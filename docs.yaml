@@ -28,6 +28,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -36,6 +41,11 @@ paths:
                     type: array
                     items:
                       type: object
+                      required:
+                        - name
+                        - virtualIp
+                        - isHaEnabled
+                        - isLocal
                       properties:
                         name:
                           type: string
@@ -61,6 +71,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -130,17 +144,34 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
                     example: 200
                   data:
                     type: object
+                    required:
+                      - events
+                      - page
                     properties:
                       events:
                         type: array
                         items:
                           type: object
+                          required:
+                            - type
+                            - id
+                            - description
+                            - host
+                            - category
+                            - service
+                            - metadata
+                            - time
                           properties:
                             type:
                               type: string
@@ -163,6 +194,9 @@ paths:
                               example: neutron
                             metadata:
                               type: object
+                              required:
+                                - id
+                                - ip
                               properties:
                                 id:
                                   type: string
@@ -175,6 +209,10 @@ paths:
                               example: '2025-01-01T01:00:00Z'
                       page:
                         type: object
+                        required:
+                          - total
+                          - number
+                          - size
                         properties:
                           total:
                             type: integer
@@ -197,6 +235,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -213,6 +255,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -244,18 +290,33 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
                     example: 200
                   data:
                     type: object
+                    required:
+                      - overall
+                      - inUse
+                      - error
+                      - fixing
                     properties:
                       overall:
                         type: object
+                        required:
+                          - status
                         properties:
                           status:
                             type: object
+                            required:
+                              - current
+                              - description
                             properties:
                               current:
                                 type: string
@@ -266,6 +327,11 @@ paths:
                       inUse:
                         type: array
                         items:
+                          required:
+                            - service
+                            - category
+                            - status
+                            - module
                           properties:
                             service:
                               type: string
@@ -275,14 +341,24 @@ paths:
                               example: core
                             status:
                               type: object
+                              required:
+                                - current
                               properties:
                                 current:
                                   type: string
                                   example: ok
                             module:
                               type: array
+                              required:
+                                - name
+                                - isAutoRepairable
+                                - status
                               items:
                                 type: object
+                                required:
+                                  - name
+                                  - isAutoRepairable
+                                  - status
                                 properties:
                                   name:
                                     type: string
@@ -292,6 +368,8 @@ paths:
                                     example: false
                                   status:
                                     type: object
+                                    required:
+                                      - current
                                     properties:
                                       current:
                                         type: string
@@ -299,6 +377,11 @@ paths:
                       error:
                         type: array
                         items:
+                          required:
+                            - service
+                            - category
+                            - status
+                            - module
                           properties:
                             service:
                               type: string
@@ -308,6 +391,9 @@ paths:
                               example: storage
                             status:
                               type: object
+                              required:
+                                - current
+                                - description
                               properties:
                                 current:
                                   type: string
@@ -318,6 +404,10 @@ paths:
                             module:
                               type: array
                               items:
+                                required:
+                                  - name
+                                  - isAutoRepairable
+                                  - status
                                 type: object
                                 properties:
                                   name:
@@ -328,6 +418,9 @@ paths:
                                     example: true
                                   status:
                                     type: object
+                                    required:
+                                      - current
+                                      - description
                                     properties:
                                       current:
                                         type: string
@@ -352,6 +445,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -392,6 +489,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -409,6 +510,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -425,6 +530,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -456,6 +565,11 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -464,6 +578,12 @@ paths:
                     type: array
                     items:
                       type: object
+                      required:
+                        - name
+                        - isHeaderShortcutEnabled
+                        - description
+                        - isBuiltIn
+                        - url
                       properties:
                         name:
                           type: string
@@ -492,6 +612,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -2013,17 +2137,38 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
                     example: 200
                   data:
                     type: object
+                    required:
+                      - nodes
+                      - page
                     properties:
                       nodes:
                         type: array
                         items:
                           type: object
+                          required:
+                            - id
+                            - hostname
+                            - role
+                            - address
+                            - managementIP
+                            - license
+                            - status
+                            - vcpu
+                            - memory
+                            - storage
+                            - uptime
+                            - labels
                           properties:
                             id:
                               type: string
@@ -2042,6 +2187,14 @@ paths:
                               example: 192.168.10.10
                             license:
                               type: object
+                              required:
+                                - status
+                                - hostname
+                                - serial
+                                - product
+                                - issue
+                                - serviceLevelAgreement
+                                - expire
                               properties:
                                 status:
                                   type: string
@@ -2054,18 +2207,28 @@ paths:
                                   example: 1N7L603
                                 product:
                                   type: object
+                                  required:
+                                    - name
+                                    - features
                                   properties:
                                     name:
                                       type: string
                                       example: cubecos
                                     features:
                                       type: object
+                                      required:
+                                        - name
                                       properties:
                                         name:
                                           type: string
                                           example: instance
                                 issue:
                                   type: object
+                                  required:
+                                    - by
+                                    - to
+                                    - hardware
+                                    - date
                                   properties:
                                     by:
                                       type: string
@@ -2081,6 +2244,12 @@ paths:
                                       example: '2025-01-01T01:00:00Z'
                                 serviceLevelAgreement:
                                   type: object
+                                  required:
+                                    - uptime
+                                    - period
+                                    - meanTimeBetweenFailure
+                                    - meanTimeToRepair
+                                    - expire
                                   properties:
                                     # TODO: this is integer?, can we rename it to `updateInMinutes`?
                                     uptime:
@@ -2097,6 +2266,9 @@ paths:
                                       example: 15 mins
                                 expire:
                                   type: object
+                                  required:
+                                    - date
+                                    - days
                                   properties:
                                     date:
                                       type: string
@@ -2109,6 +2281,10 @@ paths:
                               example: up
                             vcpu:
                               type: object
+                              required:
+                                - totalCores
+                                - usedCores
+                                - freeCores
                               properties:
                                 totalCores:
                                   type: integer
@@ -2121,6 +2297,10 @@ paths:
                                   example: 49
                             memory:
                               type: object
+                              required:
+                                - totalMiB
+                                - usedMiB
+                                - freeMiB
                               properties:
                                 totalMiB:
                                   type: integer
@@ -2133,6 +2313,10 @@ paths:
                                   example: 159116
                             storage:
                               type: object
+                              required:
+                                - totalMiB
+                                - usedMiB
+                                - freeMiB
                               properties:
                                 totalMiB:
                                   type: integer
@@ -2148,12 +2332,18 @@ paths:
                               example: 26 days
                             labels:
                               type: object
+                              required:
+                                - isGpuEnabled
                               properties:
                                 isGpuEnabled:
                                   type: string
                                   example: 'true'
                       page:
                         type: object
+                        required:
+                          - total
+                          - number
+                          - size
                         properties:
                           total:
                             type: integer
@@ -2176,6 +2366,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -2207,6 +2401,9 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - name
+                - password
               properties:
                 name:
                   type: string
@@ -2223,12 +2420,21 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
                     example: 201
                   data:
                     type: object
+                    required:
+                      - token
+                      - refresh
+                      - expires
                     properties:
                       token:
                         type: string
@@ -2238,6 +2444,9 @@ paths:
                         example: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1OGRkY2JhNC1hM2ZkLTQ2MTYtODgyYi1lMGY1ZjRlNzAyMTIifQ.eyJleHAiOjE3MzgwNzgwMTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiN2Y0ZWU4MTYtMzdjZi00OGQyLTk2ZjktNTI5YjVkNDhjYzQzIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwic3ViIjoiM2E0NTA5NTktNjJhNy00MDYyLTg4YzQtYzIwZjE1MjE5NjFmIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjA1YjQzYWIyLTZkZjMtNDY0ZC1iZWExLTBkMWJhNjcxYmViOSJ9.yeFgPdQHu5Xp7CCpCeOiGoOGTf5Hesrad0VHtdWg2Vc
                       expires:
                         type: object
+                        required:
+                          - access
+                          - refresh
                         properties:
                           access:
                             type: integer
@@ -2257,6 +2466,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
@@ -2273,6 +2486,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - code
+                  - msg
+                  - status
                 properties:
                   code:
                     type: integer
