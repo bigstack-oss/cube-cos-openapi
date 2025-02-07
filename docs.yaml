@@ -4,8 +4,6 @@ info:
   title: Cube COS API
   contact: {}
   version: 1.0.0
-host: ''
-basePath: ''
 paths:
   "/api/v1/logout":
     post:
@@ -18,10 +16,6 @@ paths:
   "/api/v1/datacenters":
     get:
       description: Retrieve the list of data centers
-      consumes:
-      - application/json
-      produces:
-      - application/json
       tags:
       - Data Centers
       summary: Retrieve the list of data centers
@@ -339,6 +333,9 @@ paths:
                                         example: 2 ceph_osd down
                       fixing:
                         type: array
+                        items:
+                          type: object
+                          # TODO: define item properties
                   msg:
                     type: string
                     example: fetch health successfully
@@ -560,13 +557,13 @@ paths:
                                     type: integer
                                     example: 31
                                   usedPercent:
-                                    type: float
+                                    type: number
                                     example: 38.75
                                   freeCores:
                                     type: integer
                                     example: 49
                                   freePercent:
-                                    type: float
+                                    type: number
                                     example: 61.25
                               memory:
                                 type: object
@@ -578,13 +575,13 @@ paths:
                                     type: integer
                                     example: 98255
                                   usedPercent:
-                                    type: float
+                                    type: number
                                     example: 38.2
                                   freeMiB:
                                     type: integer
                                     example: 159116
                                   freePercent:
-                                    type: float
+                                    type: number
                                     example: 61.8
                               storage:
                                 type: object
@@ -596,14 +593,14 @@ paths:
                                     type: integer
                                     example: 51200
                                   usedPercent:
-                                    type: float
-                                    example: 50
+                                    type: number
+                                    example: 50.12
                                   freeMiB:
                                     type: integer
                                     example: 51200
                                   freePercent:
-                                    type: float
-                                    example: 50
+                                    type: number
+                                    example: 50.12
                       vm:
                         type: object
                         properties:
@@ -647,10 +644,10 @@ paths:
                                     type: integer
                                     example: 49
                                   usedPercent:
-                                    type: float
+                                    type: number
                                     example: 38.75
                                   freePercent:
-                                    type: float
+                                    type: number
                                     example: 61.25
                               memory:
                                 type: object
@@ -665,10 +662,10 @@ paths:
                                     type: integer
                                     example: 159116
                                   usedPercent:
-                                    type: float
+                                    type: number
                                     example: 38.2
                                   freePercent:
-                                    type: float
+                                    type: number
                                     example: 61.8
                               storage:
                                 type: object
@@ -683,11 +680,11 @@ paths:
                                     type: integer
                                     example: 51200
                                   usedPercent:
-                                    type: float
-                                    example: 50
+                                    type: number
+                                    example: 50.1
                                   freePercent:
-                                    type: float
-                                    example: 50
+                                    type: number
+                                    example: 50.1
                   msg:
                     type: string
                     example: fetch summary successfully
@@ -955,10 +952,10 @@ paths:
                         type: integer
                         example: 49
                       usedPercent:
-                        type: float
+                        type: number
                         example: 38.75
                       freePercent:
-                        type: float
+                        type: number
                         example: 61.25
                   msg:
                     type: string
@@ -1048,7 +1045,8 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             bytes:
-                              type: float
+                              # TODO: this is integer?
+                              type: number
                               example: 682.6666
                       write:
                         type: array
@@ -1059,7 +1057,7 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             bytes:
-                              type: float
+                              type: number
                               example: 4.5
                   msg:
                     type: string
@@ -1149,7 +1147,7 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             ops:
-                              type: float
+                              type: number
                               example: 1.0833
                       write:
                         type: array
@@ -1160,7 +1158,7 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             ops:
-                              type: float
+                              type: number
                               example: 5.8166
                   msg:
                     type: string
@@ -1250,7 +1248,7 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             ms:
-                              type: float
+                              type: number
                               example: 10736.9833
                       write:
                         type: array
@@ -1261,7 +1259,7 @@ paths:
                               type: string
                               example: '2025-01-01T01:00:00Z'
                             ms:
-                              type: float
+                              type: number
                               example: 1615349.9
                   msg:
                     type: string
@@ -1335,10 +1333,10 @@ paths:
                           type: string
                           example: test-data-center
                         usedPercent:
-                          type: float
+                          type: number
                           example: 24.6699
                         freePercent:
-                          type: float
+                          type: number
                           example: 75.3301
                   msg:
                     type: string
@@ -1412,10 +1410,10 @@ paths:
                           type: string
                           example: test-data-center
                         usedPercent:
-                          type: float
+                          type: number
                           example: 10.5263
                         freePercent:
-                          type: float
+                          type: number
                           example: 89.4737
                   msg:
                     type: string
@@ -1489,10 +1487,10 @@ paths:
                           type: string
                           example: test-data-center
                         usedPercent:
-                          type: float
+                          type: number
                           example: 52.6702
                         freePercent:
-                          type: float
+                          type: number
                           example: 47.3298
                   msg:
                     type: string
@@ -1566,7 +1564,7 @@ paths:
                           type: string
                           example: test-data-center
                         packets:
-                          type: float
+                          type: number
                           example: 5392.2666
                   msg:
                     type: string
@@ -1590,7 +1588,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/network/hosts?metricType=egress&reportType=rank":
+  "/api/v1/datacenters/{dataCenter}/metrics/network/hosts":
     get:
       tags:
       - Metrics
@@ -1640,7 +1638,7 @@ paths:
                           type: string
                           example: test-data-center
                         packets:
-                          type: float
+                          type: number
                           example: 1724.5302
                   msg:
                     type: string
@@ -1664,7 +1662,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/cpu/vms?metricType=usage&reportType=rank":
+  "/api/v1/datacenters/{dataCenter}/metrics/cpu/vms":
     get:
       tags:
       - Metrics
@@ -1714,10 +1712,10 @@ paths:
                           type: string
                           example: test-vm
                         usedPercent:
-                          type: float
+                          type: number
                           example: 10.5263
                         freePercent:
-                          type: float
+                          type: number
                           example: 89.4737
                   msg:
                     type: string
@@ -1741,7 +1739,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/memory/vms?metricType=usage&reportType=rank":
+  "/api/v1/datacenters/{dataCenter}/metrics/memory/vms":
     get:
       tags:
       - Metrics
@@ -1791,10 +1789,10 @@ paths:
                           type: string
                           example: test-vm
                         usedPercent:
-                          type: float
+                          type: number
                           example: 35.0991
                         freePercent:
-                          type: float
+                          type: number
                           example: 64.9009
                   msg:
                     type: string
@@ -1818,7 +1816,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/vms?metricType={metricType}&reportType=rank":
+  "/api/v1/datacenters/{dataCenter}/metrics/storage/vms":
     get:
       tags:
       - Metrics
@@ -1872,7 +1870,7 @@ paths:
                           type: string
                           example: sda
                         usage:
-                          type: float
+                          type: number
                           example: 184266.4594
                   msg:
                     type: string
@@ -1896,7 +1894,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/network/vms?metricType={metricType}&reportType=rank":
+  "/api/v1/datacenters/{dataCenter}/metrics/network/vms":
     get:
       tags:
       - Metrics
@@ -1950,7 +1948,7 @@ paths:
                           type: string
                           example: sda
                         usage:
-                          type: float
+                          type: number
                           example: 45443.764
                   msg:
                     type: string
@@ -2077,8 +2075,9 @@ paths:
                                 serviceLevelAgreement:
                                   type: object
                                   properties:
+                                    # TODO: this is integer?, can we rename it to `updateInMinutes`?
                                     uptime:
-                                      type: int
+                                      type: number
                                       example: 99.99
                                     period:
                                       type: string
