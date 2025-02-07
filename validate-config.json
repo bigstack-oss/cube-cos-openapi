@@ -1,0 +1,5 @@
+{
+  "openApiGeneratorImage": "docker.io/openapitools/openapi-generator-cli",
+  "openApiGeneratorVersion": "v7.11.0",
+  "openApiPath": "./docs.yaml"
+}
