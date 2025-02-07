@@ -7,6 +7,7 @@ info:
 paths:
   "/api/v1/logout":
     post:
+      operationId: logout
       tags:
       - Logout
       summary: Logout from the system and redirect to login page
@@ -15,6 +16,7 @@ paths:
           description: Found and redirect to login page
   "/api/v1/datacenters":
     get:
+      operationId: getDataCenters
       description: Retrieve the list of data centers
       tags:
       - Data Centers
@@ -71,6 +73,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/events":
     get:
+      operationId: getEvents
       tags:
       - Events
       summary: Retrieve the list of events
@@ -222,6 +225,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/healths":
     get:
+      operationId: getHealths
       tags:
       - Health
       summary: Retrieve the list of health
@@ -360,6 +364,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/healths/{module}/repair":
     post:
+      operationId: repairModule
       tags:
       - Health
       summary: Repair the unhealthy module
@@ -432,6 +437,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations":
     get:
+      operationId: getIntegrations
       tags:
       - Integrations
       summary: Retrieve the list of integrated applications
@@ -1974,6 +1980,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/nodes":
     get:
+      operationId: getNodes
       tags:
       - Nodes
       summary: Retrieve the list of nodes
@@ -2181,6 +2188,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/tokens":
     post:
+      operationId: getTokens
       tags:
       - Tokens
       summary: Retrieve the time-limited token for the data center
