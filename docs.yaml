@@ -316,6 +316,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/metrics":
     get:
+      operationId: getMetrics
       tags:
       - Metrics
       summary: Retrieve the metrics of data center
@@ -333,182 +334,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      host:
-                        type: object
-                        properties:
-                          role:
-                            type: object
-                            properties:
-                              controlConverged:
-                                type: integer
-                                example: 10
-                              control:
-                                type: integer
-                                example: 3
-                              compute:
-                                type: integer
-                                example: 5
-                              storage:
-                                type: integer
-                                example: 2
-                              others:
-                                type: integer
-                                example: 0
-                          usage:
-                            type: object
-                            properties:
-                              vcpu:
-                                type: object
-                                properties:
-                                  totalCores:
-                                    type: integer
-                                    example: 80
-                                  usedCores:
-                                    type: integer
-                                    example: 31
-                                  usedPercent:
-                                    type: number
-                                    example: 38.75
-                                  freeCores:
-                                    type: integer
-                                    example: 49
-                                  freePercent:
-                                    type: number
-                                    example: 61.25
-                              memory:
-                                type: object
-                                properties:
-                                  totalMiB:
-                                    type: integer
-                                    example: 257371
-                                  usedMiB:
-                                    type: integer
-                                    example: 98255
-                                  usedPercent:
-                                    type: number
-                                    example: 38.2
-                                  freeMiB:
-                                    type: integer
-                                    example: 159116
-                                  freePercent:
-                                    type: number
-                                    example: 61.8
-                              storage:
-                                type: object
-                                properties:
-                                  totalMiB:
-                                    type: integer
-                                    example: 102400
-                                  usedMiB:
-                                    type: integer
-                                    example: 51200
-                                  usedPercent:
-                                    type: number
-                                    example: 50.12
-                                  freeMiB:
-                                    type: integer
-                                    example: 51200
-                                  freePercent:
-                                    type: number
-                                    example: 50.12
-                      vm:
-                        type: object
-                        properties:
-                          status:
-                            type: object
-                            properties:
-                              total:
-                                type: integer
-                                example: 10
-                              running:
-                                type: integer
-                                example: 8
-                              stopped:
-                                type: integer
-                                example: 2
-                              paused:
-                                type: integer
-                                example: 0
-                              suspend:
-                                type: integer
-                                example: 0
-                              error:
-                                type: integer
-                                example: 0
-                              unknown:
-                                type: integer
-                                example: 0
-                          usage:
-                            type: object
-                            properties:
-                              vcpu:
-                                type: object
-                                properties:
-                                  totalCores:
-                                    type: integer
-                                    example: 80
-                                  usedCores:
-                                    type: integer
-                                    example: 31
-                                  freeCores:
-                                    type: integer
-                                    example: 49
-                                  usedPercent:
-                                    type: number
-                                    example: 38.75
-                                  freePercent:
-                                    type: number
-                                    example: 61.25
-                              memory:
-                                type: object
-                                properties:
-                                  totalMiB:
-                                    type: integer
-                                    example: 257371
-                                  usedMiB:
-                                    type: integer
-                                    example: 98255
-                                  freeMiB:
-                                    type: integer
-                                    example: 159116
-                                  usedPercent:
-                                    type: number
-                                    example: 38.2
-                                  freePercent:
-                                    type: number
-                                    example: 61.8
-                              storage:
-                                type: object
-                                properties:
-                                  totalMiB:
-                                    type: integer
-                                    example: 102400
-                                  usedMiB:
-                                    type: integer
-                                    example: 51200
-                                  freeMiB:
-                                    type: integer
-                                    example: 51200
-                                  usedPercent:
-                                    type: number
-                                    example: 50.1
-                                  freePercent:
-                                    type: number
-                                    example: 50.1
-                  msg:
-                    type: string
-                    example: fetch summary successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetMetricsResponse'
         '500':
           description: Internal Server Error
           content:
@@ -2232,6 +2058,256 @@ components:
         msg:
           type: string
           example: fetch integrations successfully
+        status:
+          type: string
+          example: ok
+    GetMetricsResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+            - host
+            - vm
+          properties:
+            host:
+              type: object
+              required:
+                - role
+                - status
+                - usage
+              properties:
+                role:
+                  type: object
+                  required:
+                    - controlConverged
+                    - control
+                    - compute
+                    - storage
+                    - others
+                  properties:
+                    controlConverged:
+                      type: integer
+                      example: 10
+                    control:
+                      type: integer
+                      example: 3
+                    compute:
+                      type: integer
+                      example: 5
+                    storage:
+                      type: integer
+                      example: 2
+                    others:
+                      type: integer
+                      example: 0
+                usage:
+                  type: object
+                  required:
+                    - vcpu
+                    - memory
+                    - storage
+                  properties:
+                    vcpu:
+                      type: object
+                      required:
+                        - totalCores
+                        - usedCores
+                        - usedPercent
+                        - freeCores
+                        - freePercent
+                      properties:
+                        totalCores:
+                          type: integer
+                          example: 80
+                        usedCores:
+                          type: integer
+                          example: 31
+                        usedPercent:
+                          type: number
+                          example: 38.75
+                        freeCores:
+                          type: integer
+                          example: 49
+                        freePercent:
+                          type: number
+                          example: 61.25
+                    memory:
+                      type: object
+                      required:
+                        - totalMiB
+                        - usedMiB
+                        - usedPercent
+                        - freeMiB
+                        - freePercent
+                      properties:
+                        totalMiB:
+                          type: integer
+                          example: 257371
+                        usedMiB:
+                          type: integer
+                          example: 98255
+                        usedPercent:
+                          type: number
+                          example: 38.2
+                        freeMiB:
+                          type: integer
+                          example: 159116
+                        freePercent:
+                          type: number
+                          example: 61.8
+                    storage:
+                      type: object
+                      required:
+                        - totalMiB
+                        - usedMiB
+                        - usedPercent
+                        - freeMiB
+                        - freePercent
+                      properties:
+                        totalMiB:
+                          type: integer
+                          example: 102400
+                        usedMiB:
+                          type: integer
+                          example: 51200
+                        usedPercent:
+                          type: number
+                          example: 50.12
+                        freeMiB:
+                          type: integer
+                          example: 51200
+                        freePercent:
+                          type: number
+                          example: 50.12
+            vm:
+              type: object
+              required:
+                - status
+                - usage
+              properties:
+                status:
+                  type: object
+                  required:
+                    - total
+                    - running
+                    - stopped
+                    - paused
+                    - suspend
+                    - error
+                    - unknown
+                  properties:
+                    total:
+                      type: integer
+                      example: 10
+                    running:
+                      type: integer
+                      example: 8
+                    stopped:
+                      type: integer
+                      example: 2
+                    paused:
+                      type: integer
+                      example: 0
+                    suspend:
+                      type: integer
+                      example: 0
+                    error:
+                      type: integer
+                      example: 0
+                    unknown:
+                      type: integer
+                      example: 0
+                usage:
+                  type: object
+                  required:
+                    - vcpu
+                    - memory
+                    - storage
+                  properties:
+                    vcpu:
+                      type: object
+                      required:
+                        - totalCores
+                        - usedCores
+                        - freeCores
+                        - usedPercent
+                        - freePercent
+                      properties:
+                        totalCores:
+                          type: integer
+                          example: 80
+                        usedCores:
+                          type: integer
+                          example: 31
+                        freeCores:
+                          type: integer
+                          example: 49
+                        usedPercent:
+                          type: number
+                          example: 38.75
+                        freePercent:
+                          type: number
+                          example: 61.25
+                    memory:
+                      type: object
+                      required:
+                        - totalMiB
+                        - usedMiB
+                        - freeMiB
+                        - usedPercent
+                        - freePercent
+                      properties:
+                        totalMiB:
+                          type: integer
+                          example: 257371
+                        usedMiB:
+                          type: integer
+                          example: 98255
+                        freeMiB:
+                          type: integer
+                          example: 159116
+                        usedPercent:
+                          type: number
+                          example: 38.2
+                        freePercent:
+                          type: number
+                          example: 61.8
+                    storage:
+                      type: object
+                      required:
+                        - totalMiB
+                        - usedMiB
+                        - freeMiB
+                        - usedPercent
+                        - freePercent
+                      properties:
+                        totalMiB:
+                          type: integer
+                          example: 102400
+                        usedMiB:
+                          type: integer
+                          example: 51200
+                        freeMiB:
+                          type: integer
+                          example: 51200
+                        usedPercent:
+                          type: number
+                          example: 50.1
+                        freePercent:
+                          type: number
+                          example: 50.1
+        msg:
+          type: string
+          example: fetch summary successfully
         status:
           type: string
           example: ok
