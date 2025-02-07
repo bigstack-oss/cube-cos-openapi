@@ -1910,7 +1910,7 @@ components:
                   - service
                   - category
                   - status
-                  - module
+                  - modules
                 properties:
                   service:
                     type: string
@@ -1926,7 +1926,7 @@ components:
                       current:
                         type: string
                         example: ok
-                  module:
+                  modules:
                     type: array
                     required:
                       - name
@@ -1960,7 +1960,7 @@ components:
                   - service
                   - category
                   - status
-                  - module
+                  - modules
                 properties:
                   service:
                     type: string
@@ -1980,7 +1980,7 @@ components:
                       description:
                         type: string
                         example: ceph has 2 ceph_osd down
-                  module:
+                  modules:
                     type: array
                     items:
                       required:
