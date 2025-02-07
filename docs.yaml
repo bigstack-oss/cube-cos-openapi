@@ -27,44 +27,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                        - name
-                        - virtualIp
-                        - isHaEnabled
-                        - isLocal
-                      properties:
-                        name:
-                          type: string
-                          example: bigstack-data-center
-                        virtualIp:
-                          type: string
-                          example: 10.10.10.10
-                        isHaEnabled:
-                          type: boolean
-                          example: false
-                        isLocal:
-                          type: boolean
-                          example: true
-                  msg:
-                    type: string
-                    example: fetch data center list successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetDataCentersResponse'
         '500':
           description: Internal Server Error
           content:
@@ -143,92 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    required:
-                      - events
-                      - page
-                    properties:
-                      events:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - type
-                            - id
-                            - description
-                            - host
-                            - category
-                            - service
-                            - metadata
-                            - time
-                          properties:
-                            type:
-                              type: string
-                              example: Info
-                            id:
-                              type: string
-                              example: NET00003I
-                            description:
-                              type: string
-                              example: instance 0125741a-7dbe-4309-bc1a-53d2880d2925
-                                at 192.168.0.91 is reachable
-                            host:
-                              type: string
-                              example: bigstack-host
-                            category:
-                              type: string
-                              example: net
-                            service:
-                              type: string
-                              example: neutron
-                            metadata:
-                              type: object
-                              required:
-                                - id
-                                - ip
-                              properties:
-                                id:
-                                  type: string
-                                  example: 0125741a-7dbe-4309-bc1a-53d2880d2925
-                                ip:
-                                  type: string
-                                  example: 192.168.0.91
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                      page:
-                        type: object
-                        required:
-                          - total
-                          - number
-                          - size
-                        properties:
-                          total:
-                            type: integer
-                            example: 10
-                          number:
-                            type: integer
-                            example: 1
-                          size:
-                            type: integer
-                            example: 1
-                  msg:
-                    type: string
-                    example: fetch events successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetEventsResponse'
         '400':
           description: Bad Request
           content:
@@ -289,156 +167,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    required:
-                      - overall
-                      - inUse
-                      - error
-                      - fixing
-                    properties:
-                      overall:
-                        type: object
-                        required:
-                          - status
-                        properties:
-                          status:
-                            type: object
-                            required:
-                              - current
-                              - description
-                            properties:
-                              current:
-                                type: string
-                                example: ng
-                              description:
-                                type: string
-                                example: ceph has 2 ceph_osd down
-                      inUse:
-                        type: array
-                        items:
-                          required:
-                            - service
-                            - category
-                            - status
-                            - module
-                          properties:
-                            service:
-                              type: string
-                              example: clusterLink
-                            category:
-                              type: string
-                              example: core
-                            status:
-                              type: object
-                              required:
-                                - current
-                              properties:
-                                current:
-                                  type: string
-                                  example: ok
-                            module:
-                              type: array
-                              required:
-                                - name
-                                - isAutoRepairable
-                                - status
-                              items:
-                                type: object
-                                required:
-                                  - name
-                                  - isAutoRepairable
-                                  - status
-                                properties:
-                                  name:
-                                    type: string
-                                    example: link
-                                  isAutoRepairable:
-                                    type: boolean
-                                    example: false
-                                  status:
-                                    type: object
-                                    required:
-                                      - current
-                                    properties:
-                                      current:
-                                        type: string
-                                        example: ok
-                      error:
-                        type: array
-                        items:
-                          required:
-                            - service
-                            - category
-                            - status
-                            - module
-                          properties:
-                            service:
-                              type: string
-                              example: storage
-                            category:
-                              type: string
-                              example: storage
-                            status:
-                              type: object
-                              required:
-                                - current
-                                - description
-                              properties:
-                                current:
-                                  type: string
-                                  example: ng
-                                description:
-                                  type: string
-                                  example: ceph has 2 ceph_osd down
-                            module:
-                              type: array
-                              items:
-                                required:
-                                  - name
-                                  - isAutoRepairable
-                                  - status
-                                type: object
-                                properties:
-                                  name:
-                                    type: string
-                                    example: ceph_osd
-                                  isAutoRepairable:
-                                    type: boolean
-                                    example: true
-                                  status:
-                                    type: object
-                                    required:
-                                      - current
-                                      - description
-                                    properties:
-                                      current:
-                                        type: string
-                                        example: ng
-                                      description:
-                                        type: string
-                                        example: 2 ceph_osd down
-                      fixing:
-                        type: array
-                        items:
-                          type: object
-                          # TODO: define item properties
-                  msg:
-                    type: string
-                    example: fetch health successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetHealthsResponse'
         '500':
           description: Internal Server Error
           content:
@@ -564,48 +293,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                        - name
-                        - isHeaderShortcutEnabled
-                        - description
-                        - isBuiltIn
-                        - url
-                      properties:
-                        name:
-                          type: string
-                          example: openstack
-                        isHeaderShortcutEnabled:
-                          type: boolean
-                          example: true
-                        description:
-                          type: string
-                          example: openstack dashboard
-                        isBuiltIn:
-                          type: boolean
-                          example: true
-                        url:
-                          type: string
-                          example: https://10.10.10.10/skyline
-                  msg:
-                    type: string
-                    example: fetch integrations successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetIntegrationsResponse'
         '500':
           description: Internal Server Error
           content:
@@ -2136,230 +1824,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    required:
-                      - nodes
-                      - page
-                    properties:
-                      nodes:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                            - id
-                            - hostname
-                            - role
-                            - address
-                            - managementIP
-                            - license
-                            - status
-                            - vcpu
-                            - memory
-                            - storage
-                            - uptime
-                            - labels
-                          properties:
-                            id:
-                              type: string
-                              example: 7a18177c
-                            hostname:
-                              type: string
-                              example: bigstack-host
-                            role:
-                              type: string
-                              example: control-converged
-                            address:
-                              type: string
-                              example: 10.10.10.10
-                            managementIP:
-                              type: string
-                              example: 192.168.10.10
-                            license:
-                              type: object
-                              required:
-                                - status
-                                - hostname
-                                - serial
-                                - product
-                                - issue
-                                - serviceLevelAgreement
-                                - expire
-                              properties:
-                                status:
-                                  type: string
-                                  example: trial
-                                hostname:
-                                  type: string
-                                  example: bigstack-host
-                                serial:
-                                  type: string
-                                  example: 1N7L603
-                                product:
-                                  type: object
-                                  required:
-                                    - name
-                                    - features
-                                  properties:
-                                    name:
-                                      type: string
-                                      example: cubecos
-                                    features:
-                                      type: object
-                                      required:
-                                        - name
-                                      properties:
-                                        name:
-                                          type: string
-                                          example: instance
-                                issue:
-                                  type: object
-                                  required:
-                                    - by
-                                    - to
-                                    - hardware
-                                    - date
-                                  properties:
-                                    by:
-                                      type: string
-                                      example: Bigstack co., ltd.
-                                    to:
-                                      type: string
-                                      example: bigstack
-                                    hardware:
-                                      type: string
-                                      example: "*"
-                                    date:
-                                      type: string
-                                      example: '2025-01-01T01:00:00Z'
-                                serviceLevelAgreement:
-                                  type: object
-                                  required:
-                                    - uptime
-                                    - period
-                                    - meanTimeBetweenFailure
-                                    - meanTimeToRepair
-                                    - expire
-                                  properties:
-                                    # TODO: this is integer?, can we rename it to `updateInMinutes`?
-                                    uptime:
-                                      type: number
-                                      example: 99.99
-                                    period:
-                                      type: string
-                                      example: 24x7
-                                    meanTimeBetweenFailure:
-                                      type: string
-                                      example: 5 mins
-                                    meanTimeToRepair:
-                                      type: string
-                                      example: 15 mins
-                                expire:
-                                  type: object
-                                  required:
-                                    - date
-                                    - days
-                                  properties:
-                                    date:
-                                      type: string
-                                      example: '2025-01-01T01:00:00Z'
-                                    days:
-                                      type: integer
-                                      example: 30
-                            status:
-                              type: string
-                              example: up
-                            vcpu:
-                              type: object
-                              required:
-                                - totalCores
-                                - usedCores
-                                - freeCores
-                              properties:
-                                totalCores:
-                                  type: integer
-                                  example: 80
-                                usedCores:
-                                  type: integer
-                                  example: 31
-                                freeCores:
-                                  type: integer
-                                  example: 49
-                            memory:
-                              type: object
-                              required:
-                                - totalMiB
-                                - usedMiB
-                                - freeMiB
-                              properties:
-                                totalMiB:
-                                  type: integer
-                                  example: 257371
-                                usedMiB:
-                                  type: integer
-                                  example: 98255
-                                freeMiB:
-                                  type: integer
-                                  example: 159116
-                            storage:
-                              type: object
-                              required:
-                                - totalMiB
-                                - usedMiB
-                                - freeMiB
-                              properties:
-                                totalMiB:
-                                  type: integer
-                                  example: 102400
-                                usedMiB:
-                                  type: integer
-                                  example: 51200
-                                freeMiB:
-                                  type: integer
-                                  example: 51200
-                            uptime:
-                              type: string
-                              example: 26 days
-                            labels:
-                              type: object
-                              required:
-                                - isGpuEnabled
-                              properties:
-                                isGpuEnabled:
-                                  type: string
-                                  example: 'true'
-                      page:
-                        type: object
-                        required:
-                          - total
-                          - number
-                          - size
-                        properties:
-                          total:
-                            type: integer
-                            example: 10
-                          number:
-                            type: integer
-                            example: 1
-                          size:
-                            type: integer
-                            example: 1
-                  msg:
-                    type: string
-                    example: fetch nodes successfully
-                  status:
-                    type: string
-                    example: ok
+                $ref: '#/components/schemas/GetNodesResponse'
         '500':
           description: Internal Server Error
           content:
@@ -2400,66 +1865,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - name
-                - password
-              properties:
-                name:
-                  type: string
-                  description: the name of user to generate the token
-                  example: test-name
-                password:
-                  type: string
-                  description: the password of user to generate the token
-                  example: test-password
+              $ref: "#/components/schemas/GetTokensRequest"
       responses:
         '200':
           description: Retrieve the time-limited token for the data center successfully
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - data
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 201
-                  data:
-                    type: object
-                    required:
-                      - token
-                      - refresh
-                      - expires
-                    properties:
-                      token:
-                        type: string
-                        example: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwdDdGdWlJZC1lbnhVUWRZWGVZalZ6Q0pQZFRWMmxaU0NZanRkQW01S3djIn0.eyJleHAiOjE3MzgwODM0MTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiZjg3MGQzNjAtNzhhZi00NGNmLWI2YjktMTNmMWM0NzhkMWU0IiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjNhNDUwOTU5LTYyYTctNDA2Mi04OGM0LWMyMGYxNTIxOTYxZiIsInR5cCI6IkJlYXJlciIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJiaWdzdGFjayJ9.HC5CPPvRpkwdiufRg_Ous0k_3ifOWsgNoIqNCYaW3pX5yzizaOxzPXn9jDUkXEbirCf01OPiGtq1e5EXUg41pKHSL45MGJEQDn28fqrUBTN5Ixxwq83_54o7jQLqdV1PBaxw-SEZCa8_XArwtBsXRjm8A3cKnuzRU4xb5TGrOc1VDydQOLUFjCqMwV-V65CQ0Vt03NyiAjVeeBLiL5truT0F2ZgiuQEhDHaCgBR1wSeReYBYBhOGLiq0QA4GzgNlmTjdOC7RrXV1w7QPv2i_7IPbWCUNrFnZPGr2KJBLiIot72t2UmLsjSJ6a7jx7u1vxQ-Wx5TQQ_TiglGcghMwFg
-                      refresh:
-                        type: string
-                        example: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1OGRkY2JhNC1hM2ZkLTQ2MTYtODgyYi1lMGY1ZjRlNzAyMTIifQ.eyJleHAiOjE3MzgwNzgwMTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiN2Y0ZWU4MTYtMzdjZi00OGQyLTk2ZjktNTI5YjVkNDhjYzQzIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwic3ViIjoiM2E0NTA5NTktNjJhNy00MDYyLTg4YzQtYzIwZjE1MjE5NjFmIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjA1YjQzYWIyLTZkZjMtNDY0ZC1iZWExLTBkMWJhNjcxYmViOSJ9.yeFgPdQHu5Xp7CCpCeOiGoOGTf5Hesrad0VHtdWg2Vc
-                      expires:
-                        type: object
-                        required:
-                          - access
-                          - refresh
-                        properties:
-                          access:
-                            type: integer
-                            example: 7200
-                          refresh:
-                            type: integer
-                            example: 1800
-                  msg:
-                    type: string
-                    example: create token successfully
-                  status:
-                    type: string
-                    example: created
+                $ref: "#/components/schemas/GetTokensResponse"
         '401':
           description: Unauthorized
           content:
@@ -2500,3 +1913,606 @@ paths:
                   status:
                     type: string
                     example: internal server error
+components:
+  schemas:
+    GetDataCentersResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - virtualIp
+              - isHaEnabled
+              - isLocal
+            properties:
+              name:
+                type: string
+                example: bigstack-data-center
+              virtualIp:
+                type: string
+                example: 10.10.10.10
+              isHaEnabled:
+                type: boolean
+                example: false
+              isLocal:
+                type: boolean
+                example: true
+        msg:
+          type: string
+          example: fetch data center list successfully
+        status:
+          type: string
+          example: ok
+    GetEventsResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+            - events
+            - page
+          properties:
+            events:
+              type: array
+              items:
+                type: object
+                required:
+                  - type
+                  - id
+                  - description
+                  - host
+                  - category
+                  - service
+                  - metadata
+                  - time
+                properties:
+                  type:
+                    type: string
+                    example: Info
+                  id:
+                    type: string
+                    example: NET00003I
+                  description:
+                    type: string
+                    example: instance 0125741a-7dbe-4309-bc1a-53d2880d2925
+                      at 192.168.0.91 is reachable
+                  host:
+                    type: string
+                    example: bigstack-host
+                  category:
+                    type: string
+                    example: net
+                  service:
+                    type: string
+                    example: neutron
+                  metadata:
+                    type: object
+                    required:
+                      - id
+                      - ip
+                    properties:
+                      id:
+                        type: string
+                        example: 0125741a-7dbe-4309-bc1a-53d2880d2925
+                      ip:
+                        type: string
+                        example: 192.168.0.91
+                  time:
+                    type: string
+                    example: '2025-01-01T01:00:00Z'
+            page:
+              type: object
+              required:
+                - total
+                - number
+                - size
+              properties:
+                total:
+                  type: integer
+                  example: 10
+                number:
+                  type: integer
+                  example: 1
+                size:
+                  type: integer
+                  example: 1
+        msg:
+          type: string
+          example: fetch events successfully
+        status:
+          type: string
+          example: ok
+    GetHealthsResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+            - overall
+            - inUse
+            - error
+            - fixing
+          properties:
+            overall:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: object
+                  required:
+                    - current
+                    - description
+                  properties:
+                    current:
+                      type: string
+                      example: ng
+                    description:
+                      type: string
+                      example: ceph has 2 ceph_osd down
+            inUse:
+              type: array
+              items:
+                required:
+                  - service
+                  - category
+                  - status
+                  - module
+                properties:
+                  service:
+                    type: string
+                    example: clusterLink
+                  category:
+                    type: string
+                    example: core
+                  status:
+                    type: object
+                    required:
+                      - current
+                    properties:
+                      current:
+                        type: string
+                        example: ok
+                  module:
+                    type: array
+                    required:
+                      - name
+                      - isAutoRepairable
+                      - status
+                    items:
+                      type: object
+                      required:
+                        - name
+                        - isAutoRepairable
+                        - status
+                      properties:
+                        name:
+                          type: string
+                          example: link
+                        isAutoRepairable:
+                          type: boolean
+                          example: false
+                        status:
+                          type: object
+                          required:
+                            - current
+                          properties:
+                            current:
+                              type: string
+                              example: ok
+            error:
+              type: array
+              items:
+                required:
+                  - service
+                  - category
+                  - status
+                  - module
+                properties:
+                  service:
+                    type: string
+                    example: storage
+                  category:
+                    type: string
+                    example: storage
+                  status:
+                    type: object
+                    required:
+                      - current
+                      - description
+                    properties:
+                      current:
+                        type: string
+                        example: ng
+                      description:
+                        type: string
+                        example: ceph has 2 ceph_osd down
+                  module:
+                    type: array
+                    items:
+                      required:
+                        - name
+                        - isAutoRepairable
+                        - status
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: ceph_osd
+                        isAutoRepairable:
+                          type: boolean
+                          example: true
+                        status:
+                          type: object
+                          required:
+                            - current
+                            - description
+                          properties:
+                            current:
+                              type: string
+                              example: ng
+                            description:
+                              type: string
+                              example: 2 ceph_osd down
+            fixing:
+              type: array
+              items:
+                type: object
+                # TODO: define item properties
+        msg:
+          type: string
+          example: fetch health successfully
+        status:
+          type: string
+          example: ok
+    GetIntegrationsResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - name
+              - isHeaderShortcutEnabled
+              - description
+              - isBuiltIn
+              - url
+            properties:
+              name:
+                type: string
+                example: openstack
+              isHeaderShortcutEnabled:
+                type: boolean
+                example: true
+              description:
+                type: string
+                example: openstack dashboard
+              isBuiltIn:
+                type: boolean
+                example: true
+              url:
+                type: string
+                example: https://10.10.10.10/skyline
+        msg:
+          type: string
+          example: fetch integrations successfully
+        status:
+          type: string
+          example: ok
+    GetNodesResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+            - nodes
+            - page
+          properties:
+            nodes:
+              type: array
+              items:
+                type: object
+                required:
+                  - id
+                  - hostname
+                  - role
+                  - address
+                  - managementIP
+                  - license
+                  - status
+                  - vcpu
+                  - memory
+                  - storage
+                  - uptime
+                  - labels
+                properties:
+                  id:
+                    type: string
+                    example: 7a18177c
+                  hostname:
+                    type: string
+                    example: bigstack-host
+                  role:
+                    type: string
+                    example: control-converged
+                  address:
+                    type: string
+                    example: 10.10.10.10
+                  managementIP:
+                    type: string
+                    example: 192.168.10.10
+                  license:
+                    type: object
+                    required:
+                      - status
+                      - hostname
+                      - serial
+                      - product
+                      - issue
+                      - serviceLevelAgreement
+                      - expire
+                    properties:
+                      status:
+                        type: string
+                        example: trial
+                      hostname:
+                        type: string
+                        example: bigstack-host
+                      serial:
+                        type: string
+                        example: 1N7L603
+                      product:
+                        type: object
+                        required:
+                          - name
+                          - features
+                        properties:
+                          name:
+                            type: string
+                            example: cubecos
+                          features:
+                            type: object
+                            required:
+                              - name
+                            properties:
+                              name:
+                                type: string
+                                example: instance
+                      issue:
+                        type: object
+                        required:
+                          - by
+                          - to
+                          - hardware
+                          - date
+                        properties:
+                          by:
+                            type: string
+                            example: Bigstack co., ltd.
+                          to:
+                            type: string
+                            example: bigstack
+                          hardware:
+                            type: string
+                            example: "*"
+                          date:
+                            type: string
+                            example: '2025-01-01T01:00:00Z'
+                      serviceLevelAgreement:
+                        type: object
+                        required:
+                          - uptime
+                          - period
+                          - meanTimeBetweenFailure
+                          - meanTimeToRepair
+                          - expire
+                        properties:
+                          # TODO: this is integer?, can we rename it to `updateInMinutes`?
+                          uptime:
+                            type: number
+                            example: 99.99
+                          period:
+                            type: string
+                            example: 24x7
+                          meanTimeBetweenFailure:
+                            type: string
+                            example: 5 mins
+                          meanTimeToRepair:
+                            type: string
+                            example: 15 mins
+                      expire:
+                        type: object
+                        required:
+                          - date
+                          - days
+                        properties:
+                          date:
+                            type: string
+                            example: '2025-01-01T01:00:00Z'
+                          days:
+                            type: integer
+                            example: 30
+                  status:
+                    type: string
+                    example: up
+                  vcpu:
+                    type: object
+                    required:
+                      - totalCores
+                      - usedCores
+                      - freeCores
+                    properties:
+                      totalCores:
+                        type: integer
+                        example: 80
+                      usedCores:
+                        type: integer
+                        example: 31
+                      freeCores:
+                        type: integer
+                        example: 49
+                  memory:
+                    type: object
+                    required:
+                      - totalMiB
+                      - usedMiB
+                      - freeMiB
+                    properties:
+                      totalMiB:
+                        type: integer
+                        example: 257371
+                      usedMiB:
+                        type: integer
+                        example: 98255
+                      freeMiB:
+                        type: integer
+                        example: 159116
+                  storage:
+                    type: object
+                    required:
+                      - totalMiB
+                      - usedMiB
+                      - freeMiB
+                    properties:
+                      totalMiB:
+                        type: integer
+                        example: 102400
+                      usedMiB:
+                        type: integer
+                        example: 51200
+                      freeMiB:
+                        type: integer
+                        example: 51200
+                  uptime:
+                    type: string
+                    example: 26 days
+                  labels:
+                    type: object
+                    required:
+                      - isGpuEnabled
+                    properties:
+                      isGpuEnabled:
+                        type: string
+                        example: 'true'
+            page:
+              type: object
+              required:
+                - total
+                - number
+                - size
+              properties:
+                total:
+                  type: integer
+                  example: 10
+                number:
+                  type: integer
+                  example: 1
+                size:
+                  type: integer
+                  example: 1
+        msg:
+          type: string
+          example: fetch nodes successfully
+        status:
+          type: string
+          example: ok
+    GetTokensRequest:
+      type: object
+      required:
+        - name
+        - password
+      properties:
+        name:
+          type: string
+          description: the name of user to generate the token
+          example: test-name
+        password:
+          type: string
+          description: the password of user to generate the token
+          example: test-password
+    GetTokensResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 201
+        data:
+          type: object
+          required:
+            - token
+            - refresh
+            - expires
+          properties:
+            token:
+              type: string
+              example: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwdDdGdWlJZC1lbnhVUWRZWGVZalZ6Q0pQZFRWMmxaU0NZanRkQW01S3djIn0.eyJleHAiOjE3MzgwODM0MTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiZjg3MGQzNjAtNzhhZi00NGNmLWI2YjktMTNmMWM0NzhkMWU0IiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjNhNDUwOTU5LTYyYTctNDA2Mi04OGM0LWMyMGYxNTIxOTYxZiIsInR5cCI6IkJlYXJlciIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJiaWdzdGFjayJ9.HC5CPPvRpkwdiufRg_Ous0k_3ifOWsgNoIqNCYaW3pX5yzizaOxzPXn9jDUkXEbirCf01OPiGtq1e5EXUg41pKHSL45MGJEQDn28fqrUBTN5Ixxwq83_54o7jQLqdV1PBaxw-SEZCa8_XArwtBsXRjm8A3cKnuzRU4xb5TGrOc1VDydQOLUFjCqMwV-V65CQ0Vt03NyiAjVeeBLiL5truT0F2ZgiuQEhDHaCgBR1wSeReYBYBhOGLiq0QA4GzgNlmTjdOC7RrXV1w7QPv2i_7IPbWCUNrFnZPGr2KJBLiIot72t2UmLsjSJ6a7jx7u1vxQ-Wx5TQQ_TiglGcghMwFg
+            refresh:
+              type: string
+              example: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1OGRkY2JhNC1hM2ZkLTQ2MTYtODgyYi1lMGY1ZjRlNzAyMTIifQ.eyJleHAiOjE3MzgwNzgwMTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiN2Y0ZWU4MTYtMzdjZi00OGQyLTk2ZjktNTI5YjVkNDhjYzQzIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwic3ViIjoiM2E0NTA5NTktNjJhNy00MDYyLTg4YzQtYzIwZjE1MjE5NjFmIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjA1YjQzYWIyLTZkZjMtNDY0ZC1iZWExLTBkMWJhNjcxYmViOSJ9.yeFgPdQHu5Xp7CCpCeOiGoOGTf5Hesrad0VHtdWg2Vc
+            expires:
+              type: object
+              required:
+                - access
+                - refresh
+              properties:
+                access:
+                  type: integer
+                  example: 7200
+                refresh:
+                  type: integer
+                  example: 1800
+        msg:
+          type: string
+          example: create token successfully
+        status:
+          type: string
+          example: created
