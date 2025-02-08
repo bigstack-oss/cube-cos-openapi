@@ -14,6 +14,52 @@ paths:
       responses:
         '302':
           description: Found and redirect to login page
+  "/api/v1/datacenters/{dataCenter}/me":
+    get:
+      operationId: getMe
+      tags:
+      - User Info
+      summary: Retrieve the own user info
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Retrieve the own user info successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetMeResponse"
+              examples:
+                example1:
+                  summary: Own user info
+                  value:
+                    code: 200
+                    data:
+                      name: admin
+                    msg: fetch own user info successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch own user info: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters":
     get:
       operationId: getDataCenters
@@ -27,17 +73,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetDataCentersResponse'
+                "$ref": "#/components/schemas/GetDataCentersResponse"
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -61,7 +103,7 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       - in: query
         name: type
         required: true
@@ -100,23 +142,27 @@ paths:
           type: integer
         description: The size per page of the events to return (default is unlimit).
         example: 10
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
       responses:
         '200':
           description: Retrieve the list of events successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetEventsResponse'
+                "$ref": "#/components/schemas/GetEventsResponse"
         '400':
           description: Bad Request
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -133,10 +179,224 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch events: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/events/abstract":
+    get:
+      operationId: getAbstractedEvents
+      tags:
+      - Events
+      summary: Retrieve the abstracted events
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: query
+        name: type
+        required: true
+        schema:
+          type: string
+        description: The type of event to query, the value can be only 'system', 'host',
+          and 'instance'.
+        example: system
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        description: The limit of the abstracted events to return (default is 10).
+        example: 10
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
+      responses:
+        '200':
+          description: Retrieve the abstracted events successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetAbstractedEventsResponse"
+              examples:
+                example1:
+                  summary: Abstracted recent events
+                  value:
+                    code: 200
+                    data:
+                      events:
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "ccc449e4-a26c-47ac-afc1-c792ab1ed20a"
+                          at 192.168.0.10 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
+                          ip: 192.168.0.10
+                        time: '2025-02-04T06:05:08Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "441ddbcb-c6a3-48cd-933c-c416d52032b8"
+                          at 192.168.0.127 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: 441ddbcb-c6a3-48cd-933c-c416d52032b8
+                          ip: 192.168.0.127
+                        time: '2025-02-03T19:30:15Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "17fa8b83-3f9c-4541-a4a8-10b972f19bd2"
+                          at 10.254.1.149 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: 17fa8b83-3f9c-4541-a4a8-10b972f19bd2
+                          ip: 10.254.1.149
+                        time: '2025-02-03T19:15:15Z'
+                      - type: system
+                        severity: Info
+                        id: SDN00002I
+                        description: PROJ001 deleted virtual port 192.168.1.87 (fa:16:3e:b1:5c:89)
+                        host: ''
+                        category: sdn
+                        service: ''
+                        metadata:
+                          category: sdn
+                          device_id: 32f4993f-c692-49c9-9b5e-e1bd1014699e
+                          network_id: cae0e230-9713-4717-a94e-7e2a50cb2d86
+                          port_id: 5f20ef48-a1ea-4ef9-8463-6a790b2026c2
+                        time: '2025-02-03T17:32:09Z'
+                      - type: system
+                        severity: Info
+                        id: SDN00002I
+                        description: PROJ001 deleted virtual port 192.168.1.5 (fa:16:3e:ce:ab:6b)
+                        host: ''
+                        category: sdn
+                        service: ''
+                        metadata:
+                          category: sdn
+                          device_id: 4222d5e8-ccb2-4069-af14-d8f0fe3fbfea
+                          network_id: cae0e230-9713-4717-a94e-7e2a50cb2d86
+                          port_id: 1caa0da6-8c58-4a80-9bac-2eda77c23c92
+                        time: '2025-02-03T17:32:09Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "e5a85381-023c-4087-a607-c74687dc3b52"
+                          at 10.254.1.235 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: e5a85381-023c-4087-a607-c74687dc3b52
+                          ip: 10.254.1.235
+                        time: '2025-02-03T17:30:15Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "66cdfddb-efe1-4b67-b864-76c5d106524c"
+                          at 10.254.131.183 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: 66cdfddb-efe1-4b67-b864-76c5d106524c
+                          ip: 10.254.131.183
+                        time: '2025-02-03T17:30:15Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "f682fc8d-2c8d-4557-9b84-049e5a72b713"
+                          at 192.168.0.157 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: f682fc8d-2c8d-4557-9b84-049e5a72b713
+                          ip: 192.168.0.157
+                        time: '2025-02-03T17:15:15Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "6942ec52-f089-434d-ba5c-6137015b91b1"
+                          at 192.168.0.108 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: 6942ec52-f089-434d-ba5c-6137015b91b1
+                          ip: 192.168.0.108
+                        time: '2025-02-03T16:50:15Z'
+                      - type: system
+                        severity: Info
+                        id: NET00003I
+                        description: instance "2d9ce9a4-5fe9-4011-84ae-8ecb20f64594"
+                          at 192.168.0.111 is reachable
+                        host: ''
+                        category: net
+                        service: ''
+                        metadata:
+                          category: net
+                          id: 2d9ce9a4-5fe9-4011-84ae-8ecb20f64594
+                          ip: 192.168.0.111
+                        time: '2025-02-03T16:35:15Z'
+                      limit:
+                        number: 10
+                        description: the top 10 recent events
+                    msg: fetch event abstract successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid ''start'' time: 2021-09-01T111:00:00Z'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
                 properties:
                   code:
                     type: integer
@@ -149,10 +409,10 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/healths":
     get:
-      operationId: getHealths
+      operationId: GetHealths
       tags:
       - Health
-      summary: Retrieve the list of health
+      summary: Retrieve the overall health status of all modules
       parameters:
       - in: path
         name: dataCenter
@@ -160,24 +420,69 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
       responses:
         '200':
           description: Retrieve the list of health successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetHealthsResponse'
+                "$ref": "#/components/schemas/GetHealthsResponse"
+              examples:
+                example1:
+                  summary: Health check ok
+                  value:
+                    code: 200
+                    data:
+                      overall:
+                        status:
+                          current: ok
+                      services:
+                      - name: clusterLink
+                        category: core
+                        status:
+                          current: ok
+                        modules:
+                        - name: link
+                          status:
+                            current: ok
+                    msg: fetch health successfully
+                    status: ok
+                example2:
+                  summary: Health check ng
+                  value:
+                    code: 200
+                    data:
+                      overall:
+                        status:
+                          current: ng
+                          description: ceph has 2 ceph_osd down
+                      services:
+                      - name: storage
+                        category: storage
+                        status:
+                          current: ng
+                        modules:
+                        - name: ceph_osd
+                          status:
+                            current: ng
+                            description: ceph has 2 ceph_osd down
+                    msg: fetch health successfully
+                    status: ok
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -188,12 +493,10 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/healths/{module}/repair":
-    post:
-      operationId: repairModule
+    patch:
       tags:
       - Health
-      summary: Repair the unhealthy module
+      summary: Repair the health for all modules
       parameters:
       - in: path
         name: dataCenter
@@ -201,48 +504,27 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
-      - in: path
-        name: module
-        required: true
-        schema:
-          type: string
-        description: The name of the module to repair. The value can be 'all' to repair
-          all modules under all services, or other module names like 'ceph_osd', 'nova',
-          and so on.
-        example: all, ceph_osd, or other module names
+        example: example-data-center
       responses:
         '202':
-          description: The Request of the unhealthy module repair is accepted
+          description: The Request of the all modules repair is accepted
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - code
-                  - msg
-                  - status
-                properties:
-                  code:
-                    type: integer
-                    example: 202
-                  msg:
-                    type: string
-                    example: the request of unhealthy module repair is accepted and
-                      repairing
-                  status:
-                    type: string
-                    example: accepted
+                "$ref": "#/components/schemas/PatchRepairResponse"
+              examples:
+                example1:
+                  summary: Accept the repair request
+                  value:
+                    code: 202
+                    msg: the request of all modules repair is accepted and repairing
+                    status: accepted
         '409':
           description: Conflict
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -259,10 +541,67 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: failed to request repair
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/healths/{module}":
+    patch:
+      operationId: repairModuleHealth
+      tags:
+      - Health
+      summary: Repair the unhealthy module
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: module
+        required: true
+        schema:
+          type: string
+        description: The name of the module to repair. The module name is like 'ceph_osd',
+          'nova', and so on.
+        example: all, ceph_osd, or other module names
+      responses:
+        '202':
+          description: The Request of the unhealthy module repair is accepted
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PatchModuleRepairResponse"
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: the repair process is already running
+                  status:
+                    type: string
+                    example: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
                 properties:
                   code:
                     type: integer
@@ -270,6 +609,119 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch health checks: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/healths/{module}/history":
+    get:
+      operationId: getHealthHistory
+      tags:
+      - Health
+      summary: Retrieve the health history of module
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: module
+        required: true
+        schema:
+          type: string
+        description: The name of the module to retrieve health history, it could be
+          'ceph_osd', 'nova', and so on.
+        example: "'ceph_osd', 'nova', and so on."
+      - in: query
+        name: start
+        required: false
+        schema:
+          type: string
+        description: The start time of the health history to query, the value should
+          be in RFC3339 format (default is 24 hours ago).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: stop
+        required: false
+        schema:
+          type: string
+        description: The end time of the health history to query, the value should
+          be in RFC3339 format (default is now).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: pageNum
+        required: false
+        schema:
+          type: integer
+        description: The page number of the health history chunking to fetch (default
+          is 1).
+        example: 1
+      - in: query
+        name: pageSize
+        required: false
+        schema:
+          type: integer
+        description: The size per page of the health history to return (default is
+          unlimit).
+        example: 10
+      responses:
+        '200':
+          description: Retrieve the health history of module successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetModuleHealthHistoryResponse"
+              examples:
+                example1:
+                  summary: Historical health check records
+                  value:
+                    code: 200
+                    data:
+                      health:
+                        category: cloud computing
+                        service: compute
+                        module: nova
+                        history:
+                        - time: '2025-02-01T03:00:00Z'
+                          status: ok
+                        - time: '2025-02-01T02:55:00Z'
+                          status: ok
+                        - time: '2025-02-01T02:50:00Z'
+                          status: ng
+                          error:
+                            type: service down
+                            reason: 1 node down
+                            nodes:
+                            - example-node-0
+                            description: nova has 1 node down due to the memory exhausted,
+                              and the abnormal memory competition from PID(24887)
+                              is detected
+                            details: "{ ... best effort error summary / direction
+                              ...}"
+                            log: http://datacenter1:8888/log/nova/dell180-20250205113459-b3gc.log
+                        - time: '2025-02-01T02:45:00Z'
+                          status: ok
+                      page:
+                        total: 10
+                        number: 1
+                        size: 2
+                    msg: retrieve health history of module successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: failed to retrieve health history
                   status:
                     type: string
                     example: internal server error
@@ -286,24 +738,48 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       responses:
         '200':
           description: Retrieve the list of integrated applications successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetIntegrationsResponse'
+                "$ref": "#/components/schemas/GetIntegrationsResponse"
+              examples:
+                example1:
+                  summary: Integrated applications
+                  value:
+                    code: 200
+                    data:
+                    - name: keycloak
+                      isHeaderShortcutEnabled: true
+                      description: Keycloak Dashboard
+                      isBuiltIn: true
+                      url: https://example-datat-center.host:10443/auth/admin
+                    - name: openstack
+                      isHeaderShortcutEnabled: true
+                      description: OpenStack Dashboard
+                      isBuiltIn: true
+                      url: https://example-datat-center.host/horizon
+                    - name: rancher
+                      isHeaderShortcutEnabled: true
+                      description: Rancher Dashboard
+                      isBuiltIn: true
+                      url: https://example-datat-center.host:10443
+                    - name: ceph
+                      isHeaderShortcutEnabled: true
+                      description: Ceph Dashboard
+                      isBuiltIn: true
+                      url: https://example-datat-center.host:7443/ceph/#/dashboard
+                    msg: fetch integrations successfully
+                    status: ok
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -314,9 +790,194 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/licenses":
+    get:
+      operationId: getLicenses
+      tags:
+      - Licenses
+      summary: Retrieve the list of licenses
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: query
+        name: pageNum
+        required: false
+        schema:
+          type: integer
+        description: The page number of the event chunking to fetch (default is 1).
+        example: 1
+      - in: query
+        name: pageSize
+        required: false
+        schema:
+          type: integer
+        description: The size per page of the events to return (default is unlimit).
+        example: 10
+      responses:
+        '200':
+          description: Retrieve the list of licenses successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetLicensesResponse"
+              examples:
+                example1:
+                  summary: Licenses
+                  value:
+                    code: 200
+                    data:
+                      licenses:
+                      - type: trial
+                        hostname: dell200
+                        serial: "  "
+                        product:
+                          name: ''
+                          features: 
+                        issue:
+                          by: Bigstack co., ltd.
+                          to: "*"
+                          hardware: "*"
+                          date: 2025-02-04 09:54:45 UTC
+                        quantity:
+                          type: ''
+                          vcpu: 0
+                        serviceLevelAgreement:
+                          uptime: 0
+                          period: ''
+                          meanTimeBetweenFailure: ''
+                          meanTimeToRecovery: ''
+                        expiry:
+                          date: 2025-04-05 09:54:45 UTC
+                          days: 58
+                      page:
+                        total: 1
+                        number: 1
+                        size: 1
+                    msg: fetch licenses successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch licenses: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    post:
+      operationId: importClusterLicense
+      tags:
+      - Licenses
+      summary: Update licenses for the cluster
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: node
+        required: true
+        schema:
+          type: string
+        description: The name of the node to operate
+        example: example-node
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/PostLicenseRequest"
+      responses:
+        '200':
+          description: Update licenses successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostLicenseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update licenses: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{node}/licenses":
+    post:
+      operationId: importNodeLicense
+      tags:
+      - Licenses
+      summary: Update licenses for specific node
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: node
+        required: true
+        schema:
+          type: string
+        description: The name of the node to operate
+        example: example-node
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/PostLicenseRequest"
+      responses:
+        '200':
+          description: Update licenses successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostLicenseResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update licenses: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/metrics":
     get:
-      operationId: getMetrics
+      operationId: getMetricsOverview
       tags:
       - Metrics
       summary: Retrieve the metrics of data center
@@ -327,14 +988,14 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       responses:
         '200':
           description: Retrieve the summary of data center successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetMetricsResponse'
+                "$ref": "#/components/schemas/GetMetricsResponse"
         '500':
           description: Internal Server Error
           content:
@@ -351,11 +1012,12 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/{metricGroup}/{resourceType}":
+  "/api/v1/datacenters/{dataCenter}/metrics/{metricType}/{viewType}/{entityType}":
     get:
+      operationId: getMetricByTypes
       tags:
       - Metrics
-      summary: Retrieve the metrics of data center, host, and vm
+      summary: Retrieve the various metrics with different view from hosts or vms
       parameters:
       - in: path
         name: dataCenter
@@ -363,39 +1025,31 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       - in: path
-        name: metricGroup
-        required: true
-        schema:
-          type: string
-        description: The name of the metric group to query, the value can be only
-          'cpu', 'memory', 'storage', and 'network'
-        example: cpu
-      - in: path
-        name: resourceType
-        required: true
-        schema:
-          type: string
-        description: The type of resource to query, the value can be only 'hosts'
-          and 'vms'
-        example: hosts
-      - in: query
         name: metricType
         required: true
         schema:
           type: string
-        description: The type of metric to query, the value can be only 'usage', 'iops',
-          'bandwidth', 'latency', 'ingress', and 'egress'.
+        description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
+          'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops',
+          'diskWriteIops', 'networkTrafficIn', or 'networkTrafficOut'.
         example: 1
-      - in: query
-        name: reportType
+      - in: path
+        name: viewType
         required: true
         schema:
           type: string
-        description: The type of report to query, the value can be only 'summary',
-          'timeSeries', and 'rank'.
+        description: The type of view to query, the value can be only 'summary', 'history',
+          or 'rank'.
         example: 1
+      - in: path
+        name: entityType
+        required: true
+        schema:
+          type: string
+        description: The type of entity to query, the value can be 'hosts' or 'vms'
+        example: hosts
       - in: query
         name: start
         required: false
@@ -418,6 +1072,24 @@ paths:
           content:
             application/json:
               schema:
+                oneOf:
+                - "$ref": "#/components/schemas/GetCpuUsageSummaryOfHostsResponse"
+                - "$ref": "#/components/schemas/GetCpuUsageRankOfHostsResponse"
+                - "$ref": "#/components/schemas/GetMemoryUsageSummaryOfHostsResponse"
+                - "$ref": "#/components/schemas/GetMemoryUsageRankOfHostsResponse"
+                - "$ref": "#/components/schemas/GetDiskUsageRankOfHostsResponse"
+                - "$ref": "#/components/schemas/GetDiskBandwidthHistoryOfHostsResponse"
+                - "$ref": "#/components/schemas/GetDiskIopsHistoryOfHostsResponse"
+                - "$ref": "#/components/schemas/GetDiskLatencyHistoryOfHostsResponse"
+                - "$ref": "#/components/schemas/GetNetworkTrafficInRankOfHostsResponse"
+                - "$ref": "#/components/schemas/GetNetworkTrafficOutRankOfHostsResponse"
+                - "$ref": "#/components/schemas/GetCpuUsageRankOfVmsResponse"
+                - "$ref": "#/components/schemas/GetMemoryUsageSummaryOfVmsResponse"
+                - "$ref": "#/components/schemas/GetMemoryUsageRankOfVmsResponse"
+                - "$ref": "#/components/schemas/GetDiskReadIopsRankOfVmsResponse"
+                - "$ref": "#/components/schemas/GetDiskWriteIopsRankOfVmsResponse"
+                - "$ref": "#/components/schemas/GetNetworkTrafficInRankOfVmsResponse"
+                - "$ref": "#/components/schemas/GetNetworkTrafficOutRankOfVmsResponse"
                 type: object
                 properties:
                   code:
@@ -513,6 +1185,321 @@ paths:
                   status:
                     type: string
                     example: ok
+              examples:
+                example1:
+                  summary: Cpu usage summary of hosts
+                  value:
+                    code: 200
+                    data:
+                      totalCores: 0
+                      usedCores: 0
+                      usedPercent: 9.6774
+                      freeCores: 0
+                      freePercent: 90.3225
+                    msg: fetch metrics successfully
+                    status: ok
+                example2:
+                  summary: Cpu usage rank of hosts
+                  value:
+                    code: 200
+                    data:
+                    - id: example-node-0
+                      name: example-node-0
+                      usedPercent: 9.8248
+                      freePercent: 90.1752
+                    - id: example-node-1
+                      name: example-node-1
+                      usedPercent: 8.8248
+                      freePercent: 91.1752
+                    msg: fetch metrics successfully
+                    status: ok
+                example3:
+                  summary: Memory usage summary of hosts
+                  value:
+                    code: 200
+                    data:
+                      totalMiB: 257371
+                      usedMiB: 98255
+                      usedPercent: 38.1752
+                      freeMiB: 159116
+                      freePercent: 61.8248
+                    msg: fetch metrics successfully
+                    status: ok
+                example4:
+                  summary: Memory usage rank of hosts
+                  value:
+                    code: 200
+                    data:
+                    - id: example-node-0
+                      name: example-node-0
+                      usedPercent: 38.1752
+                      freePercent: 61.8248
+                    - id: example-node-1
+                      name: example-node-1
+                      usedPercent: 37.1752
+                      freePercent: 62.8248
+                    msg: fetch metrics successfully
+                    status: ok
+                example5:
+                  summary: Disk usage rank of hosts
+                  value:
+                    code: 200
+                    data:
+                    - id: example-node-0
+                      name: example-node-0
+                      usedPercent: 38.1752
+                      freePercent: 61.8248
+                    - id: example-node-1
+                      name: example-node-1
+                      usedPercent: 37.1752
+                      freePercent: 62.8248
+                    msg: fetch metrics successfully
+                    status: ok
+                example6:
+                  summary: Disk bandwidth history of hosts
+                  value:
+                    code: 200
+                    data:
+                      read:
+                      - time: '2025-02-08T22:58:00Z'
+                        bytes: 0.7333
+                      - time: '2025-02-08T22:59:00Z'
+                        bytes: 0
+                      - time: '2025-02-08T23:00:00Z'
+                        bytes: 955.7333
+                      - time: '2025-02-08T23:01:00Z'
+                        bytes: 0
+                      - time: '2025-02-08T23:02:00Z'
+                        bytes: 1434
+                      write:
+                      - time: '2025-02-08T22:51:00Z'
+                        bytes: 81578.6666
+                      - time: '2025-02-08T22:52:00Z'
+                        bytes: 87929.15
+                      - time: '2025-02-08T22:53:00Z'
+                        bytes: 110865.0666
+                      - time: '2025-02-08T22:54:00Z'
+                        bytes: 110796.8
+                      - time: '2025-02-08T22:55:00Z'
+                        bytes: 110933.3333
+                    msg: fetch metrics successfully
+                    status: ok
+                example7:
+                  summary: Disk iops history of hosts
+                  value:
+                    code: 200
+                    data:
+                      read:
+                      - time: '2025-02-08T22:55:00+08:00'
+                        ops: 1.05
+                      - time: '2025-02-08T22:56:00+08:00'
+                        ops: 1.0833
+                      - time: '2025-02-08T22:57:00+08:00'
+                        ops: 1
+                      - time: '2025-02-08T22:58:00+08:00'
+                        ops: 1.0166
+                      - time: '2025-02-08T22:59:00+08:00'
+                        ops: 1
+                      write:
+                      - time: '2025-02-08T22:55:00+08:00'
+                        ops: 6.8333
+                      - time: '2025-02-08T22:56:00+08:00'
+                        ops: 7.8833
+                      - time: '2025-02-08T22:57:00+08:00'
+                        ops: 6.85
+                      - time: '2025-02-08T22:58:00+08:00'
+                        ops: 4.9333
+                      - time: '2025-02-08T22:59:00+08:00'
+                        ops: 6.2166
+                    msg: fetch metrics successfully
+                    status: ok
+                example8:
+                  summary: Disk latency history of hosts
+                  value:
+                    code: 200
+                    data:
+                      read:
+                      - time: '2025-02-08T22:58:00Z'
+                        ms: 4999.5
+                      - time: '2025-02-08T22:59:00Z'
+                        ms: 21365.5666
+                      - time: '2025-02-08T23:00:00Z'
+                        ms: 39951.6333
+                      - time: '2025-02-08T23:01:00Z'
+                        ms: 6255.1333
+                      - time: '2025-02-08T23:02:00Z'
+                        ms: 5838730.85
+                      write:
+                      - time: '2025-02-08T22:58:00Z'
+                        ms: 12624417.95
+                      - time: '2025-02-08T22:59:00Z'
+                        ms: 29347351.6333
+                      - time: '2025-02-08T23:00:00Z'
+                        ms: 5219905.3
+                      - time: '2025-02-08T23:01:00Z'
+                        ms: 9249751.6666
+                      - time: '2025-02-08T23:02:00Z'
+                        ms: 10661656.35
+                    msg: fetch metrics successfully
+                    status: ok
+                example9:
+                  summary: Network inbound traffic rank of hosts
+                  value:
+                    code: 200
+                    data:
+                    - id: example-node-0
+                      name: example-node-0
+                      packets: 20739.3592
+                    - id: example-node-1
+                      name: example-node-1
+                      packets: 1739.3592
+                    msg: fetch metrics successfully
+                    status: ok
+                example10:
+                  summary: Network outbound traffic rank of hosts
+                  value:
+                    code: 200
+                    data:
+                    - id: example-node-0
+                      name: example-node-0
+                      packets: 20739.3592
+                    - id: example-node-1
+                      name: example-node-1
+                      packets: 1739.3592
+                    msg: fetch metrics successfully
+                    status: ok
+                example11:
+                  summary: Cpu usage rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: example-vm-0
+                      name: example-vm-0
+                      usedPercent: 9.8248
+                      freePercent: 90.1752
+                    - id: example-vm-1
+                      name: example-vm-1
+                      usedPercent: 8.8248
+                      freePercent: 91.1752
+                    msg: fetch metrics successfully
+                    status: ok
+                example12:
+                  summary: Memory usage summary of vms
+                  value:
+                    code: 200
+                    data:
+                      totalMiB: 257371
+                      usedMiB: 98255
+                      usedPercent: 38.1752
+                      freeMiB: 159116
+                      freePercent: 61.8248
+                    msg: fetch metrics successfully
+                    status: ok
+                example13:
+                  summary: Memory usage rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: example-vm-0
+                      name: example-vm-0
+                      usedPercent: 38.1752
+                      freePercent: 61.8248
+                    - id: example-vm-1
+                      name: example-vm-1
+                      usedPercent: 37.1752
+                      freePercent: 62.8248
+                    msg: fetch metrics successfully
+                    status: ok
+                example14:
+                  summary: Disk read iops rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
+                      name: example-vm-0
+                      device: sda
+                      usage: 300.45
+                      usedPercent: 0
+                      freePercent: 0
+                    - id: 301c55e3-5133-4c2c-9dda-4c31c382918d
+                      name: example-vm-1
+                      device: sdc
+                      usage: 245.43
+                      usedPercent: 0
+                      freePercent: 0
+                    msg: fetch metrics successfully
+                    status: ok
+                example15:
+                  summary: Disk write iops rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
+                      name: example-vm-0
+                      device: sda
+                      usage: 157060.8919
+                      usedPercent: 0
+                      freePercent: 0
+                    - id: 301c55e3-5133-4c2c-9dda-4c31c382918d
+                      name: example-vm-1
+                      device: sdc
+                      usage: 65907.0124
+                      usedPercent: 0
+                      freePercent: 0
+                    msg: fetch metrics successfully
+                    status: ok
+                example16:
+                  summary: Network inbound traffic rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
+                      name: example-vm-0
+                      usage: 20739.3592
+                      usedPercent: 0
+                      freePercent: 0
+                    - id: 301c55e3-5133-4c2c-9dda-4c31c382918d
+                      name: example-vm-1
+                      usage: 1739.3592
+                      usedPercent: 0
+                      freePercent: 0
+                    msg: fetch metrics successfully
+                    status: ok
+                example17:
+                  summary: Network outbound traffic rank of vms
+                  value:
+                    code: 200
+                    data:
+                    - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
+                      name: example-vm-0
+                      usage: 20739.3592
+                      usedPercent: 0
+                      freePercent: 0
+                    - id: 301c55e3-5133-4c2c-9dda-4c31c382918d
+                      name: example-vm-1
+                      usage: 1739.3592
+                      usedPercent: 0
+                      freePercent: 0
+                    msg: fetch metrics successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: metricType should be cpuUsage, memoryUsage, diskUsage,
+                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
+                      networkTrafficIn, or networkTrafficOut
+                  status:
+                    type: string
+                    example: bad request
         '500':
           description: Internal Server Error
           content:
@@ -526,1093 +1513,6 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch nodes: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/cpu/hosts":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the cpu metrics of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: 1
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'timeSeries'.
-        example: 1
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the event to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the event to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00Z'
-      responses:
-        '200':
-          description: Retrieve the cpu usage of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      totalCores:
-                        type: integer
-                        example: 80
-                      usedCores:
-                        type: integer
-                        example: 31
-                      freeCores:
-                        type: integer
-                        example: 49
-                      usedPercent:
-                        type: number
-                        example: 38.75
-                      freePercent:
-                        type: number
-                        example: 61.25
-                  msg:
-                    type: string
-                    example: fetch summary successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/hosts?metricType=bandwidth":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the storage bandwidth time series of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'bandwidth'.
-        example: bandwidth
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'timeSeries'.
-        example: timeSeries
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the metric to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the metric to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00Z'
-      responses:
-        '200':
-          description: Retrieve the storage bandwidth time series of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      read:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            bytes:
-                              # TODO: this is integer?
-                              type: number
-                              example: 682.6666
-                      write:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            bytes:
-                              type: number
-                              example: 4.5
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/hosts?metricType=iops":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the storage iops time series of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'iops'.
-        example: iops
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'timeSeries'.
-        example: timeSeries
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the metric to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the metric to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00Z'
-      responses:
-        '200':
-          description: Retrieve the storage iops time series of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      read:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            ops:
-                              type: number
-                              example: 1.0833
-                      write:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            ops:
-                              type: number
-                              example: 5.8166
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/hosts?metricType=latency":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the storage latency time series of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'latency'.
-        example: latency
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'timeSeries'.
-        example: timeSeries
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the metric to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the metric to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00Z'
-      responses:
-        '200':
-          description: Retrieve the storage latency time series of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
-                      read:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            ms:
-                              type: number
-                              example: 10736.9833
-                      write:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            time:
-                              type: string
-                              example: '2025-01-01T01:00:00Z'
-                            ms:
-                              type: number
-                              example: 1615349.9
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/hosts?metricType=usage":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the storage usage time series of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: latency
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the storage usage rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: test-data-center
-                        name:
-                          type: string
-                          example: test-data-center
-                        usedPercent:
-                          type: number
-                          example: 24.6699
-                        freePercent:
-                          type: number
-                          example: 75.3301
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/cpu/hosts?metricType=usage&reportType=rank":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the cpu usage rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: latency
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the cpu usage rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: test-data-center
-                        name:
-                          type: string
-                          example: test-data-center
-                        usedPercent:
-                          type: number
-                          example: 10.5263
-                        freePercent:
-                          type: number
-                          example: 89.4737
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/memory/hosts?metricType=usage&reportType=rank":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the memory usage rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: latency
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the memory usage rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: test-data-center
-                        name:
-                          type: string
-                          example: test-data-center
-                        usedPercent:
-                          type: number
-                          example: 52.6702
-                        freePercent:
-                          type: number
-                          example: 47.3298
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/network/hosts?metricType=ingress&reportType=rank":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the network ingress rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'ingress'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the network ingress rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: test-data-center
-                        name:
-                          type: string
-                          example: test-data-center
-                        packets:
-                          type: number
-                          example: 5392.2666
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/network/hosts":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the network egress rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'ingress'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the network ingress rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: test-data-center
-                        name:
-                          type: string
-                          example: test-data-center
-                        packets:
-                          type: number
-                          example: 1724.5302
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/cpu/vms":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the cpu usage rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the cpu usage rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: d280d915-7877-48c7-a0b2-faa15ec94717
-                        name:
-                          type: string
-                          example: test-vm
-                        usedPercent:
-                          type: number
-                          example: 10.5263
-                        freePercent:
-                          type: number
-                          example: 89.4737
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/memory/vms":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the memory usage rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'usage'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the memory usage rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: d280d915-7877-48c7-a0b2-faa15ec94717
-                        name:
-                          type: string
-                          example: test-vm
-                        usedPercent:
-                          type: number
-                          example: 35.0991
-                        freePercent:
-                          type: number
-                          example: 64.9009
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/storage/vms":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the storage iops read or write rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'iopsRead'
-          or 'iopsWrite'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the storage iops rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: d280d915-7877-48c7-a0b2-faa15ec94717
-                        name:
-                          type: string
-                          example: test-vm
-                        device:
-                          type: string
-                          example: sda
-                        usage:
-                          type: number
-                          example: 184266.4594
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/metrics/network/vms":
-    get:
-      tags:
-      - Metrics
-      summary: Retrieve the network ingress or egress rank of hosts
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: test-data-center
-      - in: query
-        name: metricType
-        required: true
-        schema:
-          type: string
-        description: The type of metric to query, the value can be only 'ingress'
-          or 'egress'.
-        example: ingress
-      - in: query
-        name: reportType
-        required: true
-        schema:
-          type: string
-        description: The type of report to query, the value can be only 'rank'.
-        example: rank
-      responses:
-        '200':
-          description: Retrieve the network ingress or egress rank of hosts successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: d280d915-7877-48c7-a0b2-faa15ec94717
-                        name:
-                          type: string
-                          example: test-vm
-                        device:
-                          type: string
-                          example: sda
-                        usage:
-                          type: number
-                          example: 45443.764
-                  msg:
-                    type: string
-                    example: fetch metrics successfully
-                  status:
-                    type: string
-                    example: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch metrics: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -1629,7 +1529,7 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       - in: query
         name: pageNum
         required: false
@@ -1644,23 +1544,90 @@ paths:
           type: integer
         description: The size per page of the events to return (default is unlimit).
         example: 10
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
       responses:
         '200':
           description: Retrieve the list of nodes successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetNodesResponse'
+                "$ref": "#/components/schemas/GetNodesResponse"
+              examples:
+                example:
+                  summary: Nodes
+                  value:
+                    code: 200
+                    data:
+                      nodes:
+                      - id: abc0005e
+                        hostname: example-node
+                        role: control-converged
+                        address: 10.10.10.10:8001
+                        managementIP: 10.10.10.10
+                        license:
+                          type: trial
+                          hostname: example-node
+                          serial: 1H2ZLG2
+                          product:
+                            name: ''
+                            features: 
+                          issue:
+                            by: Bigstack co., ltd.
+                            to: bigstack
+                            hardware: "*"
+                            date: 2025-01-23 06:51:50 UTC
+                          quantity:
+                            type: ''
+                            vcpu: 0
+                          serviceLevelAgreement:
+                            uptime: 0
+                            period: ''
+                            meanTimeBetweenFailure: ''
+                            meanTimeToRecovery: ''
+                          expiry:
+                            date: 2025-03-24 06:51:50 UTC
+                            days: 44
+                        status: up
+                        vcpu:
+                          totalCores: 48
+                          usedCores: 38
+                          usedPercent: 79.1666
+                          freeCores: 10
+                          freePercent: 20.8333
+                        memory:
+                          totalMiB: 257822
+                          usedMiB: 95400
+                          usedPercent: 37.0022
+                          freeMiB: 162422
+                          freePercent: 62.9977
+                        storage:
+                          totalMiB: 12571648
+                          usedMiB: 716800
+                          usedPercent: 5.7017
+                          freeMiB: 11854848
+                          freePercent: 94.2982
+                        uptimeSeconds: 5734686.37
+                        labels:
+                          isGpuEnabled: 'false'
+                      page:
+                        total: 1
+                        number: 1
+                        size: 1
+                    msg: fetch nodes list successfully
+                    status: ok
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -1673,7 +1640,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/tokens":
     post:
-      operationId: getTokens
+      operationId: getToken
       tags:
       - Tokens
       summary: Retrieve the time-limited token for the data center
@@ -1684,31 +1651,40 @@ paths:
         schema:
           type: string
         description: The name of the data center to operate
-        example: test-data-center
+        example: example-data-center
       requestBody:
         description: The user name and password to generate the token
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/GetTokensRequest"
+              "$ref": "#/components/schemas/GetTokensRequest"
       responses:
         '200':
           description: Retrieve the time-limited token for the data center successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GetTokensResponse"
+                "$ref": "#/components/schemas/GetTokensResponse"
+              examples:
+                example:
+                  summary: Token
+                  value:
+                    code: 201
+                    data:
+                      token: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwdDdGdWlJZC1lbnhVUWRZWGVZalZ6Q0pQZFRWMmxaU0NZanRkQW01S3djIn0.eyJleHAiOjE3Mzg5NjA2NzYsImlhdCI6MTczODk1MzQ3NiwianRpIjoiZjZjZTJlMjMtYzgwNC00N2YxLWE0OWEtZjdlNWZlYTgyYThjIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjpbIm1hc3Rlci1yZWFsbSIsImFjY291bnQiXSwic3ViIjoiMDY1OTVlMDAtZWIzOS00YWUxLTkzYjctZDMyNzg1MDdiZTUzIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoidG9rZW4tY29ubmVjdCIsInNlc3Npb25fc3RhdGUiOiJlOTE0MWVhZC01MTQ1LTRjZmQtODhiZC00ZjYxYzI0MzA0NzAiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImNyZWF0ZS1yZWFsbSIsImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwib2ZmbGluZV9hY2Nlc3MiLCJhZG1pbiIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsibWFzdGVyLXJlYWxtIjp7InJvbGVzIjpbInZpZXctaWRlbnRpdHktcHJvdmlkZXJzIiwidmlldy1yZWFsbSIsIm1hbmFnZS1pZGVudGl0eS1wcm92aWRlcnMiLCJpbXBlcnNvbmF0aW9uIiwiY3JlYXRlLWNsaWVudCIsIm1hbmFnZS11c2VycyIsInF1ZXJ5LXJlYWxtcyIsInZpZXctYXV0aG9yaXphdGlvbiIsInF1ZXJ5LWNsaWVudHMiLCJxdWVyeS11c2VycyIsIm1hbmFnZS1ldmVudHMiLCJtYW5hZ2UtcmVhbG0iLCJ2aWV3LWV2ZW50cyIsInZpZXctdXNlcnMiLCJ2aWV3LWNsaWVudHMiLCJtYW5hZ2UtYXV0aG9yaXphdGlvbiIsIm1hbmFnZS1jbGllbnRzIiwicXVlcnktZ3JvdXBzIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiZTkxNDFlYWQtNTE0NS00Y2ZkLTg4YmQtNGY2MWMyNDMwNDcwIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbiJ9.LkywGnG2BhQ90n-f3vJvX-frq1wRS6DAop5MUcCFb5FSuGvv3oP_byeiuHvh9rh06QWcwhpiTU_L_hOaUzMXF9spJjos8s2iOwK-4o46Ka_4Q2gnlitjd8ZG5wGfuqKRp0vb25RsBpNr6rxGFzOxxmULkjEXOGXbcrqQJBWIaWdRldYunLFRVErIpmH23w4KHKWSB5XkwqpkD9HnLH_PqbaunGpp2acgZ826JpevC8vhEhIg6fxXcDnCKhkw7nNvfs3rCC08Qci32WtzujeKH6js1ASRkKWOUxVkfIkzZ5Yg4Tfdb79_Tgy2iXLT3teeNTepmLsaftn2JzLn_6vHwg
+                      refresh: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1OGRkY2JhNC1hM2ZkLTQ2MTYtODgyYi1lMGY1ZjRlNzAyMTIifQ.eyJleHAiOjE3Mzg5NTUyNzYsImlhdCI6MTczODk1MzQ3NiwianRpIjoiNjkyZDkxMTAtMjExMy00NTU1LTgxMTctNWYxZTA2NzlmYmUxIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwic3ViIjoiMDY1OTVlMDAtZWIzOS00YWUxLTkzYjctZDMyNzg1MDdiZTUzIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiZTkxNDFlYWQtNTE0NS00Y2ZkLTg4YmQtNGY2MWMyNDMwNDcwIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6ImU5MTQxZWFkLTUxNDUtNGNmZC04OGJkLTRmNjFjMjQzMDQ3MCJ9._B9rU8TG_YSvwsri48bfne3RxFhc4Yq83bzR43nL4-c
+                      expires:
+                        access: 7200
+                        refresh: 1800
+                    msg: create token successfully
+                    status: created
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -1725,10 +1701,6 @@ paths:
             application/json:
               schema:
                 type: object
-                required:
-                  - code
-                  - msg
-                  - status
                 properties:
                   code:
                     type: integer
@@ -1741,13 +1713,34 @@ paths:
                     example: internal server error
 components:
   schemas:
+    GetMeResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+        msg:
+          type: string
+        status:
+          type: string
     GetDataCentersResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -1757,14 +1750,18 @@ components:
           items:
             type: object
             required:
-              - name
-              - virtualIp
-              - isHaEnabled
-              - isLocal
+            - name
+            - version
+            - virtualIp
+            - isHaEnabled
+            - isLocal
             properties:
               name:
                 type: string
                 example: bigstack-data-center
+              version:
+                type: string
+                example: Cube Appliance 3.0.0
               virtualIp:
                 type: string
                 example: 10.10.10.10
@@ -1783,10 +1780,10 @@ components:
     GetEventsResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -1794,24 +1791,28 @@ components:
         data:
           type: object
           required:
-            - events
-            - page
+          - events
+          - page
           properties:
             events:
               type: array
               items:
                 type: object
                 required:
-                  - type
-                  - id
-                  - description
-                  - host
-                  - category
-                  - service
-                  - metadata
-                  - time
+                - type
+                - severity
+                - id
+                - description
+                - host
+                - category
+                - service
+                - metadata
+                - time
                 properties:
                   type:
+                    type: string
+                    example: system
+                  severity:
                     type: string
                     example: Info
                   id:
@@ -1819,8 +1820,8 @@ components:
                     example: NET00003I
                   description:
                     type: string
-                    example: instance 0125741a-7dbe-4309-bc1a-53d2880d2925
-                      at 192.168.0.91 is reachable
+                    example: instance 0125741a-7dbe-4309-bc1a-53d2880d2925 at 192.168.0.91
+                      is reachable
                   host:
                     type: string
                     example: bigstack-host
@@ -1833,8 +1834,8 @@ components:
                   metadata:
                     type: object
                     required:
-                      - id
-                      - ip
+                    - id
+                    - ip
                     properties:
                       id:
                         type: string
@@ -1848,9 +1849,9 @@ components:
             page:
               type: object
               required:
-                - total
-                - number
-                - size
+              - total
+              - number
+              - size
               properties:
                 total:
                   type: integer
@@ -1867,13 +1868,78 @@ components:
         status:
           type: string
           example: ok
+    GetAbstractedEventsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          properties:
+            events:
+              type: array
+              items:
+                type: object
+                required:
+                - type
+                - severity
+                - id
+                - description
+                - host
+                - category
+                - service
+                - metadata
+                - time
+                properties:
+                  type:
+                    type: string
+                  severity:
+                    type: string
+                  id:
+                    type: string
+                  description:
+                    type: string
+                  host:
+                    type: string
+                  category:
+                    type: string
+                  service:
+                    type: string
+                  metadata:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      ip:
+                        type: string
+                  time:
+                    type: string
+            limit:
+              type: object
+              required:
+              - number
+              - description
+              properties:
+                number:
+                  type: integer
+                description:
+                  type: string
+        msg:
+          type: string
+        status:
+          type: string
     GetHealthsResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -1881,21 +1947,21 @@ components:
         data:
           type: object
           required:
-            - overall
-            - inUse
-            - error
-            - fixing
+          - overall
+          - inUse
+          - error
+          - fixing
           properties:
             overall:
               type: object
               required:
-                - status
+              - status
               properties:
                 status:
                   type: object
                   required:
-                    - current
-                    - description
+                  - current
+                  - description
                   properties:
                     current:
                       type: string
@@ -1903,16 +1969,16 @@ components:
                     description:
                       type: string
                       example: ceph has 2 ceph_osd down
-            inUse:
+            services:
               type: array
               items:
                 required:
-                  - service
-                  - category
-                  - status
-                  - modules
+                - service
+                - category
+                - status
+                - modules
                 properties:
-                  service:
+                  name:
                     type: string
                     example: clusterLink
                   category:
@@ -1921,7 +1987,7 @@ components:
                   status:
                     type: object
                     required:
-                      - current
+                    - current
                     properties:
                       current:
                         type: string
@@ -1929,102 +1995,141 @@ components:
                   modules:
                     type: array
                     required:
-                      - name
-                      - isAutoRepairable
-                      - status
+                    - name
+                    - status
                     items:
                       type: object
                       required:
-                        - name
-                        - isAutoRepairable
-                        - status
+                      - name
+                      - status
                       properties:
                         name:
                           type: string
                           example: link
-                        isAutoRepairable:
-                          type: boolean
-                          example: false
                         status:
                           type: object
                           required:
-                            - current
+                          - current
                           properties:
                             current:
                               type: string
                               example: ok
-            error:
-              type: array
-              items:
-                required:
-                  - service
-                  - category
-                  - status
-                  - modules
-                properties:
-                  service:
-                    type: string
-                    example: storage
-                  category:
-                    type: string
-                    example: storage
-                  status:
-                    type: object
-                    required:
-                      - current
-                      - description
-                    properties:
-                      current:
-                        type: string
-                        example: ng
-                      description:
-                        type: string
-                        example: ceph has 2 ceph_osd down
-                  modules:
-                    type: array
-                    items:
-                      required:
-                        - name
-                        - isAutoRepairable
-                        - status
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: ceph_osd
-                        isAutoRepairable:
-                          type: boolean
-                          example: true
-                        status:
-                          type: object
-                          required:
-                            - current
-                            - description
-                          properties:
-                            current:
-                              type: string
-                              example: ng
-                            description:
-                              type: string
-                              example: 2 ceph_osd down
-            fixing:
-              type: array
-              items:
-                type: object
-                # TODO: define item properties
         msg:
           type: string
           example: fetch health successfully
         status:
           type: string
           example: ok
+    PatchRepairResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        status:
+          type: string
+    PatchModuleRepairResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 202
+        msg:
+          type: string
+          example: the request of unhealthy module repair is accepted and repairing
+        status:
+          type: string
+          example: accepted
+    GetModuleHealthHistoryResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - health
+          - page
+          properties:
+            health:
+              type: object
+              required:
+              - category
+              - service
+              - module
+              - history
+              properties:
+                category:
+                  type: string
+                service:
+                  type: string
+                module:
+                  type: string
+                history:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - time
+                    - status
+                    properties:
+                      time:
+                        type: string
+                        format: date-time
+                      status:
+                        type: string
+                      error:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                          nodes:
+                            type: array
+                            items:
+                              type: string
+                          description:
+                            type: string
+                          details:
+                            type: string
+                          log:
+                            type: string
+                            format: uri
+            page:
+              type: object
+              properties:
+                total:
+                  type: integer
+                number:
+                  type: integer
+                size:
+                  type: integer
+        msg:
+          type: string
+        status:
+          type: string
     GetIntegrationsResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -2034,11 +2139,11 @@ components:
           items:
             type: object
             required:
-              - name
-              - isHeaderShortcutEnabled
-              - description
-              - isBuiltIn
-              - url
+            - name
+            - isHeaderShortcutEnabled
+            - description
+            - isBuiltIn
+            - url
             properties:
               name:
                 type: string
@@ -2061,13 +2166,154 @@ components:
         status:
           type: string
           example: ok
+    GetLicensesResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          properties:
+            licenses:
+              type: array
+              items:
+                type: object
+                required:
+                - type
+                - hostname
+                - serial
+                - product
+                - issue
+                - quantity
+                - serviceLevelAgreement
+                - expiry
+                properties:
+                  type:
+                    type: string
+                  hostname:
+                    type: string
+                  serial:
+                    type: string
+                  product:
+                    type: object
+                    required:
+                    - name
+                    - features
+                    properties:
+                      name:
+                        type: string
+                      features:
+                        type: object
+                  issue:
+                    type: object
+                    required:
+                    - by
+                    - to
+                    - hardware
+                    - date
+                    properties:
+                      by:
+                        type: string
+                      to:
+                        type: string
+                      hardware:
+                        type: string
+                      date:
+                        type: string
+                  quantity:
+                    type: object
+                    required:
+                    - type
+                    - vcpu
+                    properties:
+                      type:
+                        type: string
+                      vcpu:
+                        type: integer
+                  serviceLevelAgreement:
+                    type: object
+                    required:
+                    - uptime
+                    - period
+                    - meanTimeBetweenFailure
+                    - meanTimeToRecovery
+                    properties:
+                      uptime:
+                        type: number
+                      period:
+                        type: string
+                      meanTimeBetweenFailure:
+                        type: string
+                      meanTimeToRecovery:
+                        type: string
+                  expiry:
+                    type: object
+                    required:
+                    - date
+                    - days
+                    properties:
+                      date:
+                        type: string
+                      days:
+                        type: integer
+            page:
+              type: object
+              required:
+              - total
+              - number
+              - size
+              properties:
+                total:
+                  type: integer
+                number:
+                  type: integer
+                size:
+                  type: integer
+        msg:
+          type: string
+        status:
+          type: string
+    PostLicenseRequest:
+      type: object
+      required:
+      - license
+      properties:
+        license:
+          type: string
+          format: binary
+          description: License file (must have a .license extension)
+    PostLicenseResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: null
+        msg:
+          type: string
+          example: update licenses successfully
+        status:
+          type: string
+          example: ok
     GetMetricsResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -2075,24 +2321,24 @@ components:
         data:
           type: object
           required:
-            - host
-            - vm
+          - host
+          - vm
           properties:
             host:
               type: object
               required:
-                - role
-                - status
-                - usage
+              - role
+              - status
+              - usage
               properties:
                 role:
                   type: object
                   required:
-                    - controlConverged
-                    - control
-                    - compute
-                    - storage
-                    - others
+                  - controlConverged
+                  - control
+                  - compute
+                  - storage
+                  - others
                   properties:
                     controlConverged:
                       type: integer
@@ -2112,18 +2358,18 @@ components:
                 usage:
                   type: object
                   required:
-                    - vcpu
-                    - memory
-                    - storage
+                  - vcpu
+                  - memory
+                  - storage
                   properties:
                     vcpu:
                       type: object
                       required:
-                        - totalCores
-                        - usedCores
-                        - usedPercent
-                        - freeCores
-                        - freePercent
+                      - totalCores
+                      - usedCores
+                      - usedPercent
+                      - freeCores
+                      - freePercent
                       properties:
                         totalCores:
                           type: integer
@@ -2143,11 +2389,11 @@ components:
                     memory:
                       type: object
                       required:
-                        - totalMiB
-                        - usedMiB
-                        - usedPercent
-                        - freeMiB
-                        - freePercent
+                      - totalMiB
+                      - usedMiB
+                      - usedPercent
+                      - freeMiB
+                      - freePercent
                       properties:
                         totalMiB:
                           type: integer
@@ -2167,11 +2413,11 @@ components:
                     storage:
                       type: object
                       required:
-                        - totalMiB
-                        - usedMiB
-                        - usedPercent
-                        - freeMiB
-                        - freePercent
+                      - totalMiB
+                      - usedMiB
+                      - usedPercent
+                      - freeMiB
+                      - freePercent
                       properties:
                         totalMiB:
                           type: integer
@@ -2191,19 +2437,19 @@ components:
             vm:
               type: object
               required:
-                - status
-                - usage
+              - status
+              - usage
               properties:
                 status:
                   type: object
                   required:
-                    - total
-                    - running
-                    - stopped
-                    - paused
-                    - suspend
-                    - error
-                    - unknown
+                  - total
+                  - running
+                  - stopped
+                  - paused
+                  - suspend
+                  - error
+                  - unknown
                   properties:
                     total:
                       type: integer
@@ -2229,18 +2475,18 @@ components:
                 usage:
                   type: object
                   required:
-                    - vcpu
-                    - memory
-                    - storage
+                  - vcpu
+                  - memory
+                  - storage
                   properties:
                     vcpu:
                       type: object
                       required:
-                        - totalCores
-                        - usedCores
-                        - freeCores
-                        - usedPercent
-                        - freePercent
+                      - totalCores
+                      - usedCores
+                      - freeCores
+                      - usedPercent
+                      - freePercent
                       properties:
                         totalCores:
                           type: integer
@@ -2260,11 +2506,11 @@ components:
                     memory:
                       type: object
                       required:
-                        - totalMiB
-                        - usedMiB
-                        - freeMiB
-                        - usedPercent
-                        - freePercent
+                      - totalMiB
+                      - usedMiB
+                      - freeMiB
+                      - usedPercent
+                      - freePercent
                       properties:
                         totalMiB:
                           type: integer
@@ -2284,11 +2530,11 @@ components:
                     storage:
                       type: object
                       required:
-                        - totalMiB
-                        - usedMiB
-                        - freeMiB
-                        - usedPercent
-                        - freePercent
+                      - totalMiB
+                      - usedMiB
+                      - freeMiB
+                      - usedPercent
+                      - freePercent
                       properties:
                         totalMiB:
                           type: integer
@@ -2311,13 +2557,642 @@ components:
         status:
           type: string
           example: ok
+    GetCpuUsageSummaryOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - totalCores
+          - usedCores
+          - usedPercent
+          - freeCores
+          - freePercent
+          properties:
+            totalCores:
+              type: integer
+            usedCores:
+              type: integer
+            usedPercent:
+              type: number
+            freeCores:
+              type: integer
+            freePercent:
+              type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetCpuUsageRankOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetMemoryUsageSummaryOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - totalMiB
+          - usedMiB
+          - usedPercent
+          - freeMiB
+          - freePercent
+          properties:
+            totalMiB:
+              type: integer
+            usedMiB:
+              type: integer
+            usedPercent:
+              type: number
+            freeMiB:
+              type: integer
+            freePercent:
+              type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetMemoryUsageRankOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetDiskUsageRankOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetDiskBandwidthHistoryOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - read
+          - write
+          properties:
+            read:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - bytes
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  bytes:
+                    type: number
+            write:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - bytes
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  bytes:
+                    type: number
+        msg:
+          type: string
+        status:
+          type: string
+    GetDiskIopsHistoryOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - read
+          - write
+          properties:
+            read:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - ops
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  ops:
+                    type: number
+            write:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - ops
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  ops:
+                    type: number
+        msg:
+          type: string
+        status:
+          type: string
+    GetDiskLatencyHistoryOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - read
+          - write
+          properties:
+            read:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - ms
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  ms:
+                    type: number
+            write:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - ms
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  ms:
+                    type: number
+        msg:
+          type: string
+        status:
+          type: string
+    GetNetworkTrafficInRankOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - packets
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              packets:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetNetworkTrafficOutRankOfHostsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - packets
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              packets:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetCpuUsageRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetMemoryUsageSummaryOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - totalMiB
+          - usedMiB
+          - usedPercent
+          - freeMiB
+          - freePercent
+          properties:
+            totalMiB:
+              type: integer
+            usedMiB:
+              type: integer
+            usedPercent:
+              type: number
+            freeMiB:
+              type: integer
+            freePercent:
+              type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetMemoryUsageRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetDiskReadIopsRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - device
+            - usage
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              device:
+                type: string
+              usage:
+                type: number
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetDiskWriteIopsRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - device
+            - usage
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              device:
+                type: string
+              usage:
+                type: number
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetNetworkTrafficInRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usage
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usage:
+                type: number
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
+    GetNetworkTrafficOutRankOfVmsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - id
+            - name
+            - usage
+            - usedPercent
+            - freePercent
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              usage:
+                type: number
+              usedPercent:
+                type: number
+              freePercent:
+                type: number
+        msg:
+          type: string
+          example: fetch metrics successfully
+        status:
+          type: string
+          example: ok
     GetNodesResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
@@ -2325,201 +3200,168 @@ components:
         data:
           type: object
           required:
-            - nodes
-            - page
+          - nodes
+          - page
           properties:
             nodes:
               type: array
               items:
                 type: object
                 required:
-                  - id
-                  - hostname
-                  - role
-                  - address
-                  - managementIP
-                  - license
-                  - status
-                  - vcpu
-                  - memory
-                  - storage
-                  - uptime
-                  - labels
+                - id
+                - hostname
+                - role
+                - address
+                - managementIP
+                - license
+                - status
+                - vcpu
+                - memory
+                - storage
+                - uptimeSeconds
+                - labels
                 properties:
                   id:
                     type: string
-                    example: 7a18177c
                   hostname:
                     type: string
-                    example: bigstack-host
                   role:
                     type: string
-                    example: control-converged
                   address:
                     type: string
-                    example: 10.10.10.10
                   managementIP:
                     type: string
-                    example: 192.168.10.10
                   license:
                     type: object
                     required:
-                      - status
-                      - hostname
-                      - serial
-                      - product
-                      - issue
-                      - serviceLevelAgreement
-                      - expire
+                    - status
+                    - hostname
+                    - serial
+                    - product
+                    - issue
+                    - serviceLevelAgreement
+                    - expire
                     properties:
                       status:
                         type: string
-                        example: trial
                       hostname:
                         type: string
-                        example: bigstack-host
                       serial:
                         type: string
-                        example: 1N7L603
                       product:
                         type: object
                         required:
-                          - name
-                          - features
+                        - name
+                        - features
                         properties:
                           name:
                             type: string
-                            example: cubecos
                           features:
                             type: object
                             required:
-                              - name
+                            - name
                             properties:
                               name:
                                 type: string
-                                example: instance
                       issue:
                         type: object
                         required:
-                          - by
-                          - to
-                          - hardware
-                          - date
+                        - by
+                        - to
+                        - hardware
+                        - date
                         properties:
                           by:
                             type: string
-                            example: Bigstack co., ltd.
                           to:
                             type: string
-                            example: bigstack
                           hardware:
                             type: string
-                            example: "*"
                           date:
                             type: string
-                            example: '2025-01-01T01:00:00Z'
                       serviceLevelAgreement:
                         type: object
                         required:
-                          - uptime
-                          - period
-                          - meanTimeBetweenFailure
-                          - meanTimeToRepair
-                          - expire
+                        - uptime
+                        - period
+                        - meanTimeBetweenFailure
+                        - meanTimeToRepair
+                        - expire
                         properties:
-                          # TODO: this is integer?, can we rename it to `updateInMinutes`?
                           uptime:
                             type: number
-                            example: 99.99
                           period:
                             type: string
-                            example: 24x7
                           meanTimeBetweenFailure:
                             type: string
-                            example: 5 mins
                           meanTimeToRepair:
                             type: string
-                            example: 15 mins
                       expire:
                         type: object
                         required:
-                          - date
-                          - days
+                        - date
+                        - days
                         properties:
                           date:
                             type: string
-                            example: '2025-01-01T01:00:00Z'
                           days:
                             type: integer
-                            example: 30
                   status:
                     type: string
-                    example: up
                   vcpu:
                     type: object
                     required:
-                      - totalCores
-                      - usedCores
-                      - freeCores
+                    - totalCores
+                    - usedCores
+                    - freeCores
                     properties:
                       totalCores:
                         type: integer
-                        example: 80
                       usedCores:
                         type: integer
-                        example: 31
                       freeCores:
                         type: integer
-                        example: 49
                   memory:
                     type: object
                     required:
-                      - totalMiB
-                      - usedMiB
-                      - freeMiB
+                    - totalMiB
+                    - usedMiB
+                    - freeMiB
                     properties:
                       totalMiB:
                         type: integer
-                        example: 257371
                       usedMiB:
                         type: integer
-                        example: 98255
                       freeMiB:
                         type: integer
-                        example: 159116
                   storage:
                     type: object
                     required:
-                      - totalMiB
-                      - usedMiB
-                      - freeMiB
+                    - totalMiB
+                    - usedMiB
+                    - freeMiB
                     properties:
                       totalMiB:
                         type: integer
-                        example: 102400
                       usedMiB:
                         type: integer
-                        example: 51200
                       freeMiB:
                         type: integer
-                        example: 51200
-                  uptime:
-                    type: string
-                    example: 26 days
+                  uptimeSeconds:
+                    type: number
                   labels:
                     type: object
                     required:
-                      - isGpuEnabled
+                    - isGpuEnabled
                     properties:
                       isGpuEnabled:
                         type: string
-                        example: 'true'
             page:
               type: object
               required:
-                - total
-                - number
-                - size
+              - total
+              - number
+              - size
               properties:
                 total:
                   type: integer
@@ -2539,56 +3381,49 @@ components:
     GetTokensRequest:
       type: object
       required:
-        - name
-        - password
+      - name
+      - password
       properties:
         name:
           type: string
           description: the name of user to generate the token
-          example: test-name
+          example: example-name
         password:
           type: string
           description: the password of user to generate the token
-          example: test-password
+          example: example-password
     GetTokensResponse:
       type: object
       required:
-        - code
-        - data
-        - msg
-        - status
+      - code
+      - data
+      - msg
+      - status
       properties:
         code:
           type: integer
-          example: 201
         data:
           type: object
           required:
-            - token
-            - refresh
-            - expires
+          - token
+          - refresh
+          - expires
           properties:
             token:
               type: string
-              example: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwdDdGdWlJZC1lbnhVUWRZWGVZalZ6Q0pQZFRWMmxaU0NZanRkQW01S3djIn0.eyJleHAiOjE3MzgwODM0MTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiZjg3MGQzNjAtNzhhZi00NGNmLWI2YjktMTNmMWM0NzhkMWU0IiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjNhNDUwOTU5LTYyYTctNDA2Mi04OGM0LWMyMGYxNTIxOTYxZiIsInR5cCI6IkJlYXJlciIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJiaWdzdGFjayJ9.HC5CPPvRpkwdiufRg_Ous0k_3ifOWsgNoIqNCYaW3pX5yzizaOxzPXn9jDUkXEbirCf01OPiGtq1e5EXUg41pKHSL45MGJEQDn28fqrUBTN5Ixxwq83_54o7jQLqdV1PBaxw-SEZCa8_XArwtBsXRjm8A3cKnuzRU4xb5TGrOc1VDydQOLUFjCqMwV-V65CQ0Vt03NyiAjVeeBLiL5truT0F2ZgiuQEhDHaCgBR1wSeReYBYBhOGLiq0QA4GzgNlmTjdOC7RrXV1w7QPv2i_7IPbWCUNrFnZPGr2KJBLiIot72t2UmLsjSJ6a7jx7u1vxQ-Wx5TQQ_TiglGcghMwFg
             refresh:
               type: string
-              example: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI1OGRkY2JhNC1hM2ZkLTQ2MTYtODgyYi1lMGY1ZjRlNzAyMTIifQ.eyJleHAiOjE3MzgwNzgwMTYsImlhdCI6MTczODA3NjIxNiwianRpIjoiN2Y0ZWU4MTYtMzdjZi00OGQyLTk2ZjktNTI5YjVkNDhjYzQzIiwiaXNzIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwiYXVkIjoiaHR0cHM6Ly8xMC4zMi4xMC4xODA6MTA0NDMvYXV0aC9yZWFsbXMvbWFzdGVyIiwic3ViIjoiM2E0NTA5NTktNjJhNy00MDYyLTg4YzQtYzIwZjE1MjE5NjFmIiwidHlwIjoiUmVmcmVzaCIsImF6cCI6InRva2VuLWNvbm5lY3QiLCJzZXNzaW9uX3N0YXRlIjoiMDViNDNhYjItNmRmMy00NjRkLWJlYTEtMGQxYmE2NzFiZWI5Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjA1YjQzYWIyLTZkZjMtNDY0ZC1iZWExLTBkMWJhNjcxYmViOSJ9.yeFgPdQHu5Xp7CCpCeOiGoOGTf5Hesrad0VHtdWg2Vc
             expires:
               type: object
               required:
-                - access
-                - refresh
+              - access
+              - refresh
               properties:
                 access:
                   type: integer
-                  example: 7200
                 refresh:
                   type: integer
-                  example: 1800
         msg:
           type: string
-          example: create token successfully
         status:
           type: string
-          example: created
