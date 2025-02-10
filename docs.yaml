@@ -409,7 +409,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/healths":
     get:
-      operationId: GetHealths
+      operationId: getHealths
       tags:
       - Health
       summary: Retrieve the overall health status of all modules
@@ -1880,6 +1880,9 @@ components:
           type: integer
         data:
           type: object
+          required:
+            - events
+            - limit
           properties:
             events:
               type: array
@@ -1948,9 +1951,7 @@ components:
           type: object
           required:
           - overall
-          - inUse
-          - error
-          - fixing
+          - services
           properties:
             overall:
               type: object
@@ -1973,7 +1974,7 @@ components:
               type: array
               items:
                 required:
-                - service
+                - name
                 - category
                 - status
                 - modules
