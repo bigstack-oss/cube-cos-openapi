@@ -109,6 +109,7 @@ paths:
         required: true
         schema:
           type: string
+          enum: [system, host, instance]
         description: The type of event to query, the value can be only 'system', 'host',
           and 'instance'.
         example: system
@@ -208,6 +209,7 @@ paths:
         required: true
         schema:
           type: string
+          enum: ['start', 'host', 'instance']
         description: The type of event to query, the value can be only 'system', 'host',
           and 'instance'.
         example: system
@@ -1031,6 +1033,7 @@ paths:
         required: true
         schema:
           type: string
+          enum: [cpuUsage, memoryUsage, diskUsage, diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops, networkTrafficIn, networkTrafficOut]
         description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
           'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops',
           'diskWriteIops', 'networkTrafficIn', or 'networkTrafficOut'.
@@ -1040,6 +1043,7 @@ paths:
         required: true
         schema:
           type: string
+          enum: [summary, history, rank]
         description: The type of view to query, the value can be only 'summary', 'history',
           or 'rank'.
         example: 1
@@ -1048,6 +1052,7 @@ paths:
         required: true
         schema:
           type: string
+          enum: [hosts, vms]
         description: The type of entity to query, the value can be 'hosts' or 'vms'
         example: hosts
       - in: query
