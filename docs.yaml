@@ -907,6 +907,7 @@ paths:
                       overall:
                         status:
                           current: ok
+                          isFixing: false
                       services:
                       - name: clusterLink
                         category: core
@@ -926,6 +927,7 @@ paths:
                       overall:
                         status:
                           current: ng
+                          isFixing: false
                           description: ceph has 2 ceph_osd down
                       services:
                       - name: storage
@@ -3277,14 +3279,14 @@ components:
                   type: object
                   required:
                   - current
-                  - description
+                  - isFixing
                   properties:
                     current:
                       type: string
-                      example: ng
+                    isFixing:
+                      type: boolean
                     description:
                       type: string
-                      example: ceph has 2 ceph_osd down
             services:
               type: array
               items:
