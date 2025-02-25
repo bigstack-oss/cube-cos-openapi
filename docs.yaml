@@ -517,6 +517,7 @@ paths:
                     type: string
                     example: internal server error
     patch:
+      operationId: repairAllModulesHealth
       tags:
       - Health
       summary: Repair the health for all modules
