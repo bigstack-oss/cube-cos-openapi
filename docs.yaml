@@ -1908,6 +1908,14 @@ paths:
           type: string
         description: The name of the data center to operate
         example: example-data-center
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
       responses:
         '200':
           description: Retrieve the summary of data center successfully
@@ -2093,6 +2101,14 @@ paths:
         description: The end time of the event to query, the value should be in RFC3339
           format (default is now).
         example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
       responses:
         '200':
           description: Retrieve the summary of data center successfully
