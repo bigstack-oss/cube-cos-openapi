@@ -384,14 +384,7 @@ paths:
           type: integer
         description: The size per page of the events to return (default is unlimit).
         example: 10
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the list of events successfully
@@ -567,14 +560,7 @@ paths:
           type: integer
         description: The limit of the abstracted events to return (default is 10).
         example: 10
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the abstracted events successfully
@@ -834,14 +820,7 @@ paths:
           type: integer
         description: The limit of the rank of event to return (default is 10).
         example: 10
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the rank of event successfully
@@ -915,14 +894,7 @@ paths:
           type: string
         description: The name of the data center to operate
         example: example-data-center
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the list of health successfully
@@ -1097,14 +1069,7 @@ paths:
           - notifications
         description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
           to get the service list and their modules.
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the health history of service successfully
@@ -1403,14 +1368,7 @@ paths:
         description: The end time of the health history to query, the value should
           be in RFC3339 format (default is now).
         example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the health history of module successfully
@@ -1908,14 +1866,7 @@ paths:
           type: string
         description: The name of the data center to operate
         example: example-data-center
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the summary of data center successfully
@@ -2101,14 +2052,7 @@ paths:
         description: The end time of the event to query, the value should be in RFC3339
           format (default is now).
         example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the summary of data center successfully
@@ -2755,14 +2699,7 @@ paths:
           type: integer
         description: The size per page of the events to return (default is unlimit).
         example: 10
-      - in: query
-        name: watch
-        required: false
-        schema:
-          type: boolean
-        description: The toggle to enable http chunked transfer for continues server
-          push.
-        example: true
+      - $ref: '#/components/parameters/watchParam'
       responses:
         '200':
           description: Retrieve the list of nodes successfully
@@ -5947,3 +5884,12 @@ components:
         status:
           type: string
           example: ok
+  parameters:
+    watchParam:
+      in: query
+      name: watch
+      required: false
+      schema:
+        type: boolean
+      description: The toggle to enable http chunked transfer for continuous server push.
+      example: true
