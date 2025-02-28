@@ -1,0 +1,22 @@
+name: CI workflow
+
+on:
+  pull_request:
+    branches: ['develop']
+
+jobs:
+  validate:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    container:
+      # Use the Docker image to avoid setting up the JVM environment and make it easier to use.
+      # reference: https://github.com/OpenAPITools/openapi-generator?tab=readme-ov-file#16---docker
+      image: docker.io/openapitools/openapi-generator-cli:v7.11.0
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+
+      - name: validate
+        # Entrypoint file location:
+        # https://github.com/OpenAPITools/openapi-generator/blob/a79aad84206502d9cb212495520756cc82453769/Dockerfile#L38C45-L38C47
+        run: /usr/local/bin/docker-entrypoint.sh validate -i ./docs.yaml
