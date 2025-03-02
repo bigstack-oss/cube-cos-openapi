@@ -105,6 +105,186 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/services":
+    get:
+      operationId: getServices
+      tags:
+      - Services
+      summary: Retrieve the list of services
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Retrieve the list of services successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetServicesResponse"
+              examples:
+                example:
+                  summary: Services
+                  value:
+                    code: 200
+                    data:
+                    - name: clusterLink
+                      category: core
+                      modules:
+                      - name: link
+                      - name: clock
+                      - name: dns
+                    - name: clusterSys
+                      category: core
+                      modules:
+                      - name: bootstrap
+                      - name: license
+                    - name: clusterSettings
+                      category: core
+                      modules:
+                      - name: etcd
+                      - name: nodelist
+                    - name: haCluster
+                      category: core
+                      modules:
+                      - name: hacluster
+                    - name: msgQueue
+                      category: core
+                      modules:
+                      - name: rabbitmq
+                    - name: iaasDb
+                      category: core
+                      modules:
+                      - name: mysql
+                      - name: mongodb
+                    - name: virtualIp
+                      category: core
+                      modules:
+                      - name: vip
+                      - name: haproxy_ha
+                    - name: storage
+                      category: storage
+                      modules:
+                      - name: ceph
+                      - name: ceph_mon
+                      - name: ceph_mgr
+                      - name: ceph_mds
+                      - name: ceph_osd
+                      - name: ceph_rgw
+                      - name: rbd_target
+                    - name: apiService
+                      category: core
+                      modules:
+                      - name: haproxy
+                      - name: httpd
+                      - name: skyline
+                      - name: lmi
+                      - name: memcache
+                    - name: singleSignOn
+                      category: core
+                      modules:
+                      - name: k3s
+                      - name: keycloak
+                    - name: network
+                      category: cloud computing
+                      modules:
+                      - name: neutron
+                    - name: compute
+                      category: cloud computing
+                      modules:
+                      - name: nova
+                      - name: cyborg
+                    - name: bareMetal
+                      category: cloud computing
+                      modules:
+                      - name: ironic
+                    - name: image
+                      category: cloud computing
+                      modules:
+                      - name: glance
+                    - name: blockStor
+                      category: cloud computing
+                      modules:
+                      - name: cinder
+                    - name: fileStor
+                      category: cloud computing
+                      modules:
+                      - name: manila
+                    - name: objectStor
+                      category: cloud computing
+                      modules:
+                      - name: swift
+                    - name: orchestration
+                      category: cloud computing
+                      modules:
+                      - name: heat
+                    - name: lbaas
+                      category: cloud computing
+                      modules:
+                      - name: octavia
+                    - name: dnsaas
+                      category: cloud computing
+                      modules:
+                      - name: designate
+                    - name: k8saas
+                      category: cloud computing
+                      modules:
+                      - name: rancher
+                    - name: instanceHa
+                      category: cloud computing
+                      modules:
+                      - name: masakari
+                    - name: businessLogic
+                      category: cloud computing
+                      modules:
+                      - name: senlin
+                      - name: watcher
+                    - name: dataPipe
+                      category: infrascope
+                      modules:
+                      - name: zookeeper
+                      - name: kafka
+                    - name: metrics
+                      category: infrascope
+                      modules:
+                      - name: monasca
+                      - name: telegraf
+                      - name: grafana
+                    - name: logAnalytics
+                      category: infrascope
+                      modules:
+                      - name: filebeat
+                      - name: auditbeat
+                      - name: logstash
+                      - name: opensearch
+                      - name: opensearch-dashboards
+                    - name: notifications
+                      category: infrascope
+                      modules:
+                      - name: influxdb
+                      - name: kapacitor
+                    msg: fetch service details successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch services: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/events":
     get:
       operationId: getEvents
@@ -131,6 +311,49 @@ paths:
         description: The type of event to query, the value can be only 'system', 'host',
           and 'instance'.
         example: system
+      - in: query
+        name: keyword
+        required: false
+        schema:
+          type: string
+        description: The keyword of the event to query.
+        example: 10.10.10.10 is reachable
+      - in: query
+        name: id
+        required: false
+        schema:
+          type: string
+        description: The id of the event to query.
+        example: NET00003I
+      - in: query
+        name: category
+        required: false
+        schema:
+          type: string
+        description: The category of the event to query.
+        example: NET
+      - in: query
+        name: severity
+        required: false
+        schema:
+          type: string
+        description: The severity of the event to query, the value can be only 'Info',
+          'Warning', and 'Error'.
+        example: Info
+      - in: query
+        name: host
+        required: false
+        schema:
+          type: string
+        description: The host of the event to query.
+        example: example-node-0
+      - in: query
+        name: instance
+        required: false
+        schema:
+          type: string
+        description: The instance of the event to query.
+        example: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
       - in: query
         name: start
         required: false
@@ -208,6 +431,109 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/events/filterConditions":
+    get:
+      operationId: getEventFilterConditions
+      tags:
+      - Events
+      summary: Retrieve the event filter conditions
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: query
+        name: start
+        required: false
+        schema:
+          type: string
+        description: The start time of the event to query, the value should be in
+          RFC3339 format (default is 24 hours ago).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: stop
+        required: false
+        schema:
+          type: string
+        description: The end time of the event to query, the value should be in RFC3339
+          format (default is now).
+        example: '2025-01-01T01:00:00Z'
+      responses:
+        '200':
+          description: Retrieve the event filter conditions successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetEventFilterConditionResponse"
+              examples:
+                example1:
+                  summary: Event filter conditions
+                  value:
+                    code: 200
+                    data:
+                      system:
+                        severities:
+                        - Critical
+                        - Info
+                        - Warning
+                        categories:
+                        - KSN
+                        - NET
+                        - SDN
+                        - SRV
+                      instance:
+                        ids:
+                        - 028952d3-c0ba-4494-96c0-2bf1bab407e5
+                        - 02ecd121-c19b-41c7-8ed7-390745b01af4
+                        - 12893f22-a353-4dce-a164-f889e0f39951
+                        - fbd5d7c2-38c8-436b-97f4-d9e5b322d02b
+                        categories:
+                        - CPU
+                        - MEM
+                      host:
+                        names:
+                        - example-node-0
+                        categories:
+                        - DSK
+                        - MEM
+                    msg: fetch event filter conditions successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid ''start'' time: 2021-09-01T111:00:00Z'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch event filter conditions: internal server
+                      error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/events/abstract":
     get:
       operationId: getAbstractedEvents
@@ -228,7 +554,7 @@ paths:
         schema:
           type: string
           enum:
-          - start
+          - system
           - host
           - instance
         description: The type of event to query, the value can be only 'system', 'host',
@@ -430,6 +756,151 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/events/rank":
+    get:
+      operationId: getRankedEvents
+      tags:
+      - Events
+      summary: Retrieve the ranked events
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: query
+        name: type
+        required: true
+        schema:
+          type: string
+          enum:
+          - system
+          - host
+          - instance
+        description: The type of event to query, the value can be only 'system', 'host',
+          and 'instance'.
+        example: system
+      - in: query
+        name: category
+        required: false
+        schema:
+          type: string
+        description: The category of the event to query.
+        example: NET
+      - in: query
+        name: severity
+        required: false
+        schema:
+          type: string
+        description: The severity of the event to query, the value can be only 'Info',
+          'Warning', and 'Error'.
+        example: Info
+      - in: query
+        name: host
+        required: false
+        schema:
+          type: string
+        description: The host of the event to query.
+        example: dell180
+      - in: query
+        name: instance
+        required: false
+        schema:
+          type: string
+        description: The instance of the event to query.
+        example: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
+      - in: query
+        name: start
+        required: false
+        schema:
+          type: string
+        description: The start time of the event to query, the value should be in
+          RFC3339 format (default is 24 hours ago).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: stop
+        required: false
+        schema:
+          type: string
+        description: The end time of the event to query, the value should be in RFC3339
+          format (default is now).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        description: The limit of the rank of event to return (default is 10).
+        example: 10
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
+      responses:
+        '200':
+          description: Retrieve the rank of event successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetRankedEventsResponse"
+              examples:
+                example1:
+                  summary: Ranked events
+                  value:
+                    code: 200
+                    data:
+                      events:
+                      - id: NET00003I
+                        percent: 98.2142
+                        number: 440
+                        query: https://example-datat-center.host/api/v1/datacenters/example-data-center/events?type=system&id=NET00003I&start=2024-12-01T00:00:00Z&stop=2025-02-17T00:00:00Z&pageNum=1&pageSize=20
+                      - id: NET00001I
+                        percent: 1.7857
+                        number: 8
+                        query: https://example-datat-center.host/api/v1/datacenters/example-data-center/events?type=system&id=NET00001I&start=2024-12-01T00:00:00Z&stop=2025-02-17T00:00:00Z&pageNum=1&pageSize=20
+                      limit:
+                        number: 25
+                        description: The top 2 event IDs with the highest proportion
+                    msg: fetch event rank successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid ''start'' time: 2021-09-01T111:00:00Z'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch events: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/healths":
     get:
       operationId: getHealths
@@ -468,6 +939,7 @@ paths:
                       overall:
                         status:
                           current: ok
+                          isFixing: false
                       services:
                       - name: clusterLink
                         category: core
@@ -487,6 +959,7 @@ paths:
                       overall:
                         status:
                           current: ng
+                          isFixing: false
                           description: ceph has 2 ceph_osd down
                       services:
                       - name: storage
@@ -575,7 +1048,438 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/healths/{module}":
+  "/api/v1/datacenters/{dataCenter}/healths/services/{serviceType}":
+    get:
+      operationId: getServiceHealthHistory
+      tags:
+      - Health
+      summary: Retrieve the all modules health status from a service
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: serviceType
+        required: true
+        schema:
+          type: string
+          enum:
+          - clusterLink
+          - clusterSys
+          - clusterSettings
+          - haCluster
+          - msgQueue
+          - iaasDb
+          - virtualIp
+          - storage
+          - apiService
+          - singleSignOn
+          - network
+          - compute
+          - bareMetal
+          - image
+          - blockStor
+          - fileStor
+          - objectStor
+          - orchestration
+          - lbaas
+          - dnsaas
+          - k8saas
+          - instanceHa
+          - businessLogic
+          - dataPipe
+          - metrics
+          - logAnalytics
+          - notifications
+        description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
+          to get the service list and their modules.
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
+      responses:
+        '200':
+          description: Retrieve the health history of service successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetServiceHealthHistoryResponse"
+              examples:
+                example1:
+                  summary: Health result of service
+                  value:
+                    code: 200
+                    data:
+                    - category: cloud computing
+                      service: compute
+                      module: nova
+                      history:
+                      - time: '2025-02-15T08:44:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T08:49:36Z'
+                        status: ok
+                      - time: '2025-02-15T08:54:36Z'
+                        status: ok
+                      - time: '2025-02-15T08:59:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:04:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:09:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T09:14:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:19:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:24:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:29:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:34:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T09:39:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:44:36Z'
+                        status: ok
+                    - category: cloud computing
+                      service: compute
+                      module: cyborg
+                      history:
+                      - time: '2025-02-15T08:44:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T08:49:36Z'
+                        status: ok
+                      - time: '2025-02-15T08:54:36Z'
+                        status: ok
+                      - time: '2025-02-15T08:59:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:04:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:09:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T09:14:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:19:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:24:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:29:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:34:36Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - dell180
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... the best efforts of error summary / direction
+                            ...} "
+                          log: http://{dataCenter}:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-15T09:39:36Z'
+                        status: ok
+                      - time: '2025-02-15T09:44:36Z'
+                        status: ok
+                    msg: fetch health successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid serviceType: example-service'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch health checks: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/healths/services/{serviceType}/modules/{moduleType}":
+    get:
+      operationId: getHealthHistory
+      tags:
+      - Health
+      summary: Retrieve the health history of module
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      - in: path
+        name: serviceType
+        required: true
+        schema:
+          type: string
+          enum:
+          - clusterLink
+          - clusterSys
+          - clusterSettings
+          - haCluster
+          - msgQueue
+          - iaasDb
+          - virtualIp
+          - storage
+          - apiService
+          - singleSignOn
+          - network
+          - compute
+          - bareMetal
+          - image
+          - blockStor
+          - fileStor
+          - objectStor
+          - orchestration
+          - lbaas
+          - dnsaas
+          - k8saas
+          - instanceHa
+          - businessLogic
+          - dataPipe
+          - metrics
+          - logAnalytics
+          - notifications
+        description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
+          to get the service list and their modules.
+      - in: path
+        name: moduleType
+        required: true
+        schema:
+          type: string
+          enum:
+          - link
+          - clock
+          - dns
+          - bootstrap
+          - license
+          - etcd
+          - nodelist
+          - hacluster
+          - rabbitmq
+          - mysql
+          - mongodb
+          - vip
+          - haproxy_ha
+          - ceph
+          - ceph_mon
+          - ceph_osd
+          - ceph_rgw
+          - ceph_mds
+          - ceph_mgr
+          - rbd_target
+          - haproxy
+          - httpd
+          - skyline
+          - lim
+          - memcache
+          - k3s
+          - keycloak
+          - neutron
+          - nova
+          - cyborg
+          - ironic
+          - glance
+          - cinder
+          - manila
+          - swift
+          - heat
+          - octavia
+          - designate
+          - rancher
+          - masakari
+          - zookeeper
+          - kafka
+          - monasca
+          - telegraf
+          - grafana
+          - filebeat
+          - auditbeat
+          - logstash
+          - opensearch
+          - opensearch-dashboards
+          - influxdb
+          - kapacitor
+        description: The name of the module to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services/{serviceType}
+          to get the module list.
+      - in: query
+        name: start
+        required: false
+        schema:
+          type: string
+        description: The start time of the health history to query, the value should
+          be in RFC3339 format (default is 24 hours ago).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: stop
+        required: false
+        schema:
+          type: string
+        description: The end time of the health history to query, the value should
+          be in RFC3339 format (default is now).
+        example: '2025-01-01T01:00:00Z'
+      - in: query
+        name: watch
+        required: false
+        schema:
+          type: boolean
+        description: The toggle to enable http chunked transfer for continues server
+          push.
+        example: true
+      responses:
+        '200':
+          description: Retrieve the health history of module successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetModuleHealthHistoryResponse"
+              examples:
+                example1:
+                  summary: Health history of module
+                  value:
+                    code: 200
+                    data:
+                      category: cloud computing
+                      name: compute
+                      module: nova
+                      history:
+                      - time: '2025-02-01T03:00:00Z'
+                        status: ok
+                      - time: '2025-02-01T02:55:00Z'
+                        status: ok
+                      - time: '2025-02-01T02:50:00Z'
+                        status: ng
+                        error:
+                          type: service down
+                          reason: 1 node down
+                          nodes:
+                          - example-node-0
+                          description: nova has 1 node down due to the memory exhausted,
+                            and the abnormal memory competition from PID(24887) is
+                            detected
+                          details: "{ ... best effort error summary / direction ...}"
+                          log: http://datacenter1:8888/log/nova/dell180-20250205113459-b3gc.log
+                      - time: '2025-02-01T02:45:00Z'
+                        status: ok
+                    msg: retrieve health history of module successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid serviceType: example-service'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: failed to retrieve health history
+                  status:
+                    type: string
+                    example: internal server error
     patch:
       operationId: repairModuleHealth
       tags:
@@ -590,13 +1494,101 @@ paths:
         description: The name of the data center to operate
         example: example-data-center
       - in: path
-        name: module
+        name: serviceType
         required: true
         schema:
           type: string
-        description: The name of the module to repair. The module name is like 'ceph_osd',
-          'nova', and so on.
-        example: all, ceph_osd, or other module names
+          enum:
+          - clusterLink
+          - clusterSys
+          - clusterSettings
+          - haCluster
+          - msgQueue
+          - iaasDb
+          - virtualIp
+          - storage
+          - apiService
+          - singleSignOn
+          - network
+          - compute
+          - bareMetal
+          - image
+          - blockStor
+          - fileStor
+          - objectStor
+          - orchestration
+          - lbaas
+          - dnsaas
+          - k8saas
+          - instanceHa
+          - businessLogic
+          - dataPipe
+          - metrics
+          - logAnalytics
+          - notifications
+        description: The name of the service which cover the module you tend to repair.
+          use GET /api/v1/datacenters/{dataCenter}/services to get the service list
+          and their modules.
+      - in: path
+        name: moduleType
+        required: true
+        schema:
+          type: string
+          enum:
+          - link
+          - clock
+          - dns
+          - bootstrap
+          - license
+          - etcd
+          - nodelist
+          - hacluster
+          - rabbitmq
+          - mysql
+          - mongodb
+          - vip
+          - haproxy_ha
+          - ceph
+          - ceph_mon
+          - ceph_osd
+          - ceph_rgw
+          - ceph_mds
+          - ceph_mgr
+          - rbd_target
+          - haproxy
+          - httpd
+          - skyline
+          - lim
+          - memcache
+          - k3s
+          - keycloak
+          - neutron
+          - nova
+          - cyborg
+          - ironic
+          - glance
+          - cinder
+          - manila
+          - swift
+          - heat
+          - octavia
+          - designate
+          - rancher
+          - masakari
+          - zookeeper
+          - kafka
+          - monasca
+          - telegraf
+          - grafana
+          - filebeat
+          - auditbeat
+          - logstash
+          - opensearch
+          - opensearch-dashboards
+          - influxdb
+          - kapacitor
+        description: The name of the module to repair. use GET /api/v1/datacenters/{dataCenter}/services/{serviceType}
+          to get the module list.
       responses:
         '202':
           description: The Request of the unhealthy module repair is accepted
@@ -604,6 +1596,22 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/PatchModuleRepairResponse"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'invalid serviceType: example-service'
+                  status:
+                    type: string
+                    example: bad request
         '409':
           description: Conflict
           content:
@@ -633,119 +1641,6 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch health checks: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/healths/{module}/history":
-    get:
-      operationId: getHealthHistory
-      tags:
-      - Health
-      summary: Retrieve the health history of module
-      parameters:
-      - in: path
-        name: dataCenter
-        required: true
-        schema:
-          type: string
-        description: The name of the data center to operate
-        example: example-data-center
-      - in: path
-        name: module
-        required: true
-        schema:
-          type: string
-        description: The name of the module to retrieve health history, it could be
-          'ceph_osd', 'nova', and so on.
-        example: "'ceph_osd', 'nova', and so on."
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the health history to query, the value should
-          be in RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the health history to query, the value should
-          be in RFC3339 format (default is now).
-        example: '2025-01-01T01:00:00Z'
-      - in: query
-        name: pageNum
-        required: false
-        schema:
-          type: integer
-        description: The page number of the health history chunking to fetch (default
-          is 1).
-        example: 1
-      - in: query
-        name: pageSize
-        required: false
-        schema:
-          type: integer
-        description: The size per page of the health history to return (default is
-          unlimit).
-        example: 10
-      responses:
-        '200':
-          description: Retrieve the health history of module successfully
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/GetModuleHealthHistoryResponse"
-              examples:
-                example1:
-                  summary: Historical health check records
-                  value:
-                    code: 200
-                    data:
-                      health:
-                        category: cloud computing
-                        service: compute
-                        module: nova
-                        history:
-                        - time: '2025-02-01T03:00:00Z'
-                          status: ok
-                        - time: '2025-02-01T02:55:00Z'
-                          status: ok
-                        - time: '2025-02-01T02:50:00Z'
-                          status: ng
-                          error:
-                            type: service down
-                            reason: 1 node down
-                            nodes:
-                            - example-node-0
-                            description: nova has 1 node down due to the memory exhausted,
-                              and the abnormal memory competition from PID(24887)
-                              is detected
-                            details: "{ ... best effort error summary / direction
-                              ...}"
-                            log: http://datacenter1:8888/log/nova/dell180-20250205113459-b3gc.log
-                        - time: '2025-02-01T02:45:00Z'
-                          status: ok
-                      page:
-                        total: 10
-                        number: 1
-                        size: 2
-                    msg: retrieve health history of module successfully
-                    status: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: failed to retrieve health history
                   status:
                     type: string
                     example: internal server error
@@ -1938,6 +2833,628 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings":
+    get:
+      operationId: getSetting
+      tags:
+      - Settings
+      summary: Retrieve setting
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Setting retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetSettingResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch setting: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings/emailSenders":
+    post:
+      operationId: createEmailSender
+      tags:
+      - Settings
+      summary: Create a new email sender
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailSender"
+            examples:
+              example:
+                summary: Email Sender
+                value:
+                  host: smtp.example.com
+                  port: 587
+                  username: user@example.com
+                  password: securepassword
+                  from: noreply@example.com
+                  note: Primary email sender
+      responses:
+        '201':
+          description: Email sender created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostEmailSenderResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch email sender: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    get:
+      operationId: getEmailSenders
+      tags:
+      - Settings
+      summary: Retrieve email senders
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Email senders retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetEmailSendersResponse"
+              examples:
+                example:
+                  summary: Email Senders List
+                  value:
+                    code: 200
+                    data:
+                      emailSenders:
+                      - host: smtp.example.com
+                        port: 587
+                        username: user@example.com
+                        password: securepassword
+                        from: noreply@example.com
+                        note: Primary email sender
+                    msg: email senders retrieved successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch email sender: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    put:
+      operationId: updateEmailSender
+      tags:
+      - Settings
+      summary: Update email sender
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailSender"
+            examples:
+              example:
+                summary: Email Sender
+                value:
+                  host: smtp.example.com
+                  port: 587
+                  username: user@example.com
+                  password: securepassword
+                  from: noreply@example.com
+                  note: Updated email sender
+      responses:
+        '200':
+          description: Email sender updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PutEmailSenderResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch email sender: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    delete:
+      operationId: deleteEmailSender
+      tags:
+      - Settings
+      summary: Delete email sender
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Email sender deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeleteEmailSenderResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch email sender: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings/emailRecipients":
+    post:
+      operationId: createEmailRecipient
+      tags:
+      - Settings
+      summary: Create email recipient
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailRecipient"
+            examples:
+              example:
+                summary: Email Recipient
+                value:
+                  to:
+                  - user1@example.com
+                  - user2@example.com
+                  note: Primary recipients
+      responses:
+        '201':
+          description: Email recipient created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostEmailRecipientResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to create email recipients: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    get:
+      operationId: getEmailRecipients
+      tags:
+      - Settings
+      summary: Retrieve email recipients
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Email recipients retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetEmailRecipientsResponse"
+              examples:
+                example:
+                  summary: Email Recipients List
+                  value:
+                    code: 200
+                    data:
+                      emailRecipients:
+                      - id: 8c2e39d7-e72b-4581-bfa5-117160df7cfb
+                        to:
+                        - user1@example.com
+                        - user2@example.com
+                        note: Primary recipients
+                    msg: email recipients retrieved successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch email recipients: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings/emailRecipients/{id}":
+    put:
+      operationId: updateEmailRecipient
+      tags:
+      - Settings
+      summary: Update email recipient
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: ID of the email recipient to update
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailRecipient"
+            examples:
+              example:
+                summary: Email Recipient
+                value:
+                  to:
+                  - user1@example.com
+                  note: Updated recipients
+      responses:
+        '200':
+          description: Email recipient updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PutEmailRecipientResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update email recipient: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    delete:
+      operationId: deleteEmailRecipient
+      tags:
+      - Settings
+      summary: Delete email recipient
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: ID of the email recipient to delete
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Email recipient deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeleteEmailRecipientResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to delete email recipient: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings/slackWebhooks":
+    post:
+      operationId: createSlackWebhook
+      tags:
+      - Settings
+      summary: Create slack webhook
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SlackWebhook"
+            examples:
+              example:
+                summary: Slack Webhook
+                value:
+                  url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+                  channel: "#alerts"
+      responses:
+        '201':
+          description: Slack webhook created successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostSlackWebhookResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to create slack webhook: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    get:
+      operationId: getSlackWebhooks
+      tags:
+      - Settings
+      summary: Retrieve slack webhooks
+      parameters:
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Slack webhooks retrieved successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetSlackWebhooksResponse"
+              examples:
+                example:
+                  summary: Slack Webhooks List
+                  value:
+                    code: 200
+                    data:
+                      slackWebhooks:
+                      - id: 8c2e39d7-e72b-4581-bfa5-117160df7cfb
+                        url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+                        channel: "#alerts"
+                    msg: slack webhooks retrieved successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update slack webhook: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/settings/slackWebhooks/{id}":
+    put:
+      operationId: updateSlackWebhook
+      tags:
+      - Settings
+      summary: Update slack webhook
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: ID of the slack webhook to update
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SlackWebhook"
+            examples:
+              example:
+                summary: Slack Webhook
+                value:
+                  url: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+                  channel: "#alerts-updated"
+      responses:
+        '200':
+          description: Slack webhook updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PutSlackWebhookResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update slack webhook: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    delete:
+      operationId: deleteSlackWebhook
+      tags:
+      - Settings
+      summary: Delete slack webhook
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: ID of the slack webhook to delete
+      - in: path
+        name: dataCenter
+        required: true
+        schema:
+          type: string
+        description: The name of the data center to operate
+        example: example-data-center
+      responses:
+        '200':
+          description: Slack webhook deleted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeleteSlackWebhookResponse"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to delete slack webhook: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/tokens":
     post:
       operationId: getToken
@@ -2078,6 +3595,43 @@ components:
         status:
           type: string
           example: ok
+    GetServicesResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - service
+            - category
+            - modules
+            properties:
+              service:
+                type: string
+              category:
+                type: string
+              modules:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - name
+                  properties:
+                    name:
+                      type: string
+        msg:
+          type: string
+        status:
+          type: string
     GetEventsResponse:
       type: object
       required:
@@ -2237,6 +3791,117 @@ components:
           type: string
         status:
           type: string
+    GetRankedEventsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - events
+          - limit
+          properties:
+            events:
+              type: array
+              items:
+                type: object
+                required:
+                - id
+                - percent
+                - number
+                - query
+                properties:
+                  id:
+                    type: string
+                  percent:
+                    type: number
+                  number:
+                    type: integer
+                  query:
+                    type: string
+            limit:
+              type: object
+              required:
+              - number
+              - description
+              properties:
+                number:
+                  type: integer
+                description:
+                  type: string
+        msg:
+          type: string
+        status:
+          type: string
+    GetEventFilterConditionResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - system
+          - instance
+          - host
+          properties:
+            system:
+              type: object
+              required:
+              - severities
+              - categories
+              properties:
+                severities:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+            instance:
+              type: object
+              required:
+              - ids
+              - categories
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+            host:
+              type: object
+              required:
+              - names
+              - categories
+              properties:
+                names:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+        msg:
+          type: string
+        status:
+          type: string
     GetHealthsResponse:
       type: object
       required:
@@ -2263,14 +3928,14 @@ components:
                   type: object
                   required:
                   - current
-                  - description
+                  - isFixing
                   properties:
                     current:
                       type: string
-                      example: ng
+                    isFixing:
+                      type: boolean
                     description:
                       type: string
-                      example: ceph has 2 ceph_osd down
             services:
               type: array
               items:
@@ -2322,6 +3987,67 @@ components:
         status:
           type: string
           example: ok
+    GetServiceHealthHistoryResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - category
+            - service
+            - history
+            - module
+            properties:
+              category:
+                type: string
+              service:
+                type: string
+              history:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - time
+                  - status
+                  properties:
+                    time:
+                      type: string
+                      format: date-time
+                    status:
+                      type: string
+                    error:
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                        reason:
+                          type: string
+                        nodes:
+                          type: array
+                          items:
+                            type: string
+                        description:
+                          type: string
+                        details:
+                          type: string
+                        log:
+                          type: string
+                          format: uri
+              module:
+                type: string
+        msg:
+          type: string
+        status:
+          type: string
     PatchRepairResponse:
       type: object
       required:
@@ -2366,61 +4092,46 @@ components:
         data:
           type: object
           required:
-          - health
-          - page
+          - category
+          - name
+          - module
+          - history
           properties:
-            health:
-              type: object
-              required:
-              - category
-              - service
-              - module
-              - history
-              properties:
-                category:
-                  type: string
-                service:
-                  type: string
-                module:
-                  type: string
-                history:
-                  type: array
-                  items:
+            category:
+              type: string
+            service:
+              type: string
+            module:
+              type: string
+            history:
+              type: array
+              items:
+                type: object
+                required:
+                - time
+                - status
+                properties:
+                  time:
+                    type: string
+                    format: date-time
+                  status:
+                    type: string
+                  error:
                     type: object
-                    required:
-                    - time
-                    - status
                     properties:
-                      time:
+                      type:
                         type: string
-                        format: date-time
-                      status:
+                      nodes:
+                        type: array
+                        items:
+                          type: string
+                      description:
                         type: string
-                      error:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                          nodes:
-                            type: array
-                            items:
-                              type: string
-                          description:
-                            type: string
-                          details:
-                            type: string
-                          log:
-                            type: string
-                            format: uri
-            page:
-              type: object
-              properties:
-                total:
-                  type: integer
-                number:
-                  type: integer
-                size:
-                  type: integer
+                      details:
+                        type: string
+                      log:
+                        type: string
+                        format: uri
         msg:
           type: string
         status:
@@ -3890,3 +5601,333 @@ components:
           type: string
         status:
           type: string
+    Setting:
+      type: object
+      properties:
+        emailSenders:
+          type: array
+          items:
+            "$ref": "#/components/schemas/EmailSender"
+        emailRecipients:
+          type: array
+          items:
+            "$ref": "#/components/schemas/EmailRecipient"
+        slackWebhooks:
+          type: array
+          items:
+            "$ref": "#/components/schemas/SlackWebhook"
+    EmailSender:
+      type: object
+      properties:
+        host:
+          type: string
+          example: smtp.example.com
+        port:
+          type: integer
+          example: 587
+        username:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          example: securepassword
+        from:
+          type: string
+          example: noreply@example.com
+        note:
+          type: string
+          example: Primary email sender
+    EmailRecipient:
+      type: object
+      properties:
+        id:
+          type: string
+          example: recipient-id-123
+        to:
+          type: array
+          items:
+            type: string
+          example:
+          - user1@example.com
+          - user2@example.com
+        note:
+          type: string
+          example: Primary recipients
+    SlackWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          example: webhook-id-123
+        url:
+          type: string
+          example: https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX
+        channel:
+          type: string
+          example: "#alerts"
+    GetSettingResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          "$ref": "#/components/schemas/Setting"
+        msg:
+          type: string
+          example: fetch setting successfully
+        status:
+          type: string
+          example: ok
+    PostEmailSenderResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 201
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email senders created successfully
+        status:
+          type: string
+          example: ok
+    GetEmailSendersResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          properties:
+            emailSenders:
+              type: array
+              items:
+                "$ref": "#/components/schemas/EmailSender"
+        msg:
+          type: string
+          example: email senders retrieved successfully
+        status:
+          type: string
+          example: ok
+    PutEmailSenderResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email senders updated successfully
+        status:
+          type: string
+          example: ok
+    DeleteEmailSenderResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email senders deleted successfully
+        status:
+          type: string
+          example: ok
+    PostEmailRecipientResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 201
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email recipient created successfully
+        status:
+          type: string
+          example: ok
+    GetEmailRecipientsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          properties:
+            emailRecipients:
+              type: array
+              items:
+                "$ref": "#/components/schemas/EmailRecipient"
+        msg:
+          type: string
+          example: email recipients retrieved successfully
+        status:
+          type: string
+          example: ok
+    PutEmailRecipientResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email recipient updated successfully
+        status:
+          type: string
+          example: ok
+    DeleteEmailRecipientResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: email recipient deleted successfully
+        status:
+          type: string
+          example: ok
+    PostSlackWebhookResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 201
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: slack webhook created successfully
+        status:
+          type: string
+          example: ok
+    GetSlackWebhooksResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          properties:
+            slackWebhooks:
+              type: array
+              items:
+                "$ref": "#/components/schemas/SlackWebhook"
+        msg:
+          type: string
+          example: slack webhooks retrieved successfully
+        status:
+          type: string
+          example: ok
+    PutSlackWebhookResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: slack webhook updated successfully
+        status:
+          type: string
+          example: ok
+    DeleteSlackWebhookResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          example: 
+        msg:
+          type: string
+          example: slack webhook deleted successfully
+        status:
+          type: string
+          example: ok
