@@ -486,7 +486,7 @@ paths:
                         - SRV
                       instance:
                         ids:
-                        - '028952d3-c0ba-4494-96c0-2bf1bab407e5'
+                        - 028952d3-c0ba-4494-96c0-2bf1bab407e5
                         - 02ecd121-c19b-41c7-8ed7-390745b01af4
                         - 12893f22-a353-4dce-a164-f889e0f39951
                         - fbd5d7c2-38c8-436b-97f4-d9e5b322d02b
@@ -3890,7 +3890,7 @@ components:
               - names
               - categories
               properties:
-                severities:
+                names:
                   type: array
                   items:
                     type: string
