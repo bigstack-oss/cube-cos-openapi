@@ -3564,11 +3564,11 @@ components:
           items:
             type: object
             required:
-            - service
+            - name
             - category
             - modules
             properties:
-              service:
+              name:
                 type: string
               category:
                 type: string
