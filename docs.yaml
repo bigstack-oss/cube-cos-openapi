@@ -3885,6 +3885,7 @@ components:
                   properties:
                     current:
                       type: string
+                      enum: ['ok', 'ng']
                     isFixing:
                       type: boolean
                     description:
@@ -3912,6 +3913,7 @@ components:
                       current:
                         type: string
                         example: ok
+                        enum: ['ok', 'ng']
                   modules:
                     type: array
                     required:
@@ -3934,6 +3936,7 @@ components:
                             current:
                               type: string
                               example: ok
+                              enum: ['ok', 'ng']
         msg:
           type: string
           example: fetch health successfully
@@ -3977,6 +3980,7 @@ components:
                       format: date-time
                     status:
                       type: string
+                      enum: ['ok', 'ng']
                     error:
                       type: object
                       properties:
@@ -4069,6 +4073,7 @@ components:
                     format: date-time
                   status:
                     type: string
+                    enum: ['ok', 'ng']
                   error:
                     type: object
                     properties:
