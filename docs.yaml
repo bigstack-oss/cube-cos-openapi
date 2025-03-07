@@ -2203,7 +2203,7 @@ paths:
                     data:
                       totalMiB: 257371
                       usedMiB: 98255
-                      value: 38.1752
+                      usedPercent: 38.1752
                       freeMiB: 159116
                       freePercent: 61.8248
                     msg: fetch metrics successfully
@@ -2470,7 +2470,7 @@ paths:
                     data:
                       totalMiB: 257371
                       usedMiB: 98255
-                      value: 38.1752
+                      usedPercent: 38.1752
                       freeMiB: 159116
                       freePercent: 61.8248
                     msg: fetch metrics successfully
@@ -5716,7 +5716,7 @@ components:
                       required:
                       - totalMiB
                       - usedMiB
-                      - value
+                      - usedPercent
                       - freeMiB
                       - freePercent
                       properties:
@@ -5726,7 +5726,7 @@ components:
                         usedMiB:
                           type: integer
                           example: 98255
-                        value:
+                        usedPercent:
                           type: number
                           example: 38.2
                         freeMiB:
@@ -5809,7 +5809,7 @@ components:
                             required:
                             - totalMiB
                             - usedMiB
-                            - value
+                            - usedPercent
                             - freeMiB
                             - freePercent
                             properties:
@@ -5817,7 +5817,7 @@ components:
                                 type: integer
                               usedMiB:
                                 type: integer
-                              value:
+                              usedPercent:
                                 type: number
                               freeMiB:
                                 type: integer
@@ -5894,7 +5894,7 @@ components:
                       - totalMiB
                       - usedMiB
                       - freeMiB
-                      - value
+                      - usedPercent
                       - freePercent
                       properties:
                         totalMiB:
@@ -5906,7 +5906,7 @@ components:
                         freeMiB:
                           type: integer
                           example: 159116
-                        value:
+                        usedPercent:
                           type: number
                           example: 38.2
                         freePercent:
@@ -5918,7 +5918,7 @@ components:
                       - totalMiB
                       - usedMiB
                       - freeMiB
-                      - value
+                      - usedPercent
                       - freePercent
                       properties:
                         totalMiB:
@@ -5930,7 +5930,7 @@ components:
                         freeMiB:
                           type: integer
                           example: 51200
-                        value:
+                        usedPercent:
                           type: number
                           example: 50.1
                         freePercent:
@@ -6010,7 +6010,7 @@ components:
           required:
           - totalMiB
           - usedMiB
-          - value
+          - usedPercent
           - freeMiB
           - freePercent
           properties:
@@ -6018,7 +6018,7 @@ components:
               type: integer
             usedMiB:
               type: integer
-            value:
+            usedPercent:
               type: number
             freeMiB:
               type: integer
@@ -6183,7 +6183,7 @@ components:
           required:
           - totalMiB
           - usedMiB
-          - value
+          - usedPercent
           - freeMiB
           - freePercent
           properties:
@@ -6191,7 +6191,7 @@ components:
               type: integer
             usedMiB:
               type: integer
-            value:
+            usedPercent:
               type: number
             freeMiB:
               type: integer
