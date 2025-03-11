@@ -2157,6 +2157,7 @@ paths:
         description: The end time of the event to query, the value should be in RFC3339
           format (default is now).
         example: '2025-01-01T01:00:00+00:00'
+      - $ref: "#/components/parameters/watch"
       responses:
         '200':
           description: Retrieve the summary of data center successfully
