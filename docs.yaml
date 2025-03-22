@@ -1136,6 +1136,7 @@ paths:
                     - category: cloud computing
                       service: compute
                       module: nova
+                      isRepaired: true
                       history:
                       - time: '2025-02-15T08:44:36+00:00'
                         status: ng
@@ -1199,6 +1200,7 @@ paths:
                     - category: cloud computing
                       service: compute
                       module: cyborg
+                      isRepaired: true
                       history:
                       - time: '2025-02-15T08:44:36+00:00'
                         status: ng
@@ -1365,7 +1367,7 @@ paths:
           - haproxy
           - httpd
           - skyline
-          - lim
+          - api
           - memcache
           - k3s
           - keycloak
@@ -1444,6 +1446,7 @@ paths:
                       category: cloud computing
                       name: compute
                       module: nova
+                      isRepaired: true
                       history:
                       - time: '2025-02-01T03:00:00+00:00'
                         status: ok
@@ -1569,7 +1572,7 @@ paths:
           - haproxy
           - httpd
           - skyline
-          - lim
+          - api
           - memcache
           - k3s
           - keycloak
@@ -1685,7 +1688,7 @@ paths:
                       isHeaderShortcutEnabled: true
                       description: OpenStack Dashboard
                       isBuiltIn: true
-                      url: https://example-datat-center.host/horizon
+                      url: https://example-datat-center.host:9999/base/overview
                     - name: rancher
                       isHeaderShortcutEnabled: true
                       description: Rancher Dashboard
@@ -1722,8 +1725,23 @@ paths:
       summary: Retrieve the list of licenses
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/keyword"
+      - in: query
+        name: type
+        required: false
+        schema:
+          type: string
+          enum:
+          - trial
+          - perpetual
+          - community
+          - enterprise
+        description: The type of the license to query, click 'try it out' to see a
+          few options.
+        example: trial
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
+      - "$ref": "#/components/parameters/watch"
       responses:
         '200':
           description: Retrieve the list of licenses successfully
@@ -1733,33 +1751,39 @@ paths:
                 "$ref": "#/components/schemas/GetLicensesResponse"
               examples:
                 example1:
-                  summary: Licenses
+                  summary: License list
                   value:
                     code: 200
                     data:
                       licenses:
                       - type: trial
-                        hostname: dell200
-                        serial: "  "
+                        hosts:
+                        - example-node-0
+                        serial: 1H2ZLG2
                         product:
-                          name: ''
-                          features: 
+                          name: CubeCOS
+                          features:
+                          - virtualization
+                          - kubernetes
                         issue:
                           by: Bigstack co., ltd.
-                          to: "*"
+                          to: bigstack
                           hardware: "*"
-                          date: '2025-02-04T17:54:45+08:00'
+                          date: '2025-03-16T17:31:21+08:00'
                         quantity:
                           type: ''
-                          vcpu: 0
+                          value: 0
                         serviceLevelAgreement:
                           uptime: 0
                           period: ''
                           meanTimeBetweenFailure: ''
                           meanTimeToRecovery: ''
                         expiry:
-                          date: '2025-04-05T17:54:45+08:00'
-                          days: 58
+                          date: '2025-05-15T17:31:21+08:00'
+                          days: 56
+                        status:
+                          current: ok
+                          isExpiring: false
                       page:
                         total: 1
                         number: 1
@@ -1767,6 +1791,22 @@ paths:
                         totalItemCount: 1
                     msg: fetch licenses successfully
                     status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
         '500':
           description: Internal Server Error
           content:
@@ -4811,7 +4851,9 @@ paths:
         name: host
         required: false
         schema:
-          type: string
+          type: array
+          items:
+            type: string
         description: 'The name of the host to retrieve the tunings, can specify multiple
           hosts to retrieve the tunings, for example: host=example-node-0&host=example-node-1'
         example: example-node-0
@@ -6671,6 +6713,74 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/supportFiles/hosts/{hostname}":
+    get:
+      operationId: getHostSupportFile
+      tags:
+      - Support Files
+      summary: Retrieve host support files
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/hostname"
+      responses:
+        '200':
+          description: Retrieve host support files successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetHostSupportFilesResponse"
+              examples:
+                example:
+                  summary: Host support file list
+                  value:
+                    code: 200
+                    data:
+                    - name: CUBE_3.0.0_20250318-215742_example-node-0.support
+                      group: Cube Appliance 3.0.0 Support File Set 2025-03-18T21:57:39+00:00
+                      description: ''
+                      source:
+                        role: control-converged
+                        host: example-node-0
+                      sizeMiB: 116.0698
+                      url: http://example-datacenter/supportfiles/CUBE_3.0.0_20250318-215742_example-node-0.support?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Checksum-Mode=ENABLED&X-Amz-Credential=admin%2F20250318%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250318T140312Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=ae8c2a39d348709b51d6c0d4b731716f1dc33c172ba43c2919357106cbb15389
+                      status:
+                        current: completed
+                        createdAt: '2025-03-18T21:57:39+00:00'
+                        isCreating: false
+                    msg: retrieved support files successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to list host support files: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/grafana/hosts/{hostname}":
     get:
       operationId: getGrafanaHosts
@@ -6679,13 +6789,7 @@ paths:
       summary: Get Grafana hosts dashboard
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: hostname
-        required: true
-        schema:
-          type: string
-        description: The hostname of the host to operate
-        example: example-node-0
+      - "$ref": "#/components/parameters/hostname"
       responses:
         '200':
           description: Get Grafana hosts dashboard
@@ -6700,6 +6804,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/i-R2q81iz/host?refresh=5m&kiosk=tv&orgId=1&var-HOST=example-node-0
+                      enabled: true
                     msg: fetch top host link successfully
                     status: ok
         '401':
@@ -6764,6 +6869,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/qzfq087Wk/instance?refresh=5m&orgId=1&var-TID=example-instance-id&var-TOP=50&var-TENANT=admin
+                      enabled: true
                     msg: fetch top instance link successfully
                     status: ok
         '401':
@@ -6821,6 +6927,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/M3ncw6lmk/top-hosts?refresh=5m&kiosk=tv&orgId=1
+                      enabled: true
                     msg: fetch top host link successfully
                     status: ok
         '401':
@@ -6878,6 +6985,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/qzfq087Wk/top-instances?refresh=5m&orgId=1&var-TID=&var-TOP=50&var-TENANT=admin
+                      enabled: true
                     msg: fetch top instance link successfully
                     status: ok
         '401':
@@ -6935,6 +7043,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/Xx2kkftWk/network?orgId=1&refresh=5m
+                      enabled: true
                     msg: fetch top network link successfully
                     status: ok
         '401':
@@ -6992,6 +7101,7 @@ paths:
                     code: 200
                     data:
                       link: http://example-data-center/grafana/d/QTc_sAxiw/storage?refresh=5m&kiosk=tv&orgId=1
+                      enabled: true
                     msg: fetch top storage link successfully
                     status: ok
         '401':
@@ -7037,6 +7147,14 @@ components:
         type: string
       description: The name of the data center to operate
       example: example-data-center
+    hostname:
+      in: path
+      name: hostname
+      required: true
+      schema:
+        type: string
+      description: The hostname of the host to operate
+      example: example-node-0
     watch:
       in: query
       name: watch
@@ -7590,6 +7708,7 @@ components:
             required:
             - category
             - service
+            - isRepaired
             - history
             - module
             properties:
@@ -7597,6 +7716,8 @@ components:
                 type: string
               service:
                 type: string
+              isRepaired:
+                type: boolean
               history:
                 type: array
                 items:
@@ -7684,6 +7805,7 @@ components:
           - category
           - name
           - module
+          - isRepaired
           - history
           properties:
             category:
@@ -7692,6 +7814,8 @@ components:
               type: string
             module:
               type: string
+            isRepaired:
+              type: boolean
             history:
               type: array
               items:
@@ -7791,18 +7915,21 @@ components:
                 type: object
                 required:
                 - type
-                - hostname
+                - hosts
                 - serial
                 - product
                 - issue
                 - quantity
                 - serviceLevelAgreement
                 - expiry
+                - status
                 properties:
                   type:
                     type: string
-                  hostname:
-                    type: string
+                  hosts:
+                    type: array
+                    items:
+                      type: string
                   serial:
                     type: string
                   product:
@@ -7814,7 +7941,9 @@ components:
                       name:
                         type: string
                       features:
-                        type: object
+                        type: array
+                        items:
+                          type: string
                   issue:
                     type: object
                     required:
@@ -7835,11 +7964,11 @@ components:
                     type: object
                     required:
                     - type
-                    - vcpu
+                    - value
                     properties:
                       type:
                         type: string
-                      vcpu:
+                      value:
                         type: integer
                   serviceLevelAgreement:
                     type: object
@@ -7867,6 +7996,19 @@ components:
                         type: string
                       days:
                         type: integer
+                  status:
+                    type: object
+                    required:
+                    - current
+                    - isExpiring
+                    properties:
+                      current:
+                        type: string
+                        enum:
+                        - ok
+                        - expired
+                      isExpiring:
+                        type: boolean
             page:
               "$ref": "#/components/schemas/Page"
         msg:
@@ -8661,6 +8803,70 @@ components:
       - value
       properties:
         value:
+          type: string
+    GetHostSupportFilesResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            - group
+            - description
+            - source
+            - sizeMiB
+            - url
+            - status
+            properties:
+              name:
+                type: string
+              group:
+                type: string
+              description:
+                type: string
+              source:
+                type: object
+                required:
+                - role
+                - host
+                properties:
+                  role:
+                    type: string
+                  host:
+                    type: string
+              sizeMiB:
+                type: integer
+              url:
+                type: string
+              status:
+                type: object
+                required:
+                - current
+                - isCreating
+                - createdAt
+                properties:
+                  current:
+                    type: string
+                    enum:
+                    - ok
+                    - error
+                  isCreating:
+                    type: boolean
+                  createdAt:
+                    type: string
+        msg:
+          type: string
+        status:
           type: string
     EmailSenderResponse:
       type: object
@@ -9610,9 +9816,12 @@ components:
           type: object
           required:
           - link
+          - enabled
           properties:
             link:
               type: string
+            enabled:
+              type: boolean
         msg:
           type: string
         status:
