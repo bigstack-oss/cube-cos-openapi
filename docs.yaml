@@ -1136,7 +1136,7 @@ paths:
                     - category: cloud computing
                       service: compute
                       module: nova
-                      isRepaired: true
+                      isRepairable: true
                       history:
                       - time: '2025-02-15T08:44:36+00:00'
                         status: ng
@@ -1200,7 +1200,7 @@ paths:
                     - category: cloud computing
                       service: compute
                       module: cyborg
-                      isRepaired: true
+                      isRepairable: true
                       history:
                       - time: '2025-02-15T08:44:36+00:00'
                         status: ng
@@ -1446,7 +1446,7 @@ paths:
                       category: cloud computing
                       name: compute
                       module: nova
-                      isRepaired: true
+                      isRepairable: true
                       history:
                       - time: '2025-02-01T03:00:00+00:00'
                         status: ok
@@ -7708,7 +7708,7 @@ components:
             required:
             - category
             - service
-            - isRepaired
+            - isRepairable
             - history
             - module
             properties:
@@ -7716,7 +7716,7 @@ components:
                 type: string
               service:
                 type: string
-              isRepaired:
+              isRepairable:
                 type: boolean
               history:
                 type: array
@@ -7805,7 +7805,7 @@ components:
           - category
           - name
           - module
-          - isRepaired
+          - isRepairable
           - history
           properties:
             category:
@@ -7814,7 +7814,7 @@ components:
               type: string
             module:
               type: string
-            isRepaired:
+            isRepairable:
               type: boolean
             history:
               type: array
