@@ -393,22 +393,8 @@ paths:
         description: The past time of the event to query, use the unit of 's'(second),
           'm'(minute), 'h'(hour), and 'd'(day) suffix to specify the time range.
         example: 1d
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the event to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the event to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -473,22 +459,8 @@ paths:
           out' to see a few options, but can specify with the 's'(second), 'm'(minute),
           'h'(hour), and 'd'(day) suffix for other time ranges.
         example: 1d
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the event to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the event to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       responses:
         '200':
           description: Retrieve the event filter conditions successfully
@@ -834,22 +806,8 @@ paths:
           to see a few options, but can specify with the 's'(second), 'm'(minute),
           'h'(hour), and 'd'(day) suffix for other time ranges.
         example: 1d
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the event to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the event to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - in: query
         name: limit
         required: false
@@ -1089,22 +1047,8 @@ paths:
         description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
           to get the service list and their modules.
       - "$ref": "#/components/parameters/watch"
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the health history to query, the value should
-          be in RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the health history to query, the value should
-          be in RFC3339 format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - in: query
         name: past
         required: false
@@ -1413,22 +1357,8 @@ paths:
           to see a few options, but can specify with the 's'(second), 'm'(minute),
           'h'(hour), and 'd'(day) suffix for other time ranges.
         example: 1d
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the health history to query, the value should
-          be in RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the health history to query, the value should
-          be in RFC3339 format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - "$ref": "#/components/parameters/watch"
       responses:
         '200':
@@ -2097,7 +2027,7 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to fetch nodes: internal server error'
+                    example: 'failed to fetch metrics: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -2109,64 +2039,11 @@ paths:
       summary: Retrieve the various metrics with different view from hosts or vms
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: metricType
-        required: true
-        schema:
-          type: string
-          enum:
-          - cpuUsage
-          - memoryUsage
-          - diskUsage
-          - diskBandwidth
-          - diskIops
-          - diskLatency
-          - diskReadIops
-          - diskWriteIops
-          - networkTrafficIn
-          - networkTrafficOut
-        description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
-          'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops',
-          'diskWriteIops', 'networkTrafficIn', or 'networkTrafficOut'.
-        example: 1
-      - in: path
-        name: viewType
-        required: true
-        schema:
-          type: string
-          enum:
-          - summary
-          - history
-          - rank
-        description: The type of view to query, the value can be only 'summary', 'history',
-          or 'rank'.
-        example: 1
-      - in: path
-        name: entityType
-        required: true
-        schema:
-          type: string
-          enum:
-          - hosts
-          - vms
-        description: The type of entity to query, the value can be 'hosts' or 'vms'
-        example: hosts
-      - in: query
-        name: start
-        required: false
-        schema:
-          type: string
-        description: The start time of the event to query, the value should be in
-          RFC3339 format (default is 24 hours ago).
-        example: '2025-01-01T01:00:00+00:00'
-      - in: query
-        name: stop
-        required: false
-        schema:
-          type: string
-        description: The end time of the event to query, the value should be in RFC3339
-          format (default is now).
-        example: '2025-01-01T01:00:00+00:00'
+      - "$ref": "#/components/parameters/metricType"
+      - "$ref": "#/components/parameters/viewType"
+      - "$ref": "#/components/parameters/entityType"
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - "$ref": "#/components/parameters/watch"
       responses:
         '200':
@@ -2681,6 +2558,117 @@ paths:
                           value: 109977.441
                         - time: '2025-02-14T00:48:23+00:00'
                           value: 111826.9696
+                    msg: fetch metrics successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: metricType should be cpuUsage, memoryUsage, diskUsage,
+                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
+                      networkTrafficIn, or networkTrafficOut
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch metrics: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/metrics/{metricType}/{viewType}/{entityType}/{entityId or Name}":
+    get:
+      operationId: getMetricByHostOrVm
+      tags:
+      - Metrics
+      summary: Retrieve the various metrics with different view from single host or
+        single vm
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/metricType"
+      - "$ref": "#/components/parameters/viewType"
+      - "$ref": "#/components/parameters/entityType"
+      - in: path
+        name: entityId or Name
+        required: true
+        schema:
+          type: string
+        description: The id or name of the entity to query
+        example: example-node-0
+      - in: query
+        name: past
+        required: false
+        schema:
+          type: string
+          enum:
+          - 1h
+          - 24h
+          - 7d
+          - 14d
+        description: The past time of the health history to query, click 'try it out'
+          to see a few options, but can specify with the 's'(second), 'm'(minute),
+          'h'(hour), and 'd'(day) suffix for other time ranges.
+        example: 1d
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
+      - "$ref": "#/components/parameters/watch"
+      responses:
+        '200':
+          description: Retrieve the various metrics with different view from single
+            host or single vm
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - "$ref": "#/components/schemas/GetCpuUsageHistoryOfHostResponse"
+                - "$ref": "#/components/schemas/GetMemoryUsageHistoryOfHostResponse"
+              examples:
+                example1:
+                  summary: Cpu usage history of host
+                  value:
+                    code: 200
+                    data:
+                    - time: '2025-03-24T09:39:00+08:00'
+                      value: 10.9059
+                    - time: '2025-03-24T09:40:00+08:00'
+                      value: 10.5089
+                    - time: '2025-03-24T09:41:00+08:00'
+                      value: 15.3512
+                    - time: '2025-03-24T09:42:00+08:00'
+                      value: 12.3685
+                    msg: fetch metrics successfully
+                    status: ok
+                example2:
+                  summary: Memory usage history of host
+                  value:
+                    code: 200
+                    data:
+                    - time: '2025-03-24T07:06:00+08:00'
+                      value: 55.9796
+                    - time: '2025-03-24T07:07:00+08:00'
+                      value: 55.9997
+                    - time: '2025-03-24T07:08:00+08:00'
+                      value: 55.9884
+                    - time: '2025-03-24T07:09:00+08:00'
+                      value: 55.9449
                     msg: fetch metrics successfully
                     status: ok
         '400':
@@ -4857,13 +4845,7 @@ paths:
         description: 'The name of the host to retrieve the tunings, can specify multiple
           hosts to retrieve the tunings, for example: host=example-node-0&host=example-node-1'
         example: example-node-0
-      - in: query
-        name: keyword
-        required: false
-        schema:
-          type: string
-        description: The keyword to search the tunings
-        example: can be any string
+      - "$ref": "#/components/parameters/keyword"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -4891,7 +4873,9 @@ paths:
                       - name: neutron.debug.enabled
                         value: false
                         hosts:
-                        - example-node-0
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
                         description: Set to true to enable neutron verbose log.
                         enabled: true
                         isModified: false
@@ -4899,12 +4883,15 @@ paths:
                           type: bool
                           default: false
                         status:
+                          current: updating
                           updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: true
                       - name: cubesys.provider.extra
                         value: ''
                         hosts:
-                        - example-node-0
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
                         description: Set extra provider interfaces ('pvd-' prefix
                           and <= 15 chars) [IF.2:pvd-xxx,eth2:pvd-yyy,...].
                         enabled: true
@@ -4914,11 +4901,15 @@ paths:
                           default: ''
                           regex: ''
                         status:
+                          current: ok
+                          updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: false
                       - name: barbican.debug.enabled
                         value: false
                         hosts:
-                        - example-node-0
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
                         description: Set to true to enable barbican verbose log.
                         enabled: true
                         isModified: false
@@ -4926,11 +4917,15 @@ paths:
                           type: bool
                           default: false
                         status:
+                          current: ok
+                          updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: false
                       - name: cinder.backup.endpoint
                         value: ''
                         hosts:
-                        - example-node-0
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
                         description: Set cinder backup storage endpoint.
                         enabled: true
                         isModified: false
@@ -4939,12 +4934,18 @@ paths:
                           default: ''
                           regex: ''
                         status:
+                          current: ok
+                          updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: false
                       - name: influxdb.curator.rp
                         value: 7
                         hosts:
-                        - example-node-0
-                        - example-node-1
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
+                        - name: example-node-1
+                          role: control-converged
+                          ip: 10.10.10.11
                         description: influxdb curator retention policy in days.
                         enabled: true
                         isModified: false
@@ -4954,11 +4955,18 @@ paths:
                           min: 0
                           max: 365
                         status:
+                          current: ok
+                          updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: false
                       - name: influxdb.curator.rp
                         value: 23
                         hosts:
-                        - example-node-3
+                        - name: example-node-0
+                          role: control-converged
+                          ip: 10.10.10.10
+                        - name: example-node-1
+                          role: control-converged
+                          ip: 10.10.10.11
                         description: influxdb curator retention policy in days.
                         enabled: false
                         isModified: true
@@ -4968,6 +4976,8 @@ paths:
                           min: 0
                           max: 365
                         status:
+                          current: ok
+                          updatedAt: '2025-03-12T19:22:00+08:00'
                           isUpdating: false
                       page:
                         total: 15
@@ -7188,6 +7198,69 @@ components:
         type: string
       description: The keyword to search, can be any string
       example: example-keyword
+    metricType:
+      in: path
+      name: metricType
+      required: true
+      schema:
+        type: string
+        enum:
+        - cpuUsage
+        - memoryUsage
+        - diskUsage
+        - diskBandwidth
+        - diskIops
+        - diskLatency
+        - diskReadIops
+        - diskWriteIops
+        - networkTrafficIn
+        - networkTrafficOut
+      description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
+        'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops', 'diskWriteIops',
+        'networkTrafficIn', or 'networkTrafficOut'.
+      example: 1
+    viewType:
+      in: path
+      name: viewType
+      required: true
+      schema:
+        type: string
+        enum:
+        - summary
+        - history
+        - rank
+      description: The type of view to query, the value can be only 'summary', 'history',
+        or 'rank'.
+      example: 1
+    entityType:
+      in: path
+      name: entityType
+      required: true
+      schema:
+        type: string
+        enum:
+        - hosts
+        - vms
+      description: The type of entity to query, the value can be 'hosts' or 'vms'
+      example: hosts
+    start:
+      in: query
+      name: start
+      required: false
+      schema:
+        type: string
+      description: The start time of the event to query, the value should be in RFC3339
+        format (default is 24 hours ago).
+      example: '2025-01-01T01:00:00+00:00'
+    stop:
+      in: query
+      name: stop
+      required: false
+      schema:
+        type: string
+      description: The end time of the event to query, the value should be in RFC3339
+        format (default is now).
+      example: '2025-01-01T01:00:00+00:00'
   schemas:
     GetMeResponse:
       type: object
@@ -8357,6 +8430,38 @@ components:
         status:
           type: string
           example: ok
+    GetCpuUsageHistoryOfHostResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          "$ref": "#/components/schemas/TimeValuePair"
+        msg:
+          type: string
+        status:
+          type: string
+    GetMemoryUsageHistoryOfHostResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          "$ref": "#/components/schemas/TimeValuePair"
+        msg:
+          type: string
+        status:
+          type: string
     GetCpuUsageRankOfHostsResponse:
       type: object
       required:
@@ -9341,7 +9446,18 @@ components:
                   hosts:
                     type: array
                     items:
-                      type: string
+                      type: object
+                      required:
+                      - name
+                      - role
+                      - ip
+                      properties:
+                        name:
+                          type: string
+                        role:
+                          type: string
+                        ip:
+                          type: string
                   description:
                     type: string
                   enabled:
@@ -9377,8 +9493,12 @@ components:
                   status:
                     type: object
                     required:
+                    - current
+                    - updatedAt
                     - isUpdating
                     properties:
+                      current:
+                        type: string
                       updatedAt:
                         type: string
                       isUpdating:
@@ -10268,3 +10388,14 @@ components:
               type: string
             isCreating:
               type: boolean
+    TimeValuePair:
+      type: object
+      required:
+      - time
+      - value
+      properties:
+        time:
+          type: string
+          format: date-time
+        value:
+          type: number
