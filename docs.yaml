@@ -9473,7 +9473,7 @@ components:
                     - max
                     properties:
                       type:
-                        type: string
+                        $ref: "#/components/schemas/TuningLimitationType"
                       default:
                         oneOf:
                         - type: string
@@ -9544,7 +9544,7 @@ components:
                 - default
                 properties:
                   type:
-                    type: string
+                    $ref: "#/components/schemas/TuningLimitationType"
                   default:
                     oneOf:
                     - type: string
@@ -10399,3 +10399,9 @@ components:
           format: date-time
         value:
           type: number
+    TuningLimitationType:
+      type: string
+      enum:
+        - string
+        - int
+        - bool
