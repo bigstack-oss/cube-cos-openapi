@@ -10404,4 +10404,5 @@ components:
       enum:
         - string
         - int
+        - float
         - bool
