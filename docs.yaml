@@ -1757,7 +1757,7 @@ paths:
       operationId: importClusterLicense
       tags:
       - Licenses
-      summary: Update licenses for the cluster
+      summary: Import licenses for the cluster
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       requestBody:
@@ -1768,11 +1768,34 @@ paths:
               "$ref": "#/components/schemas/PostLicenseRequest"
       responses:
         '200':
-          description: Update licenses successfully
+          description: Import licenses successfully
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/PostLicenseResponse"
+              examples:
+                example1:
+                  summary: License import result
+                  value:
+                    code: 200
+                    msg: import license successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
         '500':
           description: Internal Server Error
           content:
@@ -1789,7 +1812,67 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/nodes/{node}/licenses":
+  "/api/v1/datacenters/{dataCenter}/licenses/verify":
+    post:
+      operationId: verifyLicense
+      tags:
+      - Licenses
+      summary: Verify the license
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              "$ref": "#/components/schemas/PostLicenseRequest"
+      responses:
+        '200':
+          description: Verify license successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PostLicenseResponse"
+              examples:
+                example1:
+                  summary: License verification result
+                  value:
+                    code: 200
+                    msg: verify license successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to verify license: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/licenses/hosts/{:hostname}":
     post:
       operationId: importNodeLicense
       tags:
@@ -1797,13 +1880,7 @@ paths:
       summary: Update licenses for specific node
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: node
-        required: true
-        schema:
-          type: string
-        description: The name of the node to operate
-        example: example-node
+      - "$ref": "#/components/parameters/hostname"
       requestBody:
         required: true
         content:
@@ -1817,6 +1894,13 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/PostLicenseResponse"
+              examples:
+                example1:
+                  summary: License import result
+                  value:
+                    code: 200
+                    msg: import license successfully
+                    status: ok
         '500':
           description: Internal Server Error
           content:
@@ -2713,6 +2797,9 @@ paths:
       summary: Retrieve the list of nodes
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/keyword"
+      - "$ref": "#/components/parameters/role"
+      - "$ref": "#/components/parameters/licenseStatus"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -2731,6 +2818,7 @@ paths:
                     data:
                       nodes:
                       - id: abc0005e
+                        serialNumber: 1H2ZLG2
                         dataCenter: example-data-center
                         hostname: example-node-0
                         role: control-converged
@@ -2751,7 +2839,7 @@ paths:
                             date: '2025-01-23T14:51:50+08:00'
                           quantity:
                             type: ''
-                            vcpu: 0
+                            value: 0
                           serviceLevelAgreement:
                             uptime: 0
                             period: ''
@@ -3382,6 +3470,7 @@ paths:
                     code: 200
                     data:
                       id: abc0005e
+                      serialNumber: 1H2ZLG2
                       dataCenter: example-data-center
                       hostname: example-node-0
                       role: control-converged
@@ -3402,7 +3491,7 @@ paths:
                           date: '2025-01-23T14:51:50+08:00'
                         quantity:
                           type: ''
-                          vcpu: 0
+                          value: 0
                         serviceLevelAgreement:
                           uptime: 0
                           period: ''
@@ -6547,6 +6636,94 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/triggers/{triggerName}/enable":
+    patch:
+      operationId: enableOrDisableTrigger
+      tags:
+      - Triggers
+      summary: Enable or disable a specific trigger
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - in: path
+        name: triggerName
+        required: true
+        schema:
+          type: string
+        description: The name of the trigger to update.
+        example: Administrative Level Notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EnableOrDisableTriggerRequest"
+            examples:
+              example:
+                summary: Trigger enablement request
+                value:
+                  enable: true
+      responses:
+        '202':
+          description: Enable or disable the trigger successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateTriggerResponse"
+              examples:
+                example:
+                  summary: Trigger update request received
+                  value:
+                    code: 202
+                    msg: trigger update request received
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: invalid parameter name
+                  status:
+                    type: string
+                    example: bad request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to request trigger update: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/supportFiles":
     get:
       operationId: getSupportFiles
@@ -7198,6 +7375,34 @@ components:
         type: string
       description: The keyword to search, can be any string
       example: example-keyword
+    role:
+      in: query
+      name: role
+      required: false
+      schema:
+        type: string
+        enum:
+        - control-converged
+        - control
+        - compute
+        - storage
+        - edge-core
+        - moderator
+      description: The role of the host
+      example: control-converged
+    licenseStatus:
+      in: query
+      name: licenseStatus
+      required: false
+      schema:
+        type: string
+        enum:
+        - ok
+        - expiring
+        - expired
+        - error
+      description: The status of the host
+      example: active
     metricType:
       in: path
       name: metricType
@@ -8106,16 +8311,10 @@ components:
       properties:
         code:
           type: integer
-          example: 200
-        data:
-          type: object
-          example: 
         msg:
           type: string
-          example: update licenses successfully
         status:
           type: string
-          example: ok
     GetMetricsResponse:
       type: object
       required:
@@ -9473,7 +9672,7 @@ components:
                     - max
                     properties:
                       type:
-                        $ref: "#/components/schemas/TuningLimitationType"
+                        "$ref": "#/components/schemas/TuningLimitationType"
                       default:
                         oneOf:
                         - type: string
@@ -9544,7 +9743,7 @@ components:
                 - default
                 properties:
                   type:
-                    $ref: "#/components/schemas/TuningLimitationType"
+                    "$ref": "#/components/schemas/TuningLimitationType"
                   default:
                     oneOf:
                     - type: string
@@ -9884,6 +10083,13 @@ components:
                     type: string
         enabled:
           type: boolean
+    EnableOrDisableTriggerRequest:
+      type: object
+      required:
+      - enable
+      properties:
+        enable:
+          type: boolean
     UpdateTriggerResponse:
       type: object
       required:
@@ -10091,6 +10297,7 @@ components:
       type: object
       required:
       - id
+      - serialNumber
       - dataCenter
       - hostname
       - role
@@ -10110,6 +10317,8 @@ components:
       - labels
       properties:
         id:
+          type: string
+        serialNumber:
           type: string
         dataCenter:
           type: string
@@ -10174,11 +10383,11 @@ components:
               type: object
               required:
               - type
-              - vcpu
+              - value
               properties:
                 type:
                   type: string
-                vcpu:
+                value:
                   type: integer
             serviceLevelAgreement:
               type: object
@@ -10402,7 +10611,7 @@ components:
     TuningLimitationType:
       type: string
       enum:
-        - string
-        - int
-        - float
-        - bool
+      - string
+      - int
+      - float
+      - bool
