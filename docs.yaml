@@ -884,6 +884,21 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/watch"
+      - in: query
+        name: past
+        required: false
+        schema:
+          type: string
+          enum:
+          - 1h
+          - 24h
+          - 7d
+          - 14d
+          - 30d
+        description: The past time of the health to query, click 'try it out' to see
+          a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+          and 'd'(day) suffix for other time ranges.
+        example: 1h
       responses:
         '200':
           description: Retrieve the list of health successfully
@@ -1656,8 +1671,6 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
-      - "$ref": "#/components/parameters/product"
-      - "$ref": "#/components/parameters/licenseStatus"
       - in: query
         name: type
         required: false
@@ -1705,11 +1718,7 @@ paths:
                         quantity:
                           type: ''
                           value: 0
-                        serviceLevelAgreement:
-                          uptime: 0
-                          period: ''
-                          meanTimeBetweenFailure: ''
-                          meanTimeToRecovery: ''
+                        serviceLevelAgreement: 5x8
                         expiry:
                           date: '2025-05-15T17:31:21+08:00'
                           days: 56
@@ -1834,7 +1843,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/PostLicenseResponse"
+                "$ref": "#/components/schemas/VerifyLicenseResponse"
               examples:
                 example1:
                   summary: License verification result
@@ -2848,9 +2857,9 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
-      - "$ref": "#/components/parameters/product"
-      - "$ref": "#/components/parameters/role"
+      - "$ref": "#/components/parameters/roles"
       - "$ref": "#/components/parameters/licenseStatus"
+      - "$ref": "#/components/parameters/product"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -2877,12 +2886,14 @@ paths:
                         ip: 10.10.10.10
                         managementIP: 10.10.10.10
                         license:
+                          name: example-license
                           type: trial
                           hostname: example-node-0
                           serial: 1H2ZLG2
                           product:
-                            name: ''
-                            features: 
+                            name: CubeCOS
+                            features:
+                            - virtualization
                           issue:
                             by: Bigstack co., ltd.
                             to: bigstack
@@ -2891,11 +2902,7 @@ paths:
                           quantity:
                             type: ''
                             value: 0
-                          serviceLevelAgreement:
-                            uptime: 0
-                            period: ''
-                            meanTimeBetweenFailure: ''
-                            meanTimeToRecovery: ''
+                          serviceLevelAgreement: 5x8
                           expiry:
                             date: '2025-03-24T14:51:50+08:00'
                             days: 9
@@ -2923,530 +2930,546 @@ paths:
                           state: DOWN
                           speed: NA/1000F
                         blockDevices:
-                        - device: nbd0
-                          type: disk
+                        - serial: ''
+                          device: nbd0
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd1
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd1
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd10
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd10
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd11
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd11
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd12
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd12
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd13
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd13
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd14
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd14
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd15
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd15
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd2
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd2
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd3
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd3
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd4
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd4
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd5
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd5
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd6
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd6
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd7
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd7
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd8
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd8
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: nbd9
-                          type: disk
+                          status: can be added
+                        - serial: ''
+                          device: nbd9
+                          type: SSD
                           sizeMiB: 0
-                          status: available
-                        - device: sda
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sda1
-                          type: part
+                          status: can be added
+                        - serial: S7M18BP3
+                          device: sda1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sda2
-                          type: part
+                          status: in-use
+                        - serial: S7M18BP3
+                          device: sda2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sda3
-                          type: part
+                          status: in-use
+                        - serial: S7M18BP3
+                          device: sda3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sda4
-                          type: part
+                          status: can be added
+                        - serial: S7M18BP3
+                          device: sda4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdb
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdb1
-                          type: part
+                          status: can be added
+                        - serial: S7M18KMS
+                          device: sdb1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdb2
-                          type: part
+                          status: in-use
+                        - serial: S7M18KMS
+                          device: sdb2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdb3
-                          type: part
+                          status: in-use
+                        - serial: S7M18KMS
+                          device: sdb3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdb4
-                          type: part
+                          status: can be added
+                        - serial: S7M18KMS
+                          device: sdb4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdc
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdc1
-                          type: part
+                          status: can be added
+                        - serial: S7M109S0
+                          device: sdc1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdc2
-                          type: part
+                          status: in-use
+                        - serial: S7M109S0
+                          device: sdc2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdc3
-                          type: part
+                          status: in-use
+                        - serial: S7M109S0
+                          device: sdc3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdc4
-                          type: part
+                          status: can be added
+                        - serial: S7M109S0
+                          device: sdc4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdd
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdd1
-                          type: part
+                          status: can be added
+                        - serial: S7M15TDF
+                          device: sdd1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdd2
-                          type: part
+                          status: in-use
+                        - serial: S7M15TDF
+                          device: sdd2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdd3
-                          type: part
+                          status: in-use
+                        - serial: S7M15TDF
+                          device: sdd3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdd4
-                          type: part
+                          status: can be added
+                        - serial: S7M15TDF
+                          device: sdd4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sde
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sde1
-                          type: part
+                          status: can be added
+                        - serial: S7M18BYG
+                          device: sde1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sde2
-                          type: part
+                          status: in-use
+                        - serial: S7M18BYG
+                          device: sde2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sde3
-                          type: part
+                          status: in-use
+                        - serial: S7M18BYG
+                          device: sde3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sde4
-                          type: part
+                          status: can be added
+                        - serial: S7M18BYG
+                          device: sde4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdf
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdf1
-                          type: part
+                          status: can be added
+                        - serial: S7M16KGY
+                          device: sdf1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdf2
-                          type: part
+                          status: in-use
+                        - serial: S7M16KGY
+                          device: sdf2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdf3
-                          type: part
+                          status: in-use
+                        - serial: S7M16KGY
+                          device: sdf3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdf4
-                          type: part
+                          status: can be added
+                        - serial: S7M16KGY
+                          device: sdf4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdg
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdg1
-                          type: part
+                          status: can be added
+                        - serial: S7M18J0Q
+                          device: sdg1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdg2
-                          type: part
+                          status: in-use
+                        - serial: S7M18J0Q
+                          device: sdg2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdg3
-                          type: part
+                          status: in-use
+                        - serial: S7M18J0Q
+                          device: sdg3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdg4
-                          type: part
+                          status: can be added
+                        - serial: S7M18J0Q
+                          device: sdg4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdh
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdh1
-                          type: part
+                          status: can be added
+                        - serial: S7M18LAY
+                          device: sdh1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdh2
-                          type: part
+                          status: in-use
+                        - serial: S7M18LAY
+                          device: sdh2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdh3
-                          type: part
+                          status: in-use
+                        - serial: S7M18LAY
+                          device: sdh3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdh4
-                          type: part
+                          status: can be added
+                        - serial: S7M18LAY
+                          device: sdh4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdi
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdi1
-                          type: part
+                          status: can be added
+                        - serial: S7M16LZ1
+                          device: sdi1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdi2
-                          type: part
+                          status: in-use
+                        - serial: S7M16LZ1
+                          device: sdi2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdi3
-                          type: part
+                          status: in-use
+                        - serial: S7M16LZ1
+                          device: sdi3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdi4
-                          type: part
+                          status: can be added
+                        - serial: S7M16LZ1
+                          device: sdi4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdj
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdj1
-                          type: part
+                          status: can be added
+                        - serial: S7M16LV3
+                          device: sdj1
+                          type: HDD
                           sizeMiB: 953.6743
-                          status: storage
-                        - device: sdj5
-                          type: part
+                          status: in-use
+                        - serial: S7M16LV3
+                          device: sdj5
+                          type: HDD
                           sizeMiB: 239467.6208
-                          status: storage
-                        - device: sdj6
-                          type: part
+                          status: in-use
+                        - serial: S7M16LV3
+                          device: sdj6
+                          type: HDD
                           sizeMiB: 239467.6208
-                          status: available
-                        - device: sdj7
-                          type: part
+                          status: can be added
+                        - serial: S7M16LV3
+                          device: sdj7
+                          type: HDD
                           sizeMiB: 53215.0268
-                          status: storage
-                        - device: sdk
-                          type: disk
-                          sizeMiB: 532531.7382
-                          status: available
-                        - device: sdk1
-                          type: part
+                          status: in-use
+                        - serial: 00df8523095cd5922b00617260a06d86
+                          device: sdk1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdk2
-                          type: part
+                          status: in-use
+                        - serial: 00df8523095cd5922b00617260a06d86
+                          device: sdk2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdk3
-                          type: part
+                          status: in-use
+                        - serial: 00df8523095cd5922b00617260a06d86
+                          device: sdk3
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
-                        - device: sdk4
-                          type: part
+                          status: can be added
+                        - serial: 00df8523095cd5922b00617260a06d86
+                          device: sdk4
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
-                        - device: sdl
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdl1
-                          type: part
+                          status: can be added
+                        - serial: S7M16LSA
+                          device: sdl1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdl2
-                          type: part
+                          status: in-use
+                        - serial: S7M16LSA
+                          device: sdl2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdl3
-                          type: part
+                          status: in-use
+                        - serial: S7M16LSA
+                          device: sdl3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdl4
-                          type: part
+                          status: can be added
+                        - serial: S7M16LSA
+                          device: sdl4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdm
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdm1
-                          type: part
+                          status: can be added
+                        - serial: S7M0ZYQ0
+                          device: sdm1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdm2
-                          type: part
+                          status: in-use
+                        - serial: S7M0ZYQ0
+                          device: sdm2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdm3
-                          type: part
+                          status: in-use
+                        - serial: S7M0ZYQ0
+                          device: sdm3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdm4
-                          type: part
+                          status: can be added
+                        - serial: S7M0ZYQ0
+                          device: sdm4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdn
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdn1
-                          type: part
+                          status: can be added
+                        - serial: S7M1414M
+                          device: sdn1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdn2
-                          type: part
+                          status: in-use
+                        - serial: S7M1414M
+                          device: sdn2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdn3
-                          type: part
+                          status: in-use
+                        - serial: S7M1414M
+                          device: sdn3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdn4
-                          type: part
+                          status: can be added
+                        - serial: S7M1414M
+                          device: sdn4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdo
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdo1
-                          type: part
+                          status: can be added
+                        - serial: S7M12FRA
+                          device: sdo1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdo2
-                          type: part
+                          status: in-use
+                        - serial: S7M12FRA
+                          device: sdo2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdo3
-                          type: part
+                          status: in-use
+                        - serial: S7M12FRA
+                          device: sdo3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdo4
-                          type: part
+                          status: can be added
+                        - serial: S7M12FRA
+                          device: sdo4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdp
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdp1
-                          type: part
+                          status: can be added
+                        - serial: S7M18JW0
+                          device: sdp1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdp2
-                          type: part
+                          status: in-use
+                        - serial: S7M18JW0
+                          device: sdp2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdp3
-                          type: part
+                          status: in-use
+                        - serial: S7M18JW0
+                          device: sdp3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdp4
-                          type: part
+                          status: can be added
+                        - serial: S7M18JW0
+                          device: sdp4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdq
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdq1
-                          type: part
+                          status: can be added
+                        - serial: S7M140R9
+                          device: sdq1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdq2
-                          type: part
+                          status: in-use
+                        - serial: S7M140R9
+                          device: sdq2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdq3
-                          type: part
+                          status: in-use
+                        - serial: S7M140R9
+                          device: sdq3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdq4
-                          type: part
+                          status: can be added
+                        - serial: S7M140R9
+                          device: sdq4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdr
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdr1
-                          type: part
+                          status: can be added
+                        - serial: S7M18JVW
+                          device: sdr1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdr2
-                          type: part
+                          status: in-use
+                        - serial: S7M18JVW
+                          device: sdr2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdr3
-                          type: part
+                          status: in-use
+                        - serial: S7M18JVW
+                          device: sdr3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdr4
-                          type: part
+                          status: can be added
+                        - serial: S7M18JVW
+                          device: sdr4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sds
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sds1
-                          type: part
+                          status: can be added
+                        - serial: S7M16LSF
+                          device: sds1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sds2
-                          type: part
+                          status: in-use
+                        - serial: S7M16LSF
+                          device: sds2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sds3
-                          type: part
+                          status: in-use
+                        - serial: S7M16LSF
+                          device: sds3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sds4
-                          type: part
+                          status: can be added
+                        - serial: S7M16LSF
+                          device: sds4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdt
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdt1
-                          type: part
+                          status: can be added
+                        - serial: S7M18JBV
+                          device: sdt1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdt2
-                          type: part
+                          status: in-use
+                        - serial: S7M18JBV
+                          device: sdt2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdt3
-                          type: part
+                          status: in-use
+                        - serial: S7M18JBV
+                          device: sdt3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdt4
-                          type: part
+                          status: can be added
+                        - serial: S7M18JBV
+                          device: sdt4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdu
-                          type: disk
-                          sizeMiB: 533008.5754
-                          status: available
-                        - device: sdu1
-                          type: part
+                          status: can be added
+                        - serial: S7M17CKC
+                          device: sdu1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdu2
-                          type: part
+                          status: in-use
+                        - serial: S7M17CKC
+                          device: sdu2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdu3
-                          type: part
+                          status: in-use
+                        - serial: S7M17CKC
+                          device: sdu3
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdu4
-                          type: part
+                          status: can be added
+                        - serial: S7M17CKC
+                          device: sdu4
+                          type: HDD
                           sizeMiB: 266170.5017
-                          status: available
-                        - device: sdv
-                          type: disk
-                          sizeMiB: 532531.7382
-                          status: available
-                        - device: sdv1
-                          type: part
+                          status: can be added
+                        - serial: 002c73230a6dd5922b00617260a06d86
+                          device: sdv1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdv2
-                          type: part
+                          status: in-use
+                        - serial: 002c73230a6dd5922b00617260a06d86
+                          device: sdv2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdv3
-                          type: part
+                          status: in-use
+                        - serial: 002c73230a6dd5922b00617260a06d86
+                          device: sdv3
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
-                        - device: sdv4
-                          type: part
+                          status: can be added
+                        - serial: 002c73230a6dd5922b00617260a06d86
+                          device: sdv4
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
-                        - device: sdw
-                          type: disk
-                          sizeMiB: 532531.7382
-                          status: available
-                        - device: sdw1
-                          type: part
+                          status: can be added
+                        - serial: 0070ba2a2f379c7c2b00617260a06d86
+                          device: sdw1
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdw2
-                          type: part
+                          status: in-use
+                        - serial: 0070ba2a2f379c7c2b00617260a06d86
+                          device: sdw2
+                          type: HDD
                           sizeMiB: 381.4697
-                          status: storage
-                        - device: sdw3
-                          type: part
+                          status: in-use
+                        - serial: 0070ba2a2f379c7c2b00617260a06d86
+                          device: sdw3
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
-                        - device: sdw4
-                          type: part
+                          status: can be added
+                        - serial: 0070ba2a2f379c7c2b00617260a06d86
+                          device: sdw4
+                          type: HDD
                           sizeMiB: 265884.3994
-                          status: available
+                          status: can be added
                         vcpu:
                           totalCores: 48
                           usedCores: 40
@@ -3529,12 +3552,14 @@ paths:
                       ip: 10.10.10.10
                       managementIP: 10.10.10.10
                       license:
+                        name: example-license
                         type: trial
                         hostname: example-node-0
                         serial: 1H2ZLG2
                         product:
-                          name: ''
-                          features: 
+                          name: CubeCOS
+                          features:
+                          - virtualization
                         issue:
                           by: Bigstack co., ltd.
                           to: bigstack
@@ -3543,11 +3568,7 @@ paths:
                         quantity:
                           type: ''
                           value: 0
-                        serviceLevelAgreement:
-                          uptime: 0
-                          period: ''
-                          meanTimeBetweenFailure: ''
-                          meanTimeToRecovery: ''
+                        serviceLevelAgreement: 5x8
                         expiry:
                           date: '2025-03-24T14:51:50+08:00'
                           days: 9
@@ -3575,530 +3596,546 @@ paths:
                         state: DOWN
                         speed: NA/1000F
                       blockDevices:
-                      - device: nbd0
-                        type: disk
+                      - serial: ''
+                        device: nbd0
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd1
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd1
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd10
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd10
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd11
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd11
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd12
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd12
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd13
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd13
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd14
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd14
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd15
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd15
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd2
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd2
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd3
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd3
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd4
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd4
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd5
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd5
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd6
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd6
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd7
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd7
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd8
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd8
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: nbd9
-                        type: disk
+                        status: can be added
+                      - serial: ''
+                        device: nbd9
+                        type: SSD
                         sizeMiB: 0
-                        status: available
-                      - device: sda
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sda1
-                        type: part
+                        status: can be added
+                      - serial: S7M18BP3
+                        device: sda1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sda2
-                        type: part
+                        status: in-use
+                      - serial: S7M18BP3
+                        device: sda2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sda3
-                        type: part
+                        status: in-use
+                      - serial: S7M18BP3
+                        device: sda3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sda4
-                        type: part
+                        status: can be added
+                      - serial: S7M18BP3
+                        device: sda4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdb
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdb1
-                        type: part
+                        status: can be added
+                      - serial: S7M18KMS
+                        device: sdb1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdb2
-                        type: part
+                        status: in-use
+                      - serial: S7M18KMS
+                        device: sdb2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdb3
-                        type: part
+                        status: in-use
+                      - serial: S7M18KMS
+                        device: sdb3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdb4
-                        type: part
+                        status: can be added
+                      - serial: S7M18KMS
+                        device: sdb4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdc
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdc1
-                        type: part
+                        status: can be added
+                      - serial: S7M109S0
+                        device: sdc1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdc2
-                        type: part
+                        status: in-use
+                      - serial: S7M109S0
+                        device: sdc2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdc3
-                        type: part
+                        status: in-use
+                      - serial: S7M109S0
+                        device: sdc3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdc4
-                        type: part
+                        status: can be added
+                      - serial: S7M109S0
+                        device: sdc4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdd
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdd1
-                        type: part
+                        status: can be added
+                      - serial: S7M15TDF
+                        device: sdd1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdd2
-                        type: part
+                        status: in-use
+                      - serial: S7M15TDF
+                        device: sdd2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdd3
-                        type: part
+                        status: in-use
+                      - serial: S7M15TDF
+                        device: sdd3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdd4
-                        type: part
+                        status: can be added
+                      - serial: S7M15TDF
+                        device: sdd4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sde
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sde1
-                        type: part
+                        status: can be added
+                      - serial: S7M18BYG
+                        device: sde1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sde2
-                        type: part
+                        status: in-use
+                      - serial: S7M18BYG
+                        device: sde2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sde3
-                        type: part
+                        status: in-use
+                      - serial: S7M18BYG
+                        device: sde3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sde4
-                        type: part
+                        status: can be added
+                      - serial: S7M18BYG
+                        device: sde4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdf
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdf1
-                        type: part
+                        status: can be added
+                      - serial: S7M16KGY
+                        device: sdf1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdf2
-                        type: part
+                        status: in-use
+                      - serial: S7M16KGY
+                        device: sdf2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdf3
-                        type: part
+                        status: in-use
+                      - serial: S7M16KGY
+                        device: sdf3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdf4
-                        type: part
+                        status: can be added
+                      - serial: S7M16KGY
+                        device: sdf4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdg
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdg1
-                        type: part
+                        status: can be added
+                      - serial: S7M18J0Q
+                        device: sdg1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdg2
-                        type: part
+                        status: in-use
+                      - serial: S7M18J0Q
+                        device: sdg2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdg3
-                        type: part
+                        status: in-use
+                      - serial: S7M18J0Q
+                        device: sdg3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdg4
-                        type: part
+                        status: can be added
+                      - serial: S7M18J0Q
+                        device: sdg4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdh
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdh1
-                        type: part
+                        status: can be added
+                      - serial: S7M18LAY
+                        device: sdh1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdh2
-                        type: part
+                        status: in-use
+                      - serial: S7M18LAY
+                        device: sdh2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdh3
-                        type: part
+                        status: in-use
+                      - serial: S7M18LAY
+                        device: sdh3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdh4
-                        type: part
+                        status: can be added
+                      - serial: S7M18LAY
+                        device: sdh4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdi
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdi1
-                        type: part
+                        status: can be added
+                      - serial: S7M16LZ1
+                        device: sdi1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdi2
-                        type: part
+                        status: in-use
+                      - serial: S7M16LZ1
+                        device: sdi2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdi3
-                        type: part
+                        status: in-use
+                      - serial: S7M16LZ1
+                        device: sdi3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdi4
-                        type: part
+                        status: can be added
+                      - serial: S7M16LZ1
+                        device: sdi4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdj
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdj1
-                        type: part
+                        status: can be added
+                      - serial: S7M16LV3
+                        device: sdj1
+                        type: HDD
                         sizeMiB: 953.6743
-                        status: storage
-                      - device: sdj5
-                        type: part
+                        status: in-use
+                      - serial: S7M16LV3
+                        device: sdj5
+                        type: HDD
                         sizeMiB: 239467.6208
-                        status: storage
-                      - device: sdj6
-                        type: part
+                        status: in-use
+                      - serial: S7M16LV3
+                        device: sdj6
+                        type: HDD
                         sizeMiB: 239467.6208
-                        status: available
-                      - device: sdj7
-                        type: part
+                        status: can be added
+                      - serial: S7M16LV3
+                        device: sdj7
+                        type: HDD
                         sizeMiB: 53215.0268
-                        status: storage
-                      - device: sdk
-                        type: disk
-                        sizeMiB: 532531.7382
-                        status: available
-                      - device: sdk1
-                        type: part
+                        status: in-use
+                      - serial: 00df8523095cd5922b00617260a06d86
+                        device: sdk1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdk2
-                        type: part
+                        status: in-use
+                      - serial: 00df8523095cd5922b00617260a06d86
+                        device: sdk2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdk3
-                        type: part
+                        status: in-use
+                      - serial: 00df8523095cd5922b00617260a06d86
+                        device: sdk3
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
-                      - device: sdk4
-                        type: part
+                        status: can be added
+                      - serial: 00df8523095cd5922b00617260a06d86
+                        device: sdk4
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
-                      - device: sdl
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdl1
-                        type: part
+                        status: can be added
+                      - serial: S7M16LSA
+                        device: sdl1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdl2
-                        type: part
+                        status: in-use
+                      - serial: S7M16LSA
+                        device: sdl2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdl3
-                        type: part
+                        status: in-use
+                      - serial: S7M16LSA
+                        device: sdl3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdl4
-                        type: part
+                        status: can be added
+                      - serial: S7M16LSA
+                        device: sdl4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdm
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdm1
-                        type: part
+                        status: can be added
+                      - serial: S7M0ZYQ0
+                        device: sdm1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdm2
-                        type: part
+                        status: in-use
+                      - serial: S7M0ZYQ0
+                        device: sdm2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdm3
-                        type: part
+                        status: in-use
+                      - serial: S7M0ZYQ0
+                        device: sdm3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdm4
-                        type: part
+                        status: can be added
+                      - serial: S7M0ZYQ0
+                        device: sdm4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdn
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdn1
-                        type: part
+                        status: can be added
+                      - serial: S7M1414M
+                        device: sdn1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdn2
-                        type: part
+                        status: in-use
+                      - serial: S7M1414M
+                        device: sdn2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdn3
-                        type: part
+                        status: in-use
+                      - serial: S7M1414M
+                        device: sdn3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdn4
-                        type: part
+                        status: can be added
+                      - serial: S7M1414M
+                        device: sdn4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdo
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdo1
-                        type: part
+                        status: can be added
+                      - serial: S7M12FRA
+                        device: sdo1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdo2
-                        type: part
+                        status: in-use
+                      - serial: S7M12FRA
+                        device: sdo2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdo3
-                        type: part
+                        status: in-use
+                      - serial: S7M12FRA
+                        device: sdo3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdo4
-                        type: part
+                        status: can be added
+                      - serial: S7M12FRA
+                        device: sdo4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdp
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdp1
-                        type: part
+                        status: can be added
+                      - serial: S7M18JW0
+                        device: sdp1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdp2
-                        type: part
+                        status: in-use
+                      - serial: S7M18JW0
+                        device: sdp2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdp3
-                        type: part
+                        status: in-use
+                      - serial: S7M18JW0
+                        device: sdp3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdp4
-                        type: part
+                        status: can be added
+                      - serial: S7M18JW0
+                        device: sdp4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdq
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdq1
-                        type: part
+                        status: can be added
+                      - serial: S7M140R9
+                        device: sdq1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdq2
-                        type: part
+                        status: in-use
+                      - serial: S7M140R9
+                        device: sdq2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdq3
-                        type: part
+                        status: in-use
+                      - serial: S7M140R9
+                        device: sdq3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdq4
-                        type: part
+                        status: can be added
+                      - serial: S7M140R9
+                        device: sdq4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdr
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdr1
-                        type: part
+                        status: can be added
+                      - serial: S7M18JVW
+                        device: sdr1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdr2
-                        type: part
+                        status: in-use
+                      - serial: S7M18JVW
+                        device: sdr2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdr3
-                        type: part
+                        status: in-use
+                      - serial: S7M18JVW
+                        device: sdr3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdr4
-                        type: part
+                        status: can be added
+                      - serial: S7M18JVW
+                        device: sdr4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sds
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sds1
-                        type: part
+                        status: can be added
+                      - serial: S7M16LSF
+                        device: sds1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sds2
-                        type: part
+                        status: in-use
+                      - serial: S7M16LSF
+                        device: sds2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sds3
-                        type: part
+                        status: in-use
+                      - serial: S7M16LSF
+                        device: sds3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sds4
-                        type: part
+                        status: can be added
+                      - serial: S7M16LSF
+                        device: sds4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdt
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdt1
-                        type: part
+                        status: can be added
+                      - serial: S7M18JBV
+                        device: sdt1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdt2
-                        type: part
+                        status: in-use
+                      - serial: S7M18JBV
+                        device: sdt2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdt3
-                        type: part
+                        status: in-use
+                      - serial: S7M18JBV
+                        device: sdt3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdt4
-                        type: part
+                        status: can be added
+                      - serial: S7M18JBV
+                        device: sdt4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdu
-                        type: disk
-                        sizeMiB: 533008.5754
-                        status: available
-                      - device: sdu1
-                        type: part
+                        status: can be added
+                      - serial: S7M17CKC
+                        device: sdu1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdu2
-                        type: part
+                        status: in-use
+                      - serial: S7M17CKC
+                        device: sdu2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdu3
-                        type: part
+                        status: in-use
+                      - serial: S7M17CKC
+                        device: sdu3
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdu4
-                        type: part
+                        status: can be added
+                      - serial: S7M17CKC
+                        device: sdu4
+                        type: HDD
                         sizeMiB: 266170.5017
-                        status: available
-                      - device: sdv
-                        type: disk
-                        sizeMiB: 532531.7382
-                        status: available
-                      - device: sdv1
-                        type: part
+                        status: can be added
+                      - serial: 002c73230a6dd5922b00617260a06d86
+                        device: sdv1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdv2
-                        type: part
+                        status: in-use
+                      - serial: 002c73230a6dd5922b00617260a06d86
+                        device: sdv2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdv3
-                        type: part
+                        status: in-use
+                      - serial: 002c73230a6dd5922b00617260a06d86
+                        device: sdv3
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
-                      - device: sdv4
-                        type: part
+                        status: can be added
+                      - serial: 002c73230a6dd5922b00617260a06d86
+                        device: sdv4
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
-                      - device: sdw
-                        type: disk
-                        sizeMiB: 532531.7382
-                        status: available
-                      - device: sdw1
-                        type: part
+                        status: can be added
+                      - serial: 0070ba2a2f379c7c2b00617260a06d86
+                        device: sdw1
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdw2
-                        type: part
+                        status: in-use
+                      - serial: 0070ba2a2f379c7c2b00617260a06d86
+                        device: sdw2
+                        type: HDD
                         sizeMiB: 381.4697
-                        status: storage
-                      - device: sdw3
-                        type: part
+                        status: in-use
+                      - serial: 0070ba2a2f379c7c2b00617260a06d86
+                        device: sdw3
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
-                      - device: sdw4
-                        type: part
+                        status: can be added
+                      - serial: 0070ba2a2f379c7c2b00617260a06d86
+                        device: sdw4
+                        type: HDD
                         sizeMiB: 265884.3994
-                        status: available
+                        status: can be added
                       vcpu:
                         totalCores: 48
                         usedCores: 40
@@ -6784,12 +6821,12 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/watch"
+      - "$ref": "#/components/parameters/roles"
+      - "$ref": "#/components/parameters/start"
+      - "$ref": "#/components/parameters/stop"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/keyword"
-      - "$ref": "#/components/parameters/role"
-      - "$ref": "#/components/parameters/start"
-      - "$ref": "#/components/parameters/stop"
       responses:
         '200':
           description: Retrieve support files successfully
@@ -7429,30 +7466,21 @@ components:
         type: string
       description: The keyword to search, can be any string
       example: example-keyword
-    product:
+    roles:
       in: query
-      name: product
-      required: false
-      schema: 
-        type: string
-        enum: 
-          - CubeCOS
-          - CubeCMP
-      description: The type of product to query, the value can be 'CubeCOS' or 'CubeCMP'.
-      example: CubeCOS
-    role:
-      in: query
-      name: role
+      name: roles
       required: false
       schema:
-        type: string
-        enum:
-        - control-converged
-        - control
-        - compute
-        - storage
-        - edge-core
-        - moderator
+        type: array
+        items:
+          type: string
+          enum:
+          - control-converged
+          - control
+          - compute
+          - storage
+          - edge-core
+          - moderator
       description: The role of the host
       example: control-converged
     licenseStatus:
@@ -7468,6 +7496,17 @@ components:
         - error
       description: The status of the host
       example: active
+    product:
+      in: query
+      name: product
+      required: false
+      schema:
+        type: string
+        enum:
+        - cubeCOS
+        - cubeCMP
+      description: The product of the host
+      example: example-product
     metricType:
       in: path
       name: metricType
@@ -7998,12 +8037,17 @@ components:
                     type: object
                     required:
                     - current
+                    - isFixing
                     properties:
                       current:
                         type: string
                         enum:
                         - ok
                         - ng
+                      isFixing:
+                        type: boolean
+                      description:
+                        type: string
                   modules:
                     type: array
                     required:
@@ -8022,12 +8066,17 @@ components:
                           type: object
                           required:
                           - current
+                          - isFixing
                           properties:
                             current:
                               type: string
                               enum:
                               - ok
                               - ng
+                            isFixing:
+                              type: boolean
+                            description:
+                              type: string
         msg:
           type: string
           example: fetch health successfully
@@ -8314,21 +8363,7 @@ components:
                       value:
                         type: integer
                   serviceLevelAgreement:
-                    type: object
-                    required:
-                    - uptime
-                    - period
-                    - meanTimeBetweenFailure
-                    - meanTimeToRecovery
-                    properties:
-                      uptime:
-                        type: number
-                      period:
-                        type: string
-                      meanTimeBetweenFailure:
-                        type: string
-                      meanTimeToRecovery:
-                        type: string
+                    type: string
                   expiry:
                     type: object
                     required:
@@ -8367,19 +8402,6 @@ components:
           type: string
           format: binary
           description: License file (must have a .license extension)
-    PostLicenseResponse:
-      type: object
-      required:
-      - code
-      - msg
-      - status
-      properties:
-        code:
-          type: integer
-        msg:
-          type: string
-        status:
-          type: string
     VerifyLicenseResponse:
       type: object
       required:
@@ -8514,6 +8536,19 @@ components:
                         - expired
                       isExpiring:
                         type: boolean
+        msg:
+          type: string
+        status:
+          type: string
+    PostLicenseResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
         msg:
           type: string
         status:
@@ -10540,6 +10575,7 @@ components:
         license:
           type: object
           required:
+          - name
           - type
           - hostname
           - serial
@@ -10593,21 +10629,7 @@ components:
                 value:
                   type: integer
             serviceLevelAgreement:
-              type: object
-              required:
-              - uptime
-              - period
-              - meanTimeBetweenFailure
-              - meanTimeToRe
-              properties:
-                uptime:
-                  type: integer
-                period:
-                  type: string
-                meanTimeBetweenFailure:
-                  type: string
-                meanTimeToRecovery:
-                  type: string
+              type: string
             expiry:
               type: object
               required:
@@ -10649,11 +10671,14 @@ components:
           items:
             type: object
             required:
+            - serial
             - device
             - type
             - sizeMiB
             - status
             properties:
+              serial:
+                type: string
               device:
                 type: string
               type:
