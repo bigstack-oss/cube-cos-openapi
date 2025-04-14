@@ -1671,19 +1671,9 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
-      - in: query
-        name: type
-        required: false
-        schema:
-          type: string
-          enum:
-          - trial
-          - perpetual
-          - community
-          - enterprise
-        description: The type of the license to query, click 'try it out' to see a
-          few options.
-        example: trial
+      - "$ref": "#/components/parameters/products"
+      - "$ref": "#/components/parameters/statuses"
+      - "$ref": "#/components/parameters/types"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -2858,8 +2848,8 @@ paths:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
       - "$ref": "#/components/parameters/roles"
-      - "$ref": "#/components/parameters/licenseStatus"
-      - "$ref": "#/components/parameters/product"
+      - "$ref": "#/components/parameters/licenseStatuses"
+      - "$ref": "#/components/parameters/products"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/watch"
@@ -2885,6 +2875,7 @@ paths:
                         address: 10.10.10.10:8001
                         ip: 10.10.10.10
                         managementIP: 10.10.10.10
+                        storageIP: 10.10.10.10
                         license:
                           name: example-license
                           type: trial
@@ -3551,6 +3542,7 @@ paths:
                       address: 10.10.10.10:8001
                       ip: 10.10.10.10
                       managementIP: 10.10.10.10
+                      storageIP: 10.10.10.10
                       license:
                         name: example-license
                         type: trial
@@ -5057,7 +5049,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: bool
+                          type: boolean
                           default: false
                         status:
                           current: updating
@@ -5074,7 +5066,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: string
+                          type: str
                           default: ''
                           regex: ''
                         status:
@@ -5091,7 +5083,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: bool
+                          type: boolean
                           default: false
                         status:
                           current: ok
@@ -5107,7 +5099,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: string
+                          type: str
                           default: ''
                           regex: ''
                         status:
@@ -5219,7 +5211,7 @@ paths:
                     - name: barbican.debug.enabled
                       description: Set to true to enable barbican verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5229,7 +5221,7 @@ paths:
                     - name: ceph.debug.enabled
                       description: Set to true to enable ceph debug logs.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5240,7 +5232,7 @@ paths:
                       description: Set to true to enable automatically volume metadata
                         sync.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: true
                       roles:
                       - name: control-converged
@@ -5250,7 +5242,7 @@ paths:
                     - name: cinder.backup.account
                       description: Set cinder backup storage account.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5260,7 +5252,7 @@ paths:
                     - name: cinder.backup.endpoint
                       description: Set cinder backup storage endpoint.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5270,7 +5262,7 @@ paths:
                     - name: cinder.backup.override
                       description: Enable override cinder backup configurations.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5280,7 +5272,7 @@ paths:
                     - name: cinder.backup.pool
                       description: Set cinder backup storage pool.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5290,7 +5282,7 @@ paths:
                     - name: cinder.backup.secret
                       description: Set cinder backup storage account secret.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5300,7 +5292,7 @@ paths:
                     - name: cinder.backup.type
                       description: Set cinder backup storage type <cube-storage|cube-swift>.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5310,7 +5302,7 @@ paths:
                     - name: cinder.debug.enabled
                       description: Set to true to enable cinder verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5320,7 +5312,7 @@ paths:
                     - name: cinder.external.%d.account
                       description: Set cinder external storage account.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5330,7 +5322,7 @@ paths:
                     - name: cinder.external.%d.driver
                       description: Set cinder external storage type name <cube|purestorage>.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5340,7 +5332,7 @@ paths:
                     - name: cinder.external.%d.endpoint
                       description: Set cinder external storage endpoint.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5350,7 +5342,7 @@ paths:
                     - name: cinder.external.%d.name
                       description: Set cinder external storage rule name.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5360,7 +5352,7 @@ paths:
                     - name: cinder.external.%d.pool
                       description: Set cinder external storage pool.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5370,7 +5362,7 @@ paths:
                     - name: cinder.external.%d.secret
                       description: Set cinder external storage account secret.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5431,7 +5423,7 @@ paths:
                       description: Set extra provider interfaces ('pvd-' prefix and
                         <= 15 chars) [IF.2:pvd-xxx,eth2:pvd-yyy,...].
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles:
                       - name: control-converged
@@ -5441,7 +5433,7 @@ paths:
                     - name: cyborg.debug.enabled
                       description: Set to true to enable cyborg verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5451,7 +5443,7 @@ paths:
                     - name: debug.enable_core_dump.%s
                       description: Enable core dump for process %s
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5461,7 +5453,7 @@ paths:
                     - name: debug.enable_kdump
                       description: Enable kdump to collect dump from kernel panic
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5496,7 +5488,7 @@ paths:
                     - name: designate.debug.enabled
                       description: Set to true to enable designate verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5506,7 +5498,7 @@ paths:
                     - name: glance.debug.enabled
                       description: Set to true to enable glance verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5528,7 +5520,7 @@ paths:
                     - name: heat.debug.enabled
                       description: Set to true to enable heat verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5550,7 +5542,7 @@ paths:
                     - name: ironic.debug.enabled
                       description: Set to true to enable ironic verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5560,7 +5552,7 @@ paths:
                     - name: ironic.deploy.server
                       description: Set to true to enable ironic deploy server (dhcp/tftp/pxe/http).
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5570,7 +5562,7 @@ paths:
                     - name: kapacitor.alert.check.enabled
                       description: Set true to enable kapacitor alert check.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5580,7 +5572,7 @@ paths:
                     - name: kapacitor.alert.check.eventid
                       description: Set kapacitor alert check eventid.
                       limitation:
-                        type: string
+                        type: str
                         default: SYS00002W
                       roles:
                       - name: control-converged
@@ -5591,7 +5583,7 @@ paths:
                       description: Set kapacitor alert check interval (default to
                         60m).
                       limitation:
-                        type: string
+                        type: str
                         default: 60m
                       roles:
                       - name: control-converged
@@ -5601,7 +5593,7 @@ paths:
                     - name: kapacitor.alert.extra.prefix
                       description: Set kapacitor alert message prefix.
                       limitation:
-                        type: string
+                        type: str
                         default: Cube
                       roles:
                       - name: control-converged
@@ -5611,7 +5603,7 @@ paths:
                     - name: kapacitor.alert.flow.base
                       description: Set kapacitor alert base for abnormal flow.
                       limitation:
-                        type: string
+                        type: str
                         default: 7d
                       roles:
                       - name: control-converged
@@ -5633,7 +5625,7 @@ paths:
                     - name: kapacitor.alert.flow.unit
                       description: Set kapacitor alert unit for abnormal flow.
                       limitation:
-                        type: string
+                        type: str
                         default: 5m
                       roles:
                       - name: control-converged
@@ -5643,7 +5635,7 @@ paths:
                     - name: keystone.debug.enabled
                       description: Set to true to enable keystone verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5653,7 +5645,7 @@ paths:
                     - name: manila.debug.enabled
                       description: Set to true to enable manila verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5663,7 +5655,7 @@ paths:
                     - name: manila.volume.type
                       description: Set manila backend volume type.
                       limitation:
-                        type: string
+                        type: str
                         default: CubeStorage
                       roles:
                       - name: control-converged
@@ -5674,7 +5666,7 @@ paths:
                       description: Set to true to enable evacuate all instances when
                         host goes down.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: true
                       roles:
                       - name: control-converged
@@ -5696,7 +5688,7 @@ paths:
                     - name: monasca.debug.enabled
                       description: Set to true to enable monasca verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5731,7 +5723,7 @@ paths:
                     - name: net.ipv4.tcp_syncookies
                       description: Turn on the Linux SYN cookies implementation.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: true
                       roles:
                       - name: control-converged
@@ -5741,7 +5733,7 @@ paths:
                     - name: net.lacp.default.rate
                       description: Set default LACP rate (fast/slow).
                       limitation:
-                        type: string
+                        type: str
                         default: fast
                       roles:
                       - name: control-converged
@@ -5751,7 +5743,7 @@ paths:
                     - name: net.lacp.default.xmit
                       description: Set default LACP transmit hash policy (layer2/layer2+3/layer3+4).
                       limitation:
-                        type: string
+                        type: str
                         default: layer3+4
                       roles:
                       - name: control-converged
@@ -5761,7 +5753,7 @@ paths:
                     - name: neutron.debug.enabled
                       description: Set to true to enable neutron verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5796,7 +5788,7 @@ paths:
                     - name: nova.debug.enabled
                       description: Set to true to enable nova verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5806,7 +5798,7 @@ paths:
                     - name: nova.gpu.type
                       description: Specify a supported gpu type instances would get.
                       limitation:
-                        type: string
+                        type: str
                         default: ''
                       roles: []
                     - name: nova.overcommit.cpu.ratio
@@ -5842,7 +5834,7 @@ paths:
                     - name: ntp.debug.enabled
                       description: Set to true to enable ntp verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5852,7 +5844,7 @@ paths:
                     - name: octavia.debug.enabled
                       description: Set to true to enable octavia verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5862,7 +5854,7 @@ paths:
                     - name: octavia.ha
                       description: Set to true to enable octavia HA mode.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5896,7 +5888,7 @@ paths:
                     - name: senlin.debug.enabled
                       description: Set to true to enable senlin verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5906,7 +5898,7 @@ paths:
                     - name: skyline.debug.enabled
                       description: Set to true to enable skyline verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5916,7 +5908,7 @@ paths:
                     - name: snapshot.apply.action
                       description: Set snapshot apply action <apply|revert>.
                       limitation:
-                        type: string
+                        type: str
                         default: apply
                       roles:
                       - name: control-converged
@@ -5926,7 +5918,7 @@ paths:
                     - name: snapshot.apply.policy.ignore
                       description: Set snapshot apply policy ignore <true|false>.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5936,7 +5928,7 @@ paths:
                     - name: sshd.bind_to_all_interfaces
                       description: Set to true to bind sshd to all interfaces.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5958,7 +5950,7 @@ paths:
                     - name: time.timezone
                       description: Set system timezone.
                       limitation:
-                        type: string
+                        type: str
                         default: UTC
                       roles:
                       - name: control-converged
@@ -5968,7 +5960,7 @@ paths:
                     - name: update.security.autoupdate
                       description: Set to true to enable security autoupdate.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -5978,7 +5970,7 @@ paths:
                     - name: watcher.debug.enabled
                       description: Set to true to enable watcher verbose log.
                       limitation:
-                        type: bool
+                        type: boolean
                         default: false
                       roles:
                       - name: control-converged
@@ -7541,30 +7533,65 @@ components:
           - moderator
       description: The role of the host
       example: control-converged
-    licenseStatus:
+    statuses:
       in: query
-      name: licenseStatus
+      name: statuses
       required: false
       schema:
-        type: string
-        enum:
-        - ok
-        - expiring
-        - expired
-        - error
+        type: array
+        items:
+          type: string
+          enum:
+          - ok
+          - expiring
+          - expired
+          - error
       description: The status of the host
       example: active
-    product:
+    types:
       in: query
-      name: product
+      name: types
       required: false
       schema:
-        type: string
-        enum:
-        - cubeCOS
-        - cubeCMP
+        type: array
+        items:
+          type: string
+          enum:
+          - trial
+          - perpetual
+          - community
+          - enterprise
+      description: The type of the license to query, click 'try it out' to see a few
+        options.
+      example: trial
+    licenseStatuses:
+      in: query
+      name: licenseStatuses
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - ok
+          - expiring
+          - expired
+          - error
+      description: The status of the host
+      example: active
+    products:
+      in: query
+      name: products
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - cubeCOS
+          - cubeCMP
       description: The product of the host
-      example: example-product
+      example: cubeCOS
     metricType:
       in: path
       name: metricType
@@ -10044,16 +10071,13 @@ components:
                     oneOf:
                     - type: string
                     - type: integer
-                    - type: number
                     - type: boolean
                   min:
                     oneOf:
                     - type: integer
-                    - type: number
                   max:
                     oneOf:
                     - type: integer
-                    - type: number
                   regex:
                     type: string
               roles:
@@ -10597,10 +10621,10 @@ components:
       - dataCenter
       - hostname
       - role
-      - protocol
       - address
       - ip
       - managementIP
+      - storageIP
       - license
       - status
       - cpuSpec
@@ -10622,13 +10646,13 @@ components:
           type: string
         role:
           type: string
-        protocol:
-          type: string
         address:
           type: string
         ip:
           type: string
         managementIP:
+          type: string
+        storageIP:
           type: string
         license:
           type: object
@@ -10643,6 +10667,8 @@ components:
           - serviceLevelAgreement
           - expiry
           properties:
+            name:
+              type: string
             type:
               type: string
             hostname:
@@ -10897,7 +10923,7 @@ components:
     TuningLimitationType:
       type: string
       enum:
-      - string
+      - str
       - int
-      - float
-      - bool
+      - uint
+      - boolean
