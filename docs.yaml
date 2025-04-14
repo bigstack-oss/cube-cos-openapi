@@ -6357,12 +6357,15 @@ paths:
                         - name: amqp-alert-p1
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 1
+                          enabled: false
                         - name: "#test-cos-300-notification"
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 2
+                          enabled: false
                         emails:
                         - address: example.user@example.com
                           note: example email recipient
+                          enabled: false
                       status:
                         isUpdating: false
                       enabled: false
@@ -6418,12 +6421,15 @@ paths:
                         - name: amqp-alert-p1
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 1
+                          enabled: false
                         - name: "#test-cos-300-notification"
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 2
+                          enabled: false
                         emails:
                         - address: example.user@example.com
                           note: example email recipient
+                          enabled: false
                       status:
                         isUpdating: false
                       enabled: false
@@ -6485,7 +6491,7 @@ paths:
                 "$ref": "#/components/schemas/GetTriggerResponse"
               examples:
                 example:
-                  summary: Get a specific trigger
+                  summary: Trigger
                   value:
                     code: 200
                     data:
@@ -6542,12 +6548,15 @@ paths:
                         - name: amqp-alert-p1
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 1
+                          enabled: false
                         - name: "#test-cos-300-notification"
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 2
+                          enabled: false
                         emails:
                         - address: example.user@example.com
                           note: example email recipient
+                          enabled: false
                       enabled: false
                     msg: fetch trigger successfully
                     status: ok
@@ -6653,7 +6662,7 @@ paths:
                     - url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                     emails:
                     - address: example.user@example.com
-                  enabled: false
+                  description: example-update-description
       responses:
         '202':
           description: Update trigger request received
@@ -10234,6 +10243,7 @@ components:
                       - name
                       - url
                       - description
+                      - enabled
                       properties:
                         name:
                           type: string
@@ -10241,6 +10251,8 @@ components:
                           type: string
                         description:
                           type: string
+                        enabled:
+                          type: boolean
                   emails:
                     type: array
                     items:
@@ -10248,11 +10260,14 @@ components:
                       required:
                       - address
                       - note
+                      - enabled
                       properties:
                         address:
                           type: string
                         note:
                           type: string
+                        enabled:
+                          type: boolean
               status:
                 type: object
                 required:
@@ -10329,6 +10344,7 @@ components:
                     - name
                     - url
                     - description
+                    - enabled
                     properties:
                       name:
                         type: string
@@ -10336,6 +10352,8 @@ components:
                         type: string
                       description:
                         type: string
+                      enabled:
+                        type: boolean
                 emails:
                   type: array
                   items:
@@ -10343,11 +10361,14 @@ components:
                     required:
                     - email
                     - note
+                    - enabled
                     properties:
                       email:
                         type: string
                       note:
                         type: string
+                      enabled:
+                        type: boolean
             enabled:
               type: boolean
         msg:
@@ -10361,7 +10382,7 @@ components:
       required:
       - attributes
       - response
-      - enabled
+      - description
       properties:
         attributes:
           type: array
@@ -10371,7 +10392,6 @@ components:
             - name
             - type
             - value
-            - enabled
             properties:
               name:
                 type: string
@@ -10379,8 +10399,6 @@ components:
                 type: string
               value:
                 type: string
-              enabled:
-                type: boolean
         response:
           type: object
           required:
@@ -10405,8 +10423,8 @@ components:
                 properties:
                   address:
                     type: string
-        enabled:
-          type: boolean
+        description:
+          type: string
     EnableOrDisableTriggerRequest:
       type: object
       required:
