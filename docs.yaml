@@ -8963,7 +8963,9 @@ components:
         code:
           type: integer
         data:
-          "$ref": "#/components/schemas/TimeValuePair"
+          type: array
+          items:
+            "$ref": "#/components/schemas/TimeValuePair"
         msg:
           type: string
         status:
@@ -8979,7 +8981,9 @@ components:
         code:
           type: integer
         data:
-          "$ref": "#/components/schemas/TimeValuePair"
+          type: array
+          items:
+            "$ref": "#/components/schemas/TimeValuePair"
         msg:
           type: string
         status:
