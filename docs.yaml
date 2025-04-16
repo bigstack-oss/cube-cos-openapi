@@ -1697,18 +1697,14 @@ paths:
                         serial: 1H2ZLG2
                         product:
                           name: CubeCOS
-                          features:
-                          - virtualization
-                          - kubernetes
+                          feature: kubernetes
                         issue:
                           by: Bigstack co., ltd.
                           to: bigstack
                           hardware: "*"
                           date: '2025-03-16T17:31:21+08:00'
-                        quantity:
-                          type: ''
-                          value: 0
-                        serviceLevelAgreement: 5x8
+                        quantity: some of string about cpu capacity
+                        supportPlan: 5x8
                         expiry:
                           date: '2025-05-15T17:31:21+08:00'
                           days: 56
@@ -1845,17 +1841,14 @@ paths:
                         type: trial
                         product:
                           name: CubeCOS
-                          features:
-                          - virtualization
+                          feature: virtualization
                         issue:
                           by: Bigstack Ltd.
                           to: "*"
                           hardware: "*"
                           date: '2025-04-09T19:16:13+08:00'
-                        quantity:
-                          type: ''
-                          value: 0
-                        serviceLevelAgreement: 5x8
+                        quantity: some of string about cpu capacity
+                        supportPlan: 5x8
                         expiry:
                           date: '2025-05-09T19:16:13+08:00'
                           days: 29
@@ -2885,17 +2878,14 @@ paths:
                           serial: 1H2ZLG2
                           product:
                             name: CubeCOS
-                            features:
-                            - virtualization
+                            feature: virtualization
                           issue:
                             by: Bigstack co., ltd.
                             to: bigstack
                             hardware: "*"
                             date: '2025-01-23T14:51:50+08:00'
-                          quantity:
-                            type: ''
-                            value: 0
-                          serviceLevelAgreement: 5x8
+                          quantity: some of string about cpu capacity
+                          supportPlan: 5x8
                           expiry:
                             date: '2025-03-24T14:51:50+08:00'
                             days: 9
@@ -3552,17 +3542,14 @@ paths:
                         serial: 1H2ZLG2
                         product:
                           name: CubeCOS
-                          features:
-                          - virtualization
+                          feature: virtualization
                         issue:
                           by: Bigstack co., ltd.
                           to: bigstack
                           hardware: "*"
                           date: '2025-01-23T14:51:50+08:00'
-                        quantity:
-                          type: ''
-                          value: 0
-                        serviceLevelAgreement: 5x8
+                        quantity: some of string about cpu capacity
+                        supportPlan: 5x8
                         expiry:
                           date: '2025-03-24T14:51:50+08:00'
                           days: 9
@@ -4190,27 +4177,46 @@ paths:
                   value:
                     code: 200
                     data:
-                      titlePrefix: example title prefix
+                      titlePrefix:
+                        value: example title prefix
+                        status:
+                          current: ok
+                          isUpdating: false
                       email:
                         recipients:
                         - address: example.user.1@example.com
                           note: example note 1
+                          status:
+                            current: ok
+                            isUpdating: false
                         - address: example.user.2@example.com
                           note: example note 2
+                          status:
+                            current: updating
+                            isUpdating: true
                         senders:
                         - host: email-smtp.example.mailserver.com
                           port: 587
                           username: ABBBBBBMJM56DCCCCJR
                           email: noreply@example.com
                           accessVerified: true
+                          status:
+                            current: ok
+                            isUpdating: false
                       slack:
                         channels:
                         - name: "#example-alert-channel-1"
                           url: https://hooks.slack.com/services/T9LMBBBBB/B08GQABBBBB/BBBBBBBSevAyxkM2dPYBBBBB
                           description: example alert channel 1
+                          status:
+                            current: ok
+                            isUpdating: false
                         - name: "#example-alert-channel-2"
                           url: https://hooks.slack.com/services/T9LMCCCCC/C08GQACCCCC/CCCCCCCSevAyxkM2dPYCCCCC
                           description: example alert channel 2
+                          status:
+                            current: ok
+                            isUpdating: false
                     msg: all setting retrieved successfully
                     status: ok
         '500':
@@ -4342,6 +4348,9 @@ paths:
                       username: example-user
                       email: noreply@bigstack.co
                       accessVerified: true
+                      status:
+                        current: ok
+                        isUpdating: false
                     msg: email senders retrieved successfully
                     status: ok
         '500':
@@ -4563,8 +4572,14 @@ paths:
                     data:
                     - address: example.user.1@example.com
                       note: example email recipient 1
+                      status:
+                        current: ok
+                        isUpdating: false
                     - address: example.user.2@example.com
                       note: example email recipient 2
+                      status:
+                        current: ok
+                        isUpdating: false
                     msg: email recipients retrieved successfully
                     status: ok
         '500':
@@ -4788,9 +4803,15 @@ paths:
                       - name: "#example-alert-channel-1"
                         url: https://hooks.slack.com/services/T9LMBBBBB/B08GQABBBBB/BBBBBBBSevAyxkM2dPYBBBBB
                         description: example alert channel 1
+                        status:
+                          current: ok
+                          isUpdating: false
                       - name: "#example-alert-channel-2"
                         url: https://hooks.slack.com/services/T9LMCCCCC/C08GQACCCCC/CCCCCCCSevAyxkM2dPYCCCCC
                         description: example alert channel 2
+                        status:
+                          current: ok
+                          isUpdating: false
                     msg: slack channels retrieved successfully
                     status: ok
         '500':
@@ -8408,7 +8429,7 @@ components:
                 - product
                 - issue
                 - quantity
-                - serviceLevelAgreement
+                - supportPlan
                 - expiry
                 - status
                 properties:
@@ -8424,14 +8445,12 @@ components:
                     type: object
                     required:
                     - name
-                    - features
+                    - feature
                     properties:
                       name:
                         type: string
-                      features:
-                        type: array
-                        items:
-                          type: string
+                      feature:
+                        type: string
                   issue:
                     type: object
                     required:
@@ -8449,16 +8468,8 @@ components:
                       date:
                         type: string
                   quantity:
-                    type: object
-                    required:
-                    - type
-                    - value
-                    properties:
-                      type:
-                        type: string
-                      value:
-                        type: integer
-                  serviceLevelAgreement:
+                    type: string
+                  supportPlan:
                     type: string
                   expiry:
                     type: object
@@ -8522,7 +8533,7 @@ components:
               - product
               - issue
               - quantity
-              - serviceLevelAgreement
+              - supportPlan
               - expiry
               - status
               properties:
@@ -8534,14 +8545,12 @@ components:
                   type: object
                   required:
                   - name
-                  - features
+                  - feature
                   properties:
                     name:
                       type: string
-                    features:
-                      type: array
-                      items:
-                        type: string
+                    feature:
+                      type: string
                 issue:
                   type: object
                   required:
@@ -8559,16 +8568,8 @@ components:
                     date:
                       type: string
                 quantity:
-                  type: object
-                  required:
-                  - type
-                  - value
-                  properties:
-                    type:
-                      type: string
-                    value:
-                      type: integer
-                serviceLevelAgreement:
+                  type: string
+                supportPlan:
                   type: string
                 expiry:
                   type: object
@@ -9433,9 +9434,12 @@ components:
       type: object
       required:
       - value
+      - status
       properties:
         value:
           type: string
+        status:
+          "$ref": "#/components/schemas/SettingStatus"
     GetHostSupportFilesResponse:
       type: object
       required:
@@ -9508,6 +9512,7 @@ components:
       - username
       - email
       - accessVerified
+      - status
       properties:
         host:
           type: string
@@ -9519,6 +9524,8 @@ components:
           type: string
         accessVerified:
           type: boolean
+        status:
+          "$ref": "#/components/schemas/SettingStatus"
     EmailSenderPostRequest:
       type: object
       required:
@@ -9527,6 +9534,7 @@ components:
       - username
       - password
       - email
+      - status
       properties:
         host:
           type: string
@@ -9563,11 +9571,14 @@ components:
       required:
       - address
       - note
+      - status
       properties:
         address:
           type: string
         note:
           type: string
+        status:
+          "$ref": "#/components/schemas/SettingStatus"
     EmailRecipientPostRequest:
       type: object
       required:
@@ -9591,6 +9602,7 @@ components:
       - name
       - url
       - description
+      - status
       properties:
         name:
           type: string
@@ -9598,6 +9610,8 @@ components:
           type: string
         description:
           type: string
+        status:
+          "$ref": "#/components/schemas/SettingStatus"
     SlackChannelPostRequest:
       type: object
       required:
@@ -9638,7 +9652,15 @@ components:
           - slack
           properties:
             titlePrefix:
-              type: string
+              type: object
+              required:
+              - value
+              - status
+              properties:
+                value:
+                  type: string
+                status:
+                  "$ref": "#/components/schemas/SettingStatus"
             email:
               type: object
               required:
@@ -9659,7 +9681,7 @@ components:
                 channels:
                   type: array
                   items:
-                    "$ref": "#/components/schemas/SlackChannelPostRequest"
+                    "$ref": "#/components/schemas/SlackChannelGetResponse"
         msg:
           type: string
         status:
@@ -10678,7 +10700,7 @@ components:
           - product
           - issue
           - quantity
-          - serviceLevelAgreement
+          - supportPlan
           - expiry
           properties:
             name:
@@ -10693,12 +10715,12 @@ components:
               type: object
               required:
               - name
-              - features
+              - feature
               properties:
                 name:
                   type: string
-                features:
-                  type: object
+                feature:
+                  type: string
             issue:
               type: object
               required:
@@ -10717,16 +10739,8 @@ components:
                   type: string
                   format: date-time
             quantity:
-              type: object
-              required:
-              - type
-              - value
-              properties:
-                type:
-                  type: string
-                value:
-                  type: integer
-            serviceLevelAgreement:
+              type: string
+            supportPlan:
               type: string
             expiry:
               type: object
@@ -10941,3 +10955,13 @@ components:
       - int
       - uint
       - boolean
+    SettingStatus:
+      type: object
+      required:
+      - current
+      - isUpdating
+      properties:
+        current:
+          type: string
+        isUpdating:
+          type: boolean
