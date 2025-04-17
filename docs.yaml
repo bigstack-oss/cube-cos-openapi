@@ -10963,5 +10963,9 @@ components:
       properties:
         current:
           type: string
+          enum:
+          - ok
+          - updating
+          - error
         isUpdating:
           type: boolean
