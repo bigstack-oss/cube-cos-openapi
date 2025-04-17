@@ -10223,21 +10223,23 @@ components:
               description:
                 type: string
               attributes:
-                type: object
-                required:
-                - name
-                - type
-                - value
-                - enabled
-                properties:
-                  name:
-                    type: string
-                  type:
-                    type: string
-                  value:
-                    type: string
-                  enabled:
-                    type: boolean
+                type: array
+                items:
+                  type: object
+                  required:
+                  - name
+                  - type
+                  - value
+                  - enabled
+                  properties:
+                    name:
+                      type: string
+                    type:
+                      type: string
+                    value:
+                      type: string
+                    enabled:
+                      type: boolean
               response:
                 type: object
                 required:
@@ -10324,21 +10326,23 @@ components:
             description:
               type: string
             attributes:
-              type: object
-              required:
-              - name
-              - type
-              - value
-              - enabled
-              properties:
-                name:
-                  type: string
-                type:
-                  type: string
-                value:
-                  type: string
-                enabled:
-                  type: boolean
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                - type
+                - value
+                - enabled
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+                  value:
+                    type: string
+                  enabled:
+                    type: boolean
             response:
               type: object
               required:
@@ -10373,11 +10377,11 @@ components:
                   items:
                     type: object
                     required:
-                    - email
+                    - address
                     - note
                     - enabled
                     properties:
-                      email:
+                      address:
                         type: string
                       note:
                         type: string
