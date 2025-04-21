@@ -2928,12 +2928,17 @@ paths:
                           device: nvme0n1
                           type: SSD
                           sizeMiB: 222110.7482
-                          status: system
+                          availability: system
+                          status:
+                            current: ok
                         - serial: '200598804038'
                           device: nvme1n1
                           type: SSD
                           sizeMiB: 222110.7482
-                          status: in-use
+                          availability: in-use
+                          status:
+                            current: warning
+                            description: status fetch timeout
                         vcpu:
                           totalCores: 48
                           usedCores: 40
@@ -3065,12 +3070,17 @@ paths:
                         device: nvme0n1
                         type: SSD
                         sizeMiB: 222110.7482
-                        status: system
+                        availability: system
+                        status:
+                          current: ok
                       - serial: '200598804038'
                         device: nvme1n1
                         type: SSD
                         sizeMiB: 222110.7482
-                        status: in-use
+                        availability: in-use
+                        status:
+                          current: warning
+                          description: status fetch timeout
                       vcpu:
                         totalCores: 48
                         usedCores: 40
@@ -4031,7 +4041,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: boolean
+                          type: bool
                           default: false
                         status:
                           current: updating
@@ -4065,7 +4075,7 @@ paths:
                         enabled: true
                         isModified: false
                         limitation:
-                          type: boolean
+                          type: bool
                           default: false
                         status:
                           current: ok
@@ -4193,7 +4203,7 @@ paths:
                     - name: barbican.debug.enabled
                       description: Set to true to enable barbican verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4203,7 +4213,7 @@ paths:
                     - name: ceph.debug.enabled
                       description: Set to true to enable ceph debug logs.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4214,7 +4224,7 @@ paths:
                       description: Set to true to enable automatically volume metadata
                         sync.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: true
                       roles:
                       - name: control-converged
@@ -4244,7 +4254,7 @@ paths:
                     - name: cinder.backup.override
                       description: Enable override cinder backup configurations.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4284,7 +4294,7 @@ paths:
                     - name: cinder.debug.enabled
                       description: Set to true to enable cinder verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4415,7 +4425,7 @@ paths:
                     - name: cyborg.debug.enabled
                       description: Set to true to enable cyborg verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4425,7 +4435,7 @@ paths:
                     - name: debug.enable_core_dump.%s
                       description: Enable core dump for process %s
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4435,7 +4445,7 @@ paths:
                     - name: debug.enable_kdump
                       description: Enable kdump to collect dump from kernel panic
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4470,7 +4480,7 @@ paths:
                     - name: designate.debug.enabled
                       description: Set to true to enable designate verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4480,7 +4490,7 @@ paths:
                     - name: glance.debug.enabled
                       description: Set to true to enable glance verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4502,7 +4512,7 @@ paths:
                     - name: heat.debug.enabled
                       description: Set to true to enable heat verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4524,7 +4534,7 @@ paths:
                     - name: ironic.debug.enabled
                       description: Set to true to enable ironic verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4534,7 +4544,7 @@ paths:
                     - name: ironic.deploy.server
                       description: Set to true to enable ironic deploy server (dhcp/tftp/pxe/http).
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4544,7 +4554,7 @@ paths:
                     - name: kapacitor.alert.check.enabled
                       description: Set true to enable kapacitor alert check.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4617,7 +4627,7 @@ paths:
                     - name: keystone.debug.enabled
                       description: Set to true to enable keystone verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4627,7 +4637,7 @@ paths:
                     - name: manila.debug.enabled
                       description: Set to true to enable manila verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4648,7 +4658,7 @@ paths:
                       description: Set to true to enable evacuate all instances when
                         host goes down.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: true
                       roles:
                       - name: control-converged
@@ -4670,7 +4680,7 @@ paths:
                     - name: monasca.debug.enabled
                       description: Set to true to enable monasca verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4705,7 +4715,7 @@ paths:
                     - name: net.ipv4.tcp_syncookies
                       description: Turn on the Linux SYN cookies implementation.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: true
                       roles:
                       - name: control-converged
@@ -4735,7 +4745,7 @@ paths:
                     - name: neutron.debug.enabled
                       description: Set to true to enable neutron verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4770,7 +4780,7 @@ paths:
                     - name: nova.debug.enabled
                       description: Set to true to enable nova verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4816,7 +4826,7 @@ paths:
                     - name: ntp.debug.enabled
                       description: Set to true to enable ntp verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4826,7 +4836,7 @@ paths:
                     - name: octavia.debug.enabled
                       description: Set to true to enable octavia verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4836,7 +4846,7 @@ paths:
                     - name: octavia.ha
                       description: Set to true to enable octavia HA mode.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4870,7 +4880,7 @@ paths:
                     - name: senlin.debug.enabled
                       description: Set to true to enable senlin verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4880,7 +4890,7 @@ paths:
                     - name: skyline.debug.enabled
                       description: Set to true to enable skyline verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4900,7 +4910,7 @@ paths:
                     - name: snapshot.apply.policy.ignore
                       description: Set snapshot apply policy ignore <true|false>.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4910,7 +4920,7 @@ paths:
                     - name: sshd.bind_to_all_interfaces
                       description: Set to true to bind sshd to all interfaces.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4942,7 +4952,7 @@ paths:
                     - name: update.security.autoupdate
                       description: Set to true to enable security autoupdate.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -4952,7 +4962,7 @@ paths:
                     - name: watcher.debug.enabled
                       description: Set to true to enable watcher verbose log.
                       limitation:
-                        type: boolean
+                        type: bool
                         default: false
                       roles:
                       - name: control-converged
@@ -6531,8 +6541,8 @@ components:
       schema:
         type: array
         items:
-          $ref: '#/components/schemas/ListLicenseCurrentStatus'
-      description: The status of the license
+          "$ref": "#/components/schemas/ListLicenseCurrentStatus"
+      description: The status of the host
       example: valid
     types:
       in: query
@@ -6557,7 +6567,7 @@ components:
       schema:
         type: array
         items:
-          $ref: '#/components/schemas/NodeLicenseCurrentStatus'
+          "$ref": "#/components/schemas/NodeLicenseCurrentStatus"
       description: The license status of the host
       example: valid
     products:
@@ -7580,7 +7590,19 @@ components:
                       days:
                         type: integer
                   status:
-                    $ref: "#/components/schemas/NodeLicenseStatus"
+                    type: object
+                    required:
+                    - current
+                    - isExpiring
+                    properties:
+                      current:
+                        type: string
+                        enum:
+                        - ok
+                        - expiring
+                        - expired
+                      isExpiring:
+                        type: boolean
         msg:
           type: string
         status:
@@ -9740,6 +9762,7 @@ components:
             - device
             - type
             - sizeMiB
+            - availability
             - status
             properties:
               serial:
@@ -9750,8 +9773,18 @@ components:
                 type: string
               sizeMiB:
                 type: number
-              status:
+              availability:
                 type: string
+              status:
+                type: object
+                required:
+                - current
+                - description
+                properties:
+                  current:
+                    type: string
+                  description:
+                    type: string
         vcpu:
           type: object
           required:
@@ -9911,8 +9944,8 @@ components:
     ListLicenseCurrentStatus:
       type: string
       enum:
-        - valid
-        - expired
+      - valid
+      - expired
     ListLicenseStatus:
       type: object
       required:
@@ -9920,7 +9953,20 @@ components:
       - isExpiring
       properties:
         current:
-          $ref: "#/components/schemas/ListLicenseCurrentStatus"
+          type: string
+          enum:
+          - valid
+          - expired
+        isExpiring:
+          type: boolean
+    NodeLicenseStatus:
+      type: object
+      required:
+      - current
+      - isExpiring
+      properties:
+        current:
+          "$ref": "#/components/schemas/NodeLicenseCurrentStatus"
         isExpiring:
           type: boolean
     NodeLicenseCurrentStatus:
@@ -9929,16 +9975,6 @@ components:
       - unlicense
       - valid
       - expired
-    NodeLicenseStatus:
-      type: object
-      required:
-      - current
-      - isExpiring
-      properties:
-        current:
-          $ref: "#/components/schemas/NodeLicenseCurrentStatus"
-        isExpiring:
-          type: boolean
     VerifyLicenseStatus:
       type: object
       required:
