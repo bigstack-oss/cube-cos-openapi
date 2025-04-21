@@ -1712,7 +1712,7 @@ paths:
                           hardware: "*"
                           date: '2025-03-16T17:31:21+08:00'
                         quantity: some of string about cpu capacity
-                        supportPlan: 5x8
+                        supportPlan: FMA
                         expiry:
                           date: '2025-05-15T17:31:21+08:00'
                           days: 56
@@ -1856,7 +1856,7 @@ paths:
                           hardware: "*"
                           date: '2025-04-09T19:16:13+08:00'
                         quantity: some of string about cpu capacity
-                        supportPlan: 5x8
+                        supportPlan: FMA
                         expiry:
                           date: '2025-05-09T19:16:13+08:00'
                           days: 29
@@ -2893,7 +2893,7 @@ paths:
                             hardware: "*"
                             date: '2025-01-23T14:51:50+08:00'
                           quantity: some of string about cpu capacity
-                          supportPlan: 5x8
+                          supportPlan: FMA
                           expiry:
                             date: '2025-03-24T14:51:50+08:00'
                             days: 9
@@ -3035,7 +3035,7 @@ paths:
                           hardware: "*"
                           date: '2025-01-23T14:51:50+08:00'
                         quantity: some of string about cpu capacity
-                        supportPlan: 5x8
+                        supportPlan: FMA
                         expiry:
                           date: '2025-03-24T14:51:50+08:00'
                           days: 9
@@ -9783,6 +9783,10 @@ components:
                 properties:
                   current:
                     type: string
+                    enum:
+                    - ok
+                    - warning
+                    - fail
                   description:
                     type: string
         vcpu:
