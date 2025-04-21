@@ -1680,7 +1680,7 @@ paths:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
       - "$ref": "#/components/parameters/products"
-      - "$ref": "#/components/parameters/statuses"
+      - "$ref": "#/components/parameters/listLicenseStatuses"
       - "$ref": "#/components/parameters/types"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
@@ -2851,7 +2851,7 @@ paths:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/keyword"
       - "$ref": "#/components/parameters/roles"
-      - "$ref": "#/components/parameters/licenseStatuses"
+      - "$ref": "#/components/parameters/nodeLicenseStatuses"
       - "$ref": "#/components/parameters/products"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
@@ -6524,21 +6524,16 @@ components:
           - moderator
       description: The role of the host
       example: control-converged
-    statuses:
+    listLicenseStatuses:
       in: query
       name: statuses
       required: false
       schema:
         type: array
         items:
-          type: string
-          enum:
-          - ok
-          - expiring
-          - expired
-          - error
-      description: The status of the host
-      example: active
+          $ref: '#/components/schemas/ListLicenseCurrentStatus'
+      description: The status of the license
+      example: valid
     types:
       in: query
       name: types
@@ -6555,21 +6550,16 @@ components:
       description: The type of the license to query, click 'try it out' to see a few
         options.
       example: trial
-    licenseStatuses:
+    nodeLicenseStatuses:
       in: query
       name: licenseStatuses
       required: false
       schema:
         type: array
         items:
-          type: string
-          enum:
-          - ok
-          - expiring
-          - expired
-          - error
-      description: The status of the host
-      example: active
+          $ref: '#/components/schemas/NodeLicenseCurrentStatus'
+      description: The license status of the host
+      example: valid
     products:
       in: query
       name: products
@@ -7590,19 +7580,7 @@ components:
                       days:
                         type: integer
                   status:
-                    type: object
-                    required:
-                    - current
-                    - isExpiring
-                    properties:
-                      current:
-                        type: string
-                        enum:
-                        - ok
-                        - expiring
-                        - expired
-                      isExpiring:
-                        type: boolean
+                    $ref: "#/components/schemas/NodeLicenseStatus"
         msg:
           type: string
         status:
@@ -9930,6 +9908,11 @@ components:
       - int
       - uint
       - bool
+    ListLicenseCurrentStatus:
+      type: string
+      enum:
+        - valid
+        - expired
     ListLicenseStatus:
       type: object
       required:
@@ -9937,12 +9920,15 @@ components:
       - isExpiring
       properties:
         current:
-          type: string
-          enum:
-          - valid
-          - expired
+          $ref: "#/components/schemas/ListLicenseCurrentStatus"
         isExpiring:
           type: boolean
+    NodeLicenseCurrentStatus:
+      type: string
+      enum:
+      - unlicense
+      - valid
+      - expired
     NodeLicenseStatus:
       type: object
       required:
@@ -9950,11 +9936,7 @@ components:
       - isExpiring
       properties:
         current:
-          type: string
-          enum:
-          - unlicense
-          - valid
-          - expired
+          $ref: "#/components/schemas/NodeLicenseCurrentStatus"
         isExpiring:
           type: boolean
     VerifyLicenseStatus:
