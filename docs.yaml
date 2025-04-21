@@ -10963,7 +10963,7 @@ components:
       - str
       - int
       - uint
-      - boolean
+      - bool
     SettingStatus:
       type: object
       required:
