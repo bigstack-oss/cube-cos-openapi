@@ -6729,6 +6729,9 @@ components:
             properties:
               type:
                 type: string
+                enum:
+                - cloud
+                - edge
               name:
                 type: string
               roles:
@@ -6808,6 +6811,9 @@ components:
           properties:
             type:
               type: string
+              enum:
+                - cloud
+                - edge
             name:
               type: string
             roles:
