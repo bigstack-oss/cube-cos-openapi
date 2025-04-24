@@ -6719,7 +6719,9 @@ components:
           items:
             type: object
             required:
+            - type
             - name
+            - roles
             - version
             - virtualIp
             - isHaEnabled
@@ -6812,8 +6814,8 @@ components:
             type:
               type: string
               enum:
-                - cloud
-                - edge
+              - cloud
+              - edge
             name:
               type: string
             roles:
