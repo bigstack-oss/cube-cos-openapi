@@ -1734,7 +1734,8 @@ paths:
                     code: 200
                     data:
                       licenses:
-                      - type: trial
+                      - name: example-license
+                        type: trial
                         hosts:
                         - example-node-0
                         serial: 1H2ZLG2
@@ -1882,6 +1883,7 @@ paths:
                       license:
                         name: example-license
                         type: trial
+                        serial: 1H2ZLG2
                         product:
                           name: CubeCOS
                           feature: virtualization
@@ -7487,6 +7489,7 @@ components:
               items:
                 type: object
                 required:
+                - name
                 - type
                 - hosts
                 - serial
@@ -7497,6 +7500,8 @@ components:
                 - expiry
                 - status
                 properties:
+                  name:
+                    type: string
                   type:
                     type: string
                   hosts:
@@ -7583,6 +7588,7 @@ components:
               required:
               - name
               - type
+              - serial
               - product
               - issue
               - quantity
@@ -7593,6 +7599,8 @@ components:
                 name:
                   type: string
                 type:
+                  type: string
+                serial:
                   type: string
                 product:
                   type: object
