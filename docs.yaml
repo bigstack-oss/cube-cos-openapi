@@ -3198,7 +3198,7 @@ paths:
                         - host: email-smtp.example.mailserver.com
                           port: 587
                           username: ABBBBBBMJM56DCCCCJR
-                          email: noreply@example.com
+                          from: noreply@example.com
                           accessVerified: true
                           status:
                             current: ok
@@ -3304,7 +3304,7 @@ paths:
                   port: 587
                   username: ABBBBBBMJM56DCCCCJR
                   password: VBHWEEGEEEEEX0f5NLHDXLESxdZR
-                  email: noreply@example.com
+                  from: noreply@example.com
       responses:
         '201':
           description: Email sender created successfully
@@ -3351,7 +3351,7 @@ paths:
                     - host: email-smtp.example.mailserver.com
                       port: 587
                       username: example-user
-                      email: noreply@bigstack.co
+                      from: noreply@bigstack.co
                       accessVerified: true
                       status:
                         current: ok
@@ -3442,7 +3442,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/EmailSenderPutRequest"
+              "$ref": "#/components/schemas/EmailSenderPatchRequest"
             examples:
               example:
                 summary: Email Sender
@@ -3451,7 +3451,7 @@ paths:
                   port: 587
                   username: example-user
                   password: example-password
-                  email: noreply@bigstack.co
+                  from: noreply@bigstack.co
       responses:
         '200':
           description: Email sender updated successfully
@@ -7549,7 +7549,7 @@ components:
           example: 200
         data:
           type: object
-          required: 
+          required:
           - licenses
           - page
           properties:
@@ -8597,7 +8597,7 @@ components:
       - host
       - port
       - username
-      - email
+      - from
       - accessVerified
       - status
       properties:
@@ -8607,7 +8607,7 @@ components:
           type: integer
         username:
           type: string
-        email:
+        from:
           type: string
         accessVerified:
           type: boolean
@@ -8618,7 +8618,7 @@ components:
       required:
       - host
       - port
-      - email
+      - from
       - status
       properties:
         host:
@@ -8629,9 +8629,9 @@ components:
           type: string
         password:
           type: string
-        email:
+        from:
           type: string
-    EmailSenderPutRequest:
+    EmailSenderPatchRequest:
       type: object
       properties:
         host:
@@ -8642,7 +8642,7 @@ components:
           type: string
         password:
           type: string
-        email:
+        from:
           type: string
     TryEmailSender:
       type: object
@@ -10085,12 +10085,8 @@ components:
           type: string
         hardware:
           type: string
-          description: >
-            this field will be the serial number(s) of the host(s) that
-            the license is issued to. '*' means all hosts, genearlly, it's for trial
-            license only. for the paid license, it will be the comma separated serial
-            numbers of the hosts.
-
+          description: |
+            this field will be the serial number(s) of the host(s) that the license is issued to. '*' means all hosts, genearlly, it's for trial license only. for the paid license, it will be the comma separated serial numbers of the hosts.
             examples:
               - "*"
               - example-serial-number-1, example-serial-number-2, ...
