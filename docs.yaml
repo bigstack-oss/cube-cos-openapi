@@ -10082,13 +10082,15 @@ components:
           type: string
         hardware:
           type: string
-          description: this field will be the serial number(s) of the host(s) that
+          description: >
+            this field will be the serial number(s) of the host(s) that
             the license is issued to. '*' means all hosts, genearlly, it's for trial
             license only. for the paid license, it will be the comma separated serial
             numbers of the hosts.
-          enum:
-          - "*"
-          - example-serial-number-1, example-serial-number-2, ...
+
+            examples:
+              - "*"
+              - example-serial-number-1, example-serial-number-2, ...
         date:
           type: string
           format: date-time
