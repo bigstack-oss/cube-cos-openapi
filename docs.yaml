@@ -7549,6 +7549,9 @@ components:
           example: 200
         data:
           type: object
+          required: 
+          - licenses
+          - page
           properties:
             licenses:
               type: array
