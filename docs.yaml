@@ -6623,31 +6623,31 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/opensearch/instances/{instanceId}":
+  "/api/v1/datacenters/{dataCenter}/opensearch/requests/{requestId}":
     get:
-      operationId: getOpenSearchInstances
+      operationId: getOpenSearchRequestDashboard
       tags:
       - OpenSearch
-      summary: Get OpenSearch instances dashboard
+      summary: Get OpenSearch dashboard by request id
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/instanceId"
+      - "$ref": "#/components/parameters/requestId"
       responses:
         '200':
-          description: Get OpenSearch instances dashboard
+          description: Get OpenSearch request id dashboard
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/GetOpenSearchDashboardLinkResponse"
               examples:
                 example:
-                  summary: Grafana instances dashboard link
+                  summary: Opensearch request id dashboard link
                   value:
                     code: 200
                     data:
-                      link: http://example-data-center/opensearch/waitingForCosToProvideTheActualPath/instance?var-TID=example-instance-id
+                      link: http://example-data-center/opensearch-dashboards/app/data-explorer/discover/#/view/req-aa95057d-aa8e-4c2c-af56-46ad614e6c33
                       enabled: true
-                    msg: fetch top instance link successfully
+                    msg: fetch opensearch dashboard link of request id successfully
                     status: ok
         '401':
           description: Unauthorized
@@ -6677,7 +6677,7 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to get OpenSearch instances dashboard: internal
+                    example: 'failed to get OpenSearch dashboard of request id: internal
                       server error'
                   status:
                     type: string
@@ -6700,6 +6700,14 @@ components:
         type: string
       description: The instance ID of the instance to operate
       example: example-instance-id
+    requestId:
+      in: path
+      name: requestId
+      required: true
+      schema:
+        type: string
+      description: The request id of the openstack instance operation
+      example: req-aa95057d-aa8e-4c2c-af56-46ad614e6c33
     hostname:
       in: path
       name: hostname
