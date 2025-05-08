@@ -1536,6 +1536,9 @@ paths:
                           log: http://datacenter1:8888/log/nova/example-data-center-20250205113459-b3gc.log
                       - time: '2025-02-01T02:45:00+00:00'
                         status: ok
+                      status:
+                        current: ok
+                        isFixing: false
                     msg: retrieve health history of module successfully
                     status: ok
         '400':
@@ -7643,6 +7646,7 @@ components:
           - module
           - isRepairable
           - history
+          - status
           properties:
             category:
               type: string
@@ -7684,6 +7688,19 @@ components:
                       log:
                         type: string
                         format: uri
+            status:
+              type: object
+              required:
+              - current
+              - isFixing
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - ok
+                  - ng
+                isFixing:
+                  type: boolean
         msg:
           type: string
         status:
