@@ -11,7 +11,6 @@ Thanks for your interest in contributing to CubeCOS. To create an open space for
     - [Create a GitHub account](#create-a-github-account)
     - [Setup Git Commit Signing](#setup-git-commit-signing)
   - [How to contribute](#how-to-contribute)
-    - [Quick guide to pull requests](#quick-guide-to-pull-requests)
   - [Developer Origin Certificate (DCO)](#developer-origin-certificate-dco)
 
 ## Code of conduct
@@ -40,8 +39,6 @@ We welcome contributions in the form of:
 - Bug fix or feature enhancement
 
 Please **do not** report any **security** issues in the issue tracker or a pull request. Please refer to our [security](/SECURITY.md) page on how to report and reach us.
-
-### Quick guide to pull requests
 
 ## Developer Origin Certificate (DCO)
 
