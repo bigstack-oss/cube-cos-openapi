@@ -3099,22 +3099,26 @@ paths:
                         status: up
                         cpuSpec: Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
                         networkInterfaces:
-                        - label: IF.1
+                        - interface: eth0
+                          label: IF.1
                           busIdSlaves: '0000:01:00.0'
                           driver: tg3
                           state: UP
                           speed: 1000F/1000F
-                        - label: IF.2
+                        - interface: eth1
+                          label: IF.2
                           busIdSlaves: '0000:01:00.1'
                           driver: tg3
                           state: DOWN
                           speed: NA/1000F
-                        - label: IF.3
+                        - interface: eth2
+                          label: IF.3
                           busIdSlaves: '0000:02:00.0'
                           driver: tg3
                           state: DOWN
                           speed: NA/1000F
-                        - label: IF.4
+                        - interface: eth3
+                          label: IF.4
                           busIdSlaves: '0000:02:00.1'
                           driver: tg3
                           state: DOWN
@@ -3241,22 +3245,26 @@ paths:
                       status: up
                       cpuSpec: Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
                       networkInterfaces:
-                      - label: IF.1
+                      - interface: eth0
+                        label: IF.1
                         busIdSlaves: '0000:01:00.0'
                         driver: tg3
                         state: UP
                         speed: 1000F/1000F
-                      - label: IF.2
+                      - interface: eth1
+                        label: IF.2
                         busIdSlaves: '0000:01:00.1'
                         driver: tg3
                         state: DOWN
                         speed: NA/1000F
-                      - label: IF.3
+                      - interface: eth2
+                        label: IF.3
                         busIdSlaves: '0000:02:00.0'
                         driver: tg3
                         state: DOWN
                         speed: NA/1000F
-                      - label: IF.4
+                      - interface: eth3
+                        label: IF.4
                         busIdSlaves: '0000:02:00.1'
                         driver: tg3
                         state: DOWN
@@ -10110,12 +10118,15 @@ components:
           items:
             type: object
             required:
+            - interface
             - label
             - busIdSlaves
             - driver
             - state
             - speed
             properties:
+              interface:
+                type: string
               label:
                 type: string
               busIdSlaves:
