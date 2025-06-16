@@ -3075,6 +3075,7 @@ paths:
                         ip: 10.10.10.10
                         managementIP: 10.10.10.10
                         storageIP: 10.10.10.10
+                        isVirtualIpOwner: true
                         license:
                           name: example-license
                           type: trial
@@ -3221,6 +3222,7 @@ paths:
                       ip: 10.10.10.10
                       managementIP: 10.10.10.10
                       storageIP: 10.10.10.10
+                      isVirtualIpOwner: true
                       license:
                         name: example-license
                         type: trial
@@ -6732,6 +6734,11 @@ paths:
                     type: string
                     example: internal server error
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   parameters:
     dataCenter:
       in: path
@@ -10029,6 +10036,7 @@ components:
       - ip
       - managementIP
       - storageIP
+      - isVirtualIpOwner
       - license
       - status
       - cpuSpec
@@ -10058,6 +10066,8 @@ components:
           type: string
         storageIP:
           type: string
+        isVirtualIpOwner:
+          type: boolean
         license:
           type: object
           required:
@@ -10415,3 +10425,5 @@ components:
           - error
         isUpdating:
           type: boolean
+security:
+- BearerAuth: []
