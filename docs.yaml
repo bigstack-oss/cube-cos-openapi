@@ -3152,6 +3152,10 @@ paths:
                           status:
                             current: warning
                             description: status fetch timeout
+                        ipmi:
+                          isSupported: true
+                          isConnected: false
+                          ip: 10.32.10.45
                         vcpu:
                           totalCores: 48
                           usedCores: 40
@@ -3299,6 +3303,10 @@ paths:
                         status:
                           current: warning
                           description: status fetch timeout
+                      ipmi:
+                        isSupported: true
+                        isConnected: false
+                        ip: 10.32.10.45
                       vcpu:
                         totalCores: 48
                         usedCores: 40
@@ -3335,6 +3343,264 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch node: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi":
+    post:
+      operationId: setNodeIpmi
+      tags:
+      - Nodes
+      summary: Set the node IPMI setting
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NodeIpmiSettingRequest"
+            examples:
+              example:
+                summary: Set node IPMI setting
+                value:
+                  ip: 10.10.10.10
+                  port: 623
+                  username: admin
+                  password: example-password
+      responses:
+        '200':
+          description: Node IPMI setting set successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SetNodeIpmiSettingResponse"
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to set node IPMI setting: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/disconnect":
+    delete:
+      operationId: disconnectNodeIpmi
+      tags:
+      - Nodes
+      summary: Disconnect the node IPMI control
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
+      responses:
+        '200':
+          description: Disconnect the node IPMI successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DisconnectNodeIpmiResponse"
+              examples:
+                example:
+                  summary: Disconnect node IPMI
+                  value:
+                    code: 200
+                    msg: node IPMI is disconnected successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'failed to disconnect node IPMI: bad request'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to disconnect node IPMI: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/verify":
+    post:
+      operationId: verifyNodeIpmi
+      tags:
+      - Nodes
+      summary: Verify the node IPMI setting
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/NodeIpmiSettingRequest"
+            examples:
+              example:
+                summary: Verify node IPMI setting
+                value:
+                  ip: 10.10.10.10
+                  port: 623
+                  username: admin
+                  password: example-password
+      responses:
+        '200':
+          description: Node IPMI setting verified successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyNodeIpmiResponse"
+              examples:
+                example:
+                  summary: Node IPMI setting
+                  value:
+                    code: 200
+                    data:
+                      board:
+                        manufacturingDate: '2025-01-01T01:00:00+00:00'
+                        manufacturer: DELL
+                        product: PowerEdge R630
+                        serial: CN747516CK0286
+                        partNumber: 02C2CPA04
+                      product:
+                        name: PowerEdge R630
+                        manufacturer: DELL
+                        serial: 1MXXZH2
+                        version: '01'
+                    msg: node IPMI setting verified successfully
+                    status: ok
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to verify node IPMI setting: internal server
+                      error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/{operation}":
+    post:
+      operationId: operateNodeIpmi
+      tags:
+      - Nodes
+      summary: Operate the node by IPMI
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
+      - name: operation
+        in: path
+        description: The operation to perform on the node IPMI
+        required: true
+        schema:
+          type: string
+          enum:
+          - poweron
+          - poweroff
+          - powercycle
+        example: poweroff
+      responses:
+        '202':
+          description: the ipmi oepration request received
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OperateNodeIpmiResponse"
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to operate node: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -6204,6 +6470,167 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/supportFiles/{supportFileSet}":
+    delete:
+      operationId: DeleteSupportFiles
+      tags:
+      - Support Files
+      summary: Delete support file set
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - in: path
+        name: supportFileSet
+        required: true
+        schema:
+          type: string
+        description: The name of the support file set to delete. (have to be done
+          the http encode)
+        example: Cube Appliance 3.0.0 Support File Set 2025-06-18T15:54:48+00:00
+      responses:
+        '200':
+          description: Delete support files successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeleteSupportFileSetResponse"
+              examples:
+                example:
+                  summary: Delete support file set
+                  value:
+                    code: 200
+                    msg: support file set deleted successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: support file set not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to delete support files: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    post:
+      operationId: createSupportFiles
+      tags:
+      - Support Files
+      summary: Create one or more support files
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateSupportFilesRequest"
+            examples:
+              example:
+                summary: Support file creation request
+                value:
+                  description: example-description
+                  hosts:
+                  - example-node-0
+      responses:
+        '202':
+          description: Support file creation request received
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateSupportFilesResponse"
+              examples:
+                example:
+                  summary: Support file creation response
+                  value:
+                    code: 202
+                    msg: support file creation request received
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: invalid host found
+                  status:
+                    type: string
+                    example: bad request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to request support file creation: internal server
+                      error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/supportFiles/hosts/{hostname}":
     get:
       operationId: getHostSupportFile
@@ -6760,6 +7187,14 @@ components:
         type: string
       description: The name of the data center to operate
       example: example-data-center
+    nodeName:
+      name: nodeName
+      in: path
+      description: The name of the node
+      required: true
+      schema:
+        type: string
+      example: example-node-0
     instanceId:
       in: path
       name: instanceId
@@ -8715,6 +9150,157 @@ components:
         status:
           type: string
           example: ok
+    GetNodeIpmiSettingResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - ip
+          - port
+          - username
+          - password
+          properties:
+            ip:
+              type: string
+            port:
+              type: integer
+            username:
+              type: string
+            password:
+              type: string
+        msg:
+          type: string
+        status:
+          type: string
+    VerifyNodeIpmiResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - board
+          - product
+          properties:
+            board:
+              type: object
+              required:
+              - manufacturingDate
+              - manufacturer
+              - product
+              - serial
+              - partNumber
+              properties:
+                manufacturingDate:
+                  type: string
+                  format: date-time
+                manufacturer:
+                  type: string
+                product:
+                  type: string
+                serial:
+                  type: string
+                partNumber:
+                  type: string
+            product:
+              type: object
+              required:
+              - manufacturer
+              - name
+              - serial
+              - version
+              properties:
+                manufacturer:
+                  type: string
+                name:
+                  type: string
+                serial:
+                  type: string
+                version:
+                  type: string
+        msg:
+          type: string
+        status:
+          type: string
+    NodeIpmiSettingRequest:
+      type: object
+      required:
+      - ip
+      - port
+      - username
+      - password
+      properties:
+        ip:
+          type: string
+          description: IP address of the node's IPMI interface
+        port:
+          type: integer
+          description: Port number of the node's IPMI interface
+        username:
+          type: string
+          description: Username for the node's IPMI interface
+        password:
+          type: string
+          description: Password for the node's IPMI interface
+    SetNodeIpmiSettingResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        msg:
+          type: string
+          example: IPMI settings set successfully
+        status:
+          type: string
+          example: ok
+    OperateNodeIpmiResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 202
+        msg:
+          type: string
+          example: node is being operated successfully
+        status:
+          type: string
+          example: ok
+    DisconnectNodeIpmiResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        status:
+          type: string
     GetTokensRequest:
       type: object
       required:
@@ -8787,6 +9373,19 @@ components:
                 "$ref": "#/components/schemas/SupportFileSet"
             page:
               "$ref": "#/components/schemas/Page"
+        msg:
+          type: string
+        status:
+          type: string
+    DeleteSupportFileSetResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
         msg:
           type: string
         status:
@@ -10054,6 +10653,7 @@ components:
       - cpuSpec
       - networkInterfaces
       - blockDevices
+      - ipmi
       - vcpu
       - memory
       - storage
@@ -10195,6 +10795,19 @@ components:
                     - fail
                   description:
                     type: string
+        ipmi:
+          type: object
+          required:
+          - isSupported
+          - isConnected
+          - ip
+          properties:
+            isSupported:
+              type: boolean
+            isConnected:
+              type: boolean
+            ip:
+              type: string
         vcpu:
           type: object
           required:
