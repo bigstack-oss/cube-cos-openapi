@@ -400,32 +400,44 @@ paths:
         description: The id of the event to query.
         example: NET00003I
       - in: query
-        name: category
+        name: categories
         required: false
         schema:
-          type: string
+          type: array
+          items:
+            type: string
         description: The category of the event to query.
         example: NET
       - in: query
-        name: severity
+        name: severities
         required: false
         schema:
-          type: string
+          type: array
+          items:
+            type: string
+            enum:
+            - Info
+            - Warning
+            - Error
         description: The severity of the event to query, the value can be only 'Info',
           'Warning', and 'Error'.
         example: Info
       - in: query
-        name: host
+        name: hosts
         required: false
         schema:
-          type: string
+          type: array
+          items:
+            type: string
         description: The host of the event to query.
         example: example-node-0
       - in: query
-        name: instance
+        name: instances
         required: false
         schema:
-          type: string
+          type: array
+          items:
+            type: string
         description: The instance of the event to query.
         example: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
       - in: query
