@@ -10669,6 +10669,13 @@ components:
               "$ref": "#/components/schemas/NodeLicenseStatus"
         status:
           type: string
+          enum:
+          - up
+          - down
+          - powering on
+          - powering off
+          - powering cycle
+          - unknown
         cpuSpec:
           type: string
         networkInterfaces:
