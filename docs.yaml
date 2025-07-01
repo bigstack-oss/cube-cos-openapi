@@ -10675,6 +10675,7 @@ components:
           - powering on
           - powering off
           - powering cycle
+          - syncing
           - unknown
         cpuSpec:
           type: string
