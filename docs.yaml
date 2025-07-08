@@ -492,6 +492,106 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/events/predefined":
+    get:
+      operationId: getPredefinedEvents
+      tags:
+      - Events
+      summary: Retrieve the predefined events
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - in: query
+        name: types
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - system
+            - host
+            - instance
+        description: The types of event to query, the value can be only 'system',
+          'host', and 'instance'.
+        example: system
+      - in: query
+        name: categories
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: The categories of the event to query.
+        example: CPU
+      - in: query
+        name: severities
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Info
+            - Warning
+            - Critical
+            - Error
+        description: The severities of the event to query.
+        example: Info
+      responses:
+        '200':
+          description: Retrieve the predefined events successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetPredefinedEventFilterResponse"
+              examples:
+                example1:
+                  summary: Predefined event list
+                  value:
+                    code: 200
+                    data:
+                    - type: system
+                      id: KSN00001I
+                      severity: INFO
+                      category: KSN
+                    - type: system
+                      id: CMP01001I
+                      severity: INFO
+                      category: CMP
+                    - type: host
+                      id: ETH00001I
+                      severity: INFO
+                      category: ETH
+                    - type: host
+                      id: CPU00002W
+                      severity: WARNING
+                      category: CPU
+                    - type: instance
+                      id: CPU00004I
+                      severity: INFO
+                      category: CPU
+                    - type: instance
+                      id: CPU00006C
+                      severity: CTRITICAL
+                      category: CPU
+                    msg: fetch predefined events successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch predefined events: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/events/filterConditions":
     get:
       operationId: getEventFilterConditions
@@ -5778,6 +5878,175 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/triggers/materials":
+    get:
+      operationId: getTriggerMaterials
+      tags:
+      - Triggers
+      summary: Retrieve all trigger materials
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: Retrieve trigger materials successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetTriggerMaterialsResponse"
+              examples:
+                example:
+                  summary: Trigger materials list
+                  value:
+                    code: 200
+                    data:
+                      attribute:
+                        alertTypes:
+                        - system
+                        - host
+                        - instance
+                        severities:
+                        - INFO
+                        - WARNING
+                        - CTRITICAL
+                        categories:
+                        - KSN
+                        - CMP
+                        - ETH
+                        - CPU
+                        eventIds:
+                        - KSN00001I
+                        - CMP01001I
+                        - ETH00001I
+                        - CPU00002W
+                        - CPU00004I
+                        - CPU00006C
+                      response:
+                        scriptTypes:
+                          type: Bash
+                          environment: Alpine Linux
+                        notifications:
+                          emails:
+                          - address: example-user@bigstack.co
+                            note: example email recipient
+                          slacks:
+                          - name: Example slack channel
+                            url: https://example.slack.com/archives/exmpale-token-abc
+                            description: example slack channel
+                    msg: fetched trigger materials successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to get trigger materials: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/triggers/materials/script/verify":
+    post:
+      operationId: verifyTriggerScript
+      tags:
+      - Triggers
+      summary: Verify trigger script
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyMaterialScriptRequest"
+            examples:
+              example:
+                summary: Trigger script verification request
+                value:
+                  script: base64-encoded-script-content
+      responses:
+        '200':
+          description: Trigger script verified successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyMaterialScriptResponse"
+              examples:
+                example:
+                  summary: Trigger script verification result
+                  value:
+                    code: 200
+                    msg: trigger script verified successfully
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: invalid script content
+                  status:
+                    type: string
+                    example: bad request
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to verify trigger script: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/triggers":
     get:
       operationId: getTriggers
@@ -5786,6 +6055,8 @@ paths:
       summary: Retrieve all triggers
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/pageSize"
+      - "$ref": "#/components/parameters/pageNum"
       responses:
         '200':
           description: Retrieve triggers successfully
@@ -5799,136 +6070,227 @@ paths:
                   value:
                     code: 200
                     data:
-                    - name: Administrative Level Notification
-                      description: Configure how you are going to be notified for
-                        system events and host alerts, including levels 'warning',
-                        'error', and 'critical'.
-                      attributes:
-                      - name: severity
-                        type: string
-                        value: Warning
-                        enabled: false
-                      - name: severity
-                        type: string
-                        value: Error
-                        enabled: false
-                      - name: severity
-                        type: string
-                        value: Critical
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: DEV
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: CPU
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: DSK
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: MEM
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: NET
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: SRV
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: VRT
-                        enabled: false
-                      response:
-                        types:
-                        - email
-                        - slack
-                        slacks:
-                        - name: amqp-alert-p1
-                          url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
-                          description: example slack channel 1
+                      triggers:
+                      - name: Administrative Level Notification
+                        isBuiltIn: true
+                        description: Configure how you are going to be notified for
+                          system events and host alerts, including levels 'warning',
+                          'error', and 'critical'.
+                        attributes:
+                        - name: severity
+                          type: string
+                          value: Warning
                           enabled: false
-                        - name: "#test-cos-300-notification"
-                          url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
-                          description: example slack channel 2
+                        - name: severity
+                          type: string
+                          value: Error
                           enabled: false
-                        emails:
-                        - address: example.user@example.com
-                          note: example email recipient
+                        - name: severity
+                          type: string
+                          value: Critical
                           enabled: false
-                      status:
-                        isUpdating: false
-                      enabled: false
-                    - name: Instance Level Notification
-                      description: Configure how you are going to be notified for
-                        instance alerts, including levels 'warning', and 'critical'.
-                      attributes:
-                      - name: severity
-                        type: string
-                        value: Warning
-                        enabled: false
-                      - name: severity
-                        type: string
-                        value: Error
-                        enabled: false
-                      - name: severity
-                        type: string
-                        value: Critical
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: DEV
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: CPU
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: DSK
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: MEM
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: NET
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: SRV
-                        enabled: false
-                      - name: category
-                        type: string
-                        value: VRT
-                        enabled: false
-                      response:
-                        types:
-                        - email
-                        - slack
-                        slacks:
-                        - name: amqp-alert-p1
-                          url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
-                          description: example slack channel 1
+                        - name: category
+                          type: string
+                          value: DEV
                           enabled: false
-                        - name: "#test-cos-300-notification"
-                          url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
-                          description: example slack channel 2
+                        - name: category
+                          type: string
+                          value: CPU
                           enabled: false
-                        emails:
-                        - address: example.user@example.com
-                          note: example email recipient
+                        - name: category
+                          type: string
+                          value: DSK
                           enabled: false
-                      status:
-                        isUpdating: false
-                      enabled: false
+                        - name: category
+                          type: string
+                          value: MEM
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: NET
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: SRV
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: VRT
+                          enabled: false
+                        response:
+                          types:
+                          - email
+                          - slack
+                          slacks:
+                          - name: amqp-alert-p1
+                            url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                            description: example slack channel 1
+                            enabled: false
+                          - name: "#test-cos-300-notification"
+                            url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                            description: example slack channel 2
+                            enabled: false
+                          emails:
+                          - address: example.user@example.com
+                            note: example email recipient
+                            enabled: false
+                        status:
+                          isUpdating: false
+                        enabled: false
+                      - name: Instance Level Notification
+                        isBuiltIn: true
+                        description: Configure how you are going to be notified for
+                          instance alerts, including levels 'warning', and 'critical'.
+                        attributes:
+                        - name: severity
+                          type: string
+                          value: Warning
+                          enabled: false
+                        - name: severity
+                          type: string
+                          value: Error
+                          enabled: false
+                        - name: severity
+                          type: string
+                          value: Critical
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: DEV
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: CPU
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: DSK
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: MEM
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: NET
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: SRV
+                          enabled: false
+                        - name: category
+                          type: string
+                          value: VRT
+                          enabled: false
+                        response:
+                          types:
+                          - email
+                          - slack
+                          slacks:
+                          - name: amqp-alert-p1
+                            url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                            description: example slack channel 1
+                            enabled: false
+                          - name: "#test-cos-300-notification"
+                            url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                            description: example slack channel 2
+                            enabled: false
+                          emails:
+                          - address: example.user@example.com
+                            note: example email recipient
+                            enabled: false
+                        status:
+                          isUpdating: false
+                        enabled: false
+                      page:
+                        total: 1
+                        number: 1
+                        size: 2
+                        totalItemCount: 2
                     msg: fetch triggers successfully
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to list triggers: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    post:
+      operationId: createTrigger
+      tags:
+      - Triggers
+      summary: Create trigger
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateTriggerRequest"
+            examples:
+              example:
+                summary: Create trigger request
+                value:
+                  name: example-trigger
+                  description: This is an example trigger
+                  attribute:
+                    alertTypes:
+                    - system
+                    severities:
+                    - Critical
+                    categories:
+                    - CPU
+                    eventIds:
+                    - CPU00006C
+                  response:
+                    script:
+                      filePath: "/tmp/example.sh"
+                      content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
+                    notifications:
+                      emails:
+                      - example-user@bigstack.co
+                      slacks:
+                      - https://hooks.slack.com/services/T00000000/B00000000/XXXXX
+      responses:
+        '202':
+          description: Trigger creation request received
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateTriggerResponse"
+              examples:
+                example:
+                  summary: Trigger creation request received
+                  value:
+                    code: 202
+                    msg: trigger creation request received
                     status: ok
         '401':
           description: Unauthorized
@@ -5970,13 +6332,7 @@ paths:
       summary: Retrieve a specific trigger
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: triggerName
-        required: true
-        schema:
-          type: string
-        description: The name of the trigger to operate
-        example: Administrative Level Notification
+      - "$ref": "#/components/parameters/triggerName"
       responses:
         '200':
           description: Retrieve trigger successfully
@@ -5991,6 +6347,7 @@ paths:
                     code: 200
                     data:
                       name: Administrative Level Notification
+                      isBuiltIn: true
                       description: Configure how you are going to be notified for
                         system events and host alerts, including levels 'warning',
                         'error', and 'critical'.
@@ -6094,13 +6451,7 @@ paths:
       summary: Update a specific trigger
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: triggerName
-        required: true
-        schema:
-          type: string
-        description: The name of the trigger to operate
-        example: Administrative Level Notification
+      - "$ref": "#/components/parameters/triggerName"
       requestBody:
         required: true
         content:
@@ -6220,6 +6571,76 @@ paths:
                   status:
                     type: string
                     example: internal server error
+    delete:
+      operationId: deleteTrigger
+      tags:
+      - Triggers
+      summary: Delete a specific trigger
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/triggerName"
+      responses:
+        '202':
+          description: Delete trigger request received
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeleteTriggerResponse"
+              examples:
+                example:
+                  summary: Trigger deletion request received
+                  value:
+                    code: 202
+                    msg: trigger deletion request received
+                    status: ok
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 401
+                  msg:
+                    type: string
+                    example: 'invalid_grant: Invalid user credentials'
+                  status:
+                    type: string
+                    example: unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: trigger not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to delete trigger: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/triggers/{triggerName}/enable":
     patch:
       operationId: enableOrDisableTrigger
@@ -6228,13 +6649,7 @@ paths:
       summary: Enable or disable a specific trigger
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - in: path
-        name: triggerName
-        required: true
-        schema:
-          type: string
-        description: The name of the trigger to update.
-        example: Administrative Level Notification
+      - "$ref": "#/components/parameters/triggerName"
       requestBody:
         required: true
         content:
@@ -7338,6 +7753,14 @@ components:
       description: The name of the support file set to delete. (have to be done the
         http encode)
       example: Cube Appliance 3.0.0 Support File Set 2025-06-18T15:54:48+00:00
+    triggerName:
+      in: path
+      name: triggerName
+      required: true
+      schema:
+        type: string
+      description: The name of the trigger to operate
+      example: Administrative Level Notification
   schemas:
     GetMeResponse:
       type: object
@@ -7640,6 +8063,42 @@ components:
         status:
           type: string
           example: ok
+    GetPredefinedEventFilterResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - events
+          properties:
+            events:
+              type: array
+              items:
+                required:
+                - type
+                - id
+                - severity
+                - category
+                properties:
+                  type:
+                    type: string
+                  id:
+                    type: string
+                  severity:
+                    type: string
+                  category:
+                    type: string
+        msg:
+          type: string
+        status:
+          type: string
     GetAbstractedEventsResponse:
       type: object
       required:
@@ -10089,6 +10548,132 @@ components:
           type: string
         status:
           type: string
+    GetTriggerMaterialsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+          - attribute
+          - response
+          properties:
+            attribute:
+              type: array
+              items:
+                type: object
+                required:
+                - alertTypes
+                - severities
+                - categories
+                - eventIds
+                properties:
+                  alertTypes:
+                    type: array
+                    items:
+                      type: string
+                  severities:
+                    type: array
+                    items:
+                      type: string
+                  categories:
+                    type: array
+                    items:
+                      type: string
+                  eventIds:
+                    type: array
+                    items:
+                      type: string
+            response:
+              type: object
+              required:
+              - scriptTypes
+              - notifications
+              properties:
+                scriptTypes:
+                  type: object
+                  required:
+                  - types
+                  - environments
+                  properties:
+                    types:
+                      type: array
+                      items:
+                        type: string
+                    environments:
+                      type: array
+                      items:
+                        type: string
+                notifications:
+                  type: object
+                  required:
+                  - slacks
+                  - emails
+                  properties:
+                    slacks:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - name
+                        - url
+                        - description
+                        properties:
+                          name:
+                            type: string
+                          url:
+                            type: string
+                          description:
+                            type: string
+                    emails:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - address
+                        - note
+                        properties:
+                          address:
+                            type: string
+                          note:
+                            type: string
+        msg:
+          type: string
+          example: trigger materials retrieved successfully
+        status:
+          type: string
+          example: ok
+    VerifyMaterialScriptResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        msg:
+          type: string
+          example: trigger script verified successfully
+        status:
+          type: string
+          example: ok
+    VerifyMaterialScriptRequest:
+      type: object
+      required:
+      - script
+      properties:
+        script:
+          type: string
+          example: base64-encoded-script-content
     GetTriggersResponse:
       type: object
       required:
@@ -10101,94 +10686,105 @@ components:
           type: integer
           example: 200
         data:
-          type: array
-          items:
-            type: object
-            required:
-            - name
-            - description
-            - attributes
-            - response
-            - status
-            - enabled
-            properties:
-              name:
-                type: string
-              description:
-                type: string
-              attributes:
-                type: array
-                items:
-                  type: object
-                  required:
-                  - name
-                  - type
-                  - value
-                  - enabled
-                  properties:
-                    name:
-                      type: string
-                    type:
-                      type: string
-                    value:
-                      type: string
-                    enabled:
-                      type: boolean
-              response:
+          type: object
+          required:
+          - triggers
+          - page
+          properties:
+            triggers:
+              type: array
+              items:
                 type: object
                 required:
-                - types
-                - slacks
-                - emails
+                - name
+                - isBuiltIn
+                - description
+                - attributes
+                - response
+                - status
+                - enabled
                 properties:
-                  types:
-                    type: array
-                    items:
-                      type: string
-                  slacks:
+                  name:
+                    type: string
+                  isBuiltIn:
+                    type: boolean
+                  description:
+                    type: string
+                  attributes:
                     type: array
                     items:
                       type: object
                       required:
                       - name
-                      - url
-                      - description
+                      - type
+                      - value
                       - enabled
                       properties:
                         name:
                           type: string
-                        url:
+                        type:
                           type: string
-                        description:
-                          type: string
-                        enabled:
-                          type: boolean
-                  emails:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                      - address
-                      - note
-                      - enabled
-                      properties:
-                        address:
-                          type: string
-                        note:
+                        value:
                           type: string
                         enabled:
                           type: boolean
-              status:
-                type: object
-                required:
-                - isUpdating
-                properties:
-                  current:
-                    type: string
-                  isUpdating:
+                  response:
+                    type: object
+                    required:
+                    - types
+                    - slacks
+                    - emails
+                    properties:
+                      types:
+                        type: array
+                        items:
+                          type: string
+                      slacks:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - name
+                          - url
+                          - description
+                          - enabled
+                          properties:
+                            name:
+                              type: string
+                            url:
+                              type: string
+                            description:
+                              type: string
+                            enabled:
+                              type: boolean
+                      emails:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - address
+                          - note
+                          - enabled
+                          properties:
+                            address:
+                              type: string
+                            note:
+                              type: string
+                            enabled:
+                              type: boolean
+                  status:
+                    type: object
+                    required:
+                    - isUpdating
+                    properties:
+                      current:
+                        type: string
+                      isUpdating:
+                        type: boolean
+                  enabled:
                     type: boolean
-              enabled:
-                type: boolean
+            page:
+              "$ref": "#/components/schemas/Page"
         msg:
           type: string
           example: triggers retrieved successfully
@@ -10210,6 +10806,7 @@ components:
           type: object
           required:
           - name
+          - isBuiltIn
           - description
           - attributes
           - response
@@ -10217,6 +10814,8 @@ components:
           properties:
             name:
               type: string
+            isBuiltIn:
+              type: boolean
             description:
               type: string
             attributes:
@@ -10289,6 +10888,86 @@ components:
         status:
           type: string
           example: ok
+    CreateTriggerRequest:
+      type: object
+      required:
+      - name
+      - description
+      - attribute
+      - response
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        attribute:
+          type: object
+          required:
+          - alertTypes
+          - severities
+          - categories
+          - eventIds
+          properties:
+            alertTypes:
+              type: array
+              items:
+                type: string
+            severities:
+              type: array
+              items:
+                type: string
+            categories:
+              type: array
+              items:
+                type: string
+            eventIds:
+              type: array
+              items:
+                type: string
+        response:
+          type: object
+          required:
+          - script
+          - notifications
+          properties:
+            script:
+              type: object
+              required:
+              - filePath
+              - content
+              properties:
+                filePath:
+                  type: string
+                content:
+                  type: string
+                  description: Base64 encoded script content
+            notifications:
+              type: object
+              required:
+              - slacks
+              - emails
+              properties:
+                slacks:
+                  type: array
+                  items:
+                    type: string
+                emails:
+                  type: array
+                  items:
+                    type: string
+    CreateTriggerResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        status:
+          type: string
     UpdateTriggerRequest:
       type: object
       required:
@@ -10345,6 +11024,19 @@ components:
         enable:
           type: boolean
     UpdateTriggerResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        msg:
+          type: string
+        status:
+          type: string
+    DeleteTriggerResponse:
       type: object
       required:
       - code
