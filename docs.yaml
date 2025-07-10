@@ -502,7 +502,7 @@ paths:
       - "$ref": "#/components/parameters/dataCenter"
       - in: query
         name: types
-        required: true
+        required: false
         schema:
           type: array
           items:
@@ -536,6 +536,15 @@ paths:
             - Critical
             - Error
         description: The severities of the event to query.
+        example: Info
+      - in: query
+        name: ids
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: The ids of the event to query.
         example: Info
       responses:
         '200':
@@ -6105,15 +6114,12 @@ paths:
                           - name: example-slack-channel-0
                             url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                             description: example slack channel 1
-                            enabled: false
                           - name: example-slack-channel-1
                             url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                             description: example slack channel 2
-                            enabled: false
                           emails:
                           - address: example.user@example.com
                             note: example email recipient
-                            enabled: false
                         status:
                           isUpdating: false
                         enabled: false
@@ -6150,15 +6156,12 @@ paths:
                           - name: example-slack-channel-0
                             url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                             description: example slack channel 1
-                            enabled: false
                           - name: example-slack-channel-1
                             url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                             description: example slack channel 2
-                            enabled: false
                           emails:
                           - address: example.user@example.com
                             note: example email recipient
-                            enabled: false
                         status:
                           isUpdating: false
                         enabled: false
@@ -6416,6 +6419,9 @@ paths:
                     - CPU00006C
                   description: example-update-description
                   response:
+                    script:
+                      filePath: "/tmp/example-update.sh"
+                      content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICd1cGRhdGVkJzsgfQ==
                     slacks:
                     - https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                     emails:
@@ -10676,7 +10682,6 @@ components:
                           - name
                           - url
                           - description
-                          - enabled
                           properties:
                             name:
                               type: string
@@ -10684,8 +10689,6 @@ components:
                               type: string
                             description:
                               type: string
-                            enabled:
-                              type: boolean
                       emails:
                         type: array
                         items:
@@ -10693,14 +10696,11 @@ components:
                           required:
                           - address
                           - note
-                          - enabled
                           properties:
                             address:
                               type: string
                             note:
                               type: string
-                            enabled:
-                              type: boolean
                   status:
                     type: object
                     required:
@@ -10790,7 +10790,6 @@ components:
                     - name
                     - url
                     - description
-                    - enabled
                     properties:
                       name:
                         type: string
@@ -10798,8 +10797,6 @@ components:
                         type: string
                       description:
                         type: string
-                      enabled:
-                        type: boolean
                 emails:
                   type: array
                   items:
@@ -10807,14 +10804,11 @@ components:
                     required:
                     - address
                     - note
-                    - enabled
                     properties:
                       address:
                         type: string
                       note:
                         type: string
-                      enabled:
-                        type: boolean
             enabled:
               type: boolean
         msg:
@@ -10944,9 +10938,21 @@ components:
             script:
               type: object
               required:
+              - script
               - filePath
               - content
               properties:
+                script:
+                  type: object
+                  required:
+                  - filePath
+                  - content
+                  properties:
+                    filePath:
+                      type: string
+                    content:
+                      type: string
+                      description: Base64 encoded script content
                 filePath:
                   type: string
                 content:
