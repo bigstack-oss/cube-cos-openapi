@@ -545,7 +545,7 @@ paths:
           items:
             type: string
         description: The ids of the event to query.
-        example: Info
+        example: CPU00004I
       responses:
         '200':
           description: Retrieve the predefined events successfully
