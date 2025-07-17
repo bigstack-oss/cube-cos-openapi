@@ -3764,7 +3764,7 @@ paths:
                     - serial: 57T0A05UF5YE
                       device: sda
                       type: HDD
-                      class: hdd
+                      class: HDD
                       osd:
                         pgs: 646
                         reweight: 1
@@ -3804,7 +3804,7 @@ paths:
                     - serial: 57P0A0EWF5YE
                       device: sdc
                       type: HDD
-                      class: hdd
+                      class: HDD
                       osd:
                         pgs: 634
                         reweight: 1
@@ -3829,7 +3829,7 @@ paths:
                     msg: fetch node devices successfully
                     status: ok
         '404':
-          description: Node not found
+          description: Node device not found
           content:
             application/json:
               schema:
@@ -3840,7 +3840,7 @@ paths:
                     example: 404
                   msg:
                     type: string
-                    example: node not found
+                    example: node device not found
                   status:
                     type: string
                     example: not found
@@ -3986,11 +3986,11 @@ paths:
               example1:
                 summary: Promote a device to SSD class
                 value:
-                  class: ssd
+                  class: SSD
               example2:
                 summary: Demote a device to HDD class
                 value:
-                  class: hdd
+                  class: HDD
       responses:
         '202':
           description: the request to update node device is accepted successfully
@@ -4030,6 +4030,66 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/devices/{deviceName}/osds":
+    patch:
+      operationId: updateNodeDeviceOsds
+      tags:
+      - Nodes
+      summary: Update OSDs on the node device
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
+      - "$ref": "#/components/parameters/deviceName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateNodeOsdRequest"
+            examples:
+              example:
+                summary: Reweight an OSD
+                value:
+                  reweight: 0.75
+      responses:
+        '202':
+          description: the request to update node device OSDs is accepted successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateNodeOsdResponse"
+        '404':
+          description: Node device not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node device not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update node device osds: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/osds/{osdId}":
     patch:
       operationId: updateNodeOsd
@@ -4050,7 +4110,7 @@ paths:
               example:
                 summary: Reweight an OSD
                 value:
-                  reweight: 0.5
+                  reweight: 0.75
       responses:
         '202':
           description: the request to update node OSD is accepted successfully
@@ -10120,16 +10180,17 @@ components:
               device:
                 type: string
               class:
-                type: string
-                enum:
-                - ssd
-                - hdd
+                "$ref": "#/components/schemas/DeviceType"
               type:
                 type: string
               sizeMiB:
                 type: number
               availability:
                 type: string
+                enum:
+                - available
+                - in-use
+                - system
               osd:
                 type: object
                 required:
@@ -10300,10 +10361,7 @@ components:
       - class
       properties:
         class:
-          type: string
-          enum:
-          - ssd
-          - hdd
+          "$ref": "#/components/schemas/DeviceType"
     UpdateNodeOsdRequest:
       type: object
       required:
@@ -10311,7 +10369,8 @@ components:
       properties:
         reweight:
           type: number
-          description: The reweight value for the OSD, e.g., 0.5
+          description: The reweight value for the OSD. It's only allow to have two
+            decimal places with a range of 0.0 to 1.0, for example, 0.5 or 0.75.
     DisconnectNodeIpmiResponse:
       type: object
       required:
@@ -12313,5 +12372,10 @@ components:
           - error
         isUpdating:
           type: boolean
+    DeviceType:
+      type: string
+      enum:
+      - SSD
+      - HDD
 security:
 - BearerAuth: []
