@@ -521,6 +521,22 @@ paths:
           type: array
           items:
             type: string
+            enum:
+            - PLC
+            - BSP
+            - RUG
+            - KSN
+            - CMP
+            - CEP
+            - NET
+            - SRV
+            - SDN
+            - VRT
+            - ETH
+            - CPU
+            - DSK
+            - MEM
+            - DEV
         description: The categories of the event to query.
         example: CPU
       - in: query
@@ -531,10 +547,9 @@ paths:
           items:
             type: string
             enum:
-            - Info
-            - Warning
-            - Critical
-            - Error
+            - INFO
+            - WARNING
+            - CRITICAL
         description: The severities of the event to query.
         example: Info
       - in: query
@@ -544,6 +559,55 @@ paths:
           type: array
           items:
             type: string
+            enum:
+            - PLC00001I
+            - PLC00002I
+            - BSP00001I
+            - RUG00001I
+            - KSN00001I
+            - KSN00002I
+            - CMP01001I
+            - CMP01002I
+            - CMP02001I
+            - CMP02002I
+            - CMP02003I
+            - CEP00001I
+            - CEP00002W
+            - NET00001I
+            - NET00002W
+            - NET00003I
+            - NET00004W
+            - SRV00001I
+            - SRV00002W
+            - SRV00003C
+            - SRV01001I
+            - SRV01002I
+            - SDN00001I
+            - SDN00002I
+            - VRT00001I
+            - VRT00002W
+            - VRT00003C
+            - ETH00001I
+            - ETH00002W
+            - CPU00001I
+            - CPU00002W
+            - CPU00003C
+            - DSK00001I
+            - DSK00002W
+            - DSK00003C
+            - MEM00001I
+            - MEM00002W
+            - MEM00003C
+            - DEV00001I
+            - DEV00002W
+            - CPU00004I
+            - CPU00005W
+            - CPU00006C
+            - CPU00007I
+            - MEM00004I
+            - MEM00005W
+            - MEM00006C
+            - MEM00007I
         description: The ids of the event to query.
         example: CPU00004I
       responses:
@@ -560,29 +624,20 @@ paths:
                     code: 200
                     data:
                     - type: system
-                      id: KSN00001I
+                      id: PLC00001I
                       severity: INFO
-                      category: KSN
+                      category: PLC
+                      description: CubeCOS node policy is successfully applied
                     - type: system
-                      id: CMP01001I
+                      id: PLC00002I
                       severity: INFO
-                      category: CMP
-                    - type: host
-                      id: ETH00001I
+                      category: PLC
+                      description: CubeCOS cluster policy is successfully applied
+                    - type: system
+                      id: BSP00001I
                       severity: INFO
-                      category: ETH
-                    - type: host
-                      id: CPU00002W
-                      severity: WARNING
-                      category: CPU
-                    - type: instance
-                      id: CPU00004I
-                      severity: INFO
-                      category: CPU
-                    - type: instance
-                      id: CPU00006C
-                      severity: CTRITICAL
-                      category: CPU
+                      category: BSP
+                      description: CubeCOS node bootstrapping is started
                     msg: fetch predefined events successfully
                     status: ok
         '500':
@@ -6450,16 +6505,15 @@ paths:
                         - CPU00006C
                       response:
                         scriptType:
-                          type: Bash
+                          language: Bash
                           environment: Alpine Linux
-                        notifications:
-                          emails:
-                          - address: example-user@bigstack.co
-                            note: example email recipient
-                          slacks:
-                          - name: Example slack channel
-                            url: https://example.slack.com/archives/exmpale-token-abc
-                            description: example slack channel
+                        emails:
+                        - address: example-user@bigstack.co
+                          note: example email recipient
+                        slacks:
+                        - name: Example slack channel
+                          url: https://example.slack.com/archives/exmpale-token-abc
+                          description: example slack channel
                     msg: fetched trigger materials successfully
                     status: ok
         '401':
@@ -6604,7 +6658,7 @@ paths:
                         description: Configure how you are going to be notified for
                           system events and host alerts, including levels 'warning',
                           'error', and 'critical'.
-                        attributes:
+                        attribute:
                           alertTypes:
                           - system
                           - host
@@ -6627,7 +6681,7 @@ paths:
                           - email
                           - slack
                           script:
-                            filePath: "/tmp/example.sh"
+                            name: example-script
                             content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
                           slacks:
                           - name: example-slack-channel-0
@@ -6646,7 +6700,7 @@ paths:
                         isBuiltIn: true
                         description: Configure how you are going to be notified for
                           instance alerts, including levels 'warning', and 'critical'.
-                        attributes:
+                        attribute:
                           alertTypes:
                           - system
                           - host
@@ -6669,7 +6723,7 @@ paths:
                           - email
                           - slack
                           script:
-                            filePath: "/tmp/example.sh"
+                            name: example-script
                             content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
                           slacks:
                           - name: example-slack-channel-0
@@ -6753,13 +6807,12 @@ paths:
                     - CPU00006C
                   response:
                     script:
-                      filePath: "/tmp/example.sh"
+                      name: example-script
                       content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
-                    notifications:
-                      emails:
-                      - example-user@bigstack.co
-                      slacks:
-                      - https://hooks.slack.com/services/T00000000/B00000000/XXXXX
+                    emails:
+                    - example-user@bigstack.co
+                    slacks:
+                    - https://hooks.slack.com/services/T00000000/B00000000/XXXXX
       responses:
         '202':
           description: Trigger creation request received
@@ -6833,7 +6886,7 @@ paths:
                       description: Configure how you are going to be notified for
                         system events and host alerts, including levels 'warning',
                         'error', and 'critical'.
-                      attributes:
+                      attribute:
                         alertTypes:
                         - system
                         - host
@@ -6856,21 +6909,18 @@ paths:
                         - email
                         - slack
                         script:
-                          filePath: "/tmp/example.sh"
+                          name: example-script
                           content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
                         slacks:
                         - name: example-slack-channel-0
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 1
-                          enabled: false
                         - name: example-slack-channel-1
                           url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
                           description: example slack channel 2
-                          enabled: false
                         emails:
                         - address: example.user@example.com
                           note: example email recipient
-                          enabled: false
                       enabled: false
                     msg: fetch trigger successfully
                     status: ok
@@ -6924,7 +6974,7 @@ paths:
               example:
                 summary: Trigger update request
                 value:
-                  attributes:
+                  attribute:
                     alertTypes:
                     - system
                     - host
@@ -6939,7 +6989,7 @@ paths:
                   description: example-update-description
                   response:
                     script:
-                      filePath: "/tmp/example-update.sh"
+                      name: example-script
                       content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICd1cGRhdGVkJzsgfQ==
                     slacks:
                     - https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
@@ -7950,6 +8000,201 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/images/materials":
+    get:
+      operationId: listImageMaterials
+      tags:
+      - Images
+      summary: List image materials
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: List image materials successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ListImageMaterialsResponse"
+              examples:
+                example:
+                  summary: Image material list
+                  value:
+                    code: 200
+                    data:
+                      reservedImages:
+                      - file: amphora-x64-haproxy-yoga.qcow2
+                        name: amphora-x64-haproxy
+                        os: Ubuntu
+                        destination: CubeStorage
+                        domain: default
+                        sourceFromAnotherHypervisor: false
+                        visibility: private
+                      - file: manila-service-image_yoga.qcow2
+                        name: manila-service-image
+                        os: Ubuntu
+                        destination: CubeStorage
+                        domain: default
+                        sourceFromAnotherHypervisor: false
+                        visibility: private
+                      projects:
+                      - name: admin
+                        domain: default
+                        enabled: true
+                        description: Bootstrap project for initializing the cloud.
+                      - name: example-project
+                        domain: default
+                        enabled: true
+                        description: Example project
+                      oses:
+                      - CentOS
+                      - Fedora
+                      - Ubuntu
+                      - Debian
+                      - Windows
+                      - Rocky
+                      - FreeBSD
+                      - CoreOS
+                      - Arch
+                      - Others
+                      destinations:
+                      - CubeStorage
+                      domains:
+                      - default
+                      visibility:
+                      - public
+                      - private
+                    msg: fetch image materials successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to list image materials: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/images":
+    post:
+      operationId: importImage
+      tags:
+      - Images
+      summary: Improt an image
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+              - image
+              - file
+              - name
+              - os
+              - destination
+              - domain
+              - project
+              - sourceFromAnotherHypervisor
+              - visibility
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image file to import
+                file:
+                  type: string
+                  description: The file name of the image to import
+                name:
+                  type: string
+                  description: The name of the image to import
+                os:
+                  type: string
+                  description: The OS of the image to import
+                  enum:
+                  - CentOS
+                  - Fedora
+                  - Ubuntu
+                  - Debian
+                  - Windows
+                  - Rocky
+                  - FreeBSD
+                  - CoreOS
+                  - Arch
+                  - Others
+                destination:
+                  type: string
+                  description: The destination of the image to import
+                domain:
+                  type: string
+                  description: The domain of the image to import
+                project:
+                  type: string
+                  description: The project of the image to import
+                sourceFromAnotherHypervisor:
+                  type: boolean
+                  description: Whether the image is from another hypervisor
+                visibility:
+                  type: string
+                  description: The visibility of the image to import
+                  enum:
+                  - public
+                  - private
+            example:
+              image: "<image file to upload"
+              file: example-image.qcow2
+              name: example image
+              os: Ubuntu
+              destination: CubeStorage
+              domain: default
+              project: admin
+              sourceFromAnotherHypervisor: false
+              visibility: private
+      responses:
+        '202':
+          description: Image import accepted and under processing
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 202
+                  msg:
+                    type: string
+                    example: image import accepted and under processing
+                  status:
+                    type: string
+                    example: accepted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to import image: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
 components:
   securitySchemes:
     BearerAuth:
@@ -8530,10 +8775,11 @@ components:
           items:
             type: object
             required:
-              - type
-              - id
-              - severity
-              - category
+            - type
+            - id
+            - severity
+            - category
+            - description
             properties:
               type:
                 type: string
@@ -8542,6 +8788,8 @@ components:
               severity:
                 type: string
               category:
+                type: string
+              description:
                 type: string
         msg:
           type: string
@@ -11275,10 +11523,10 @@ components:
             attribute:
               type: object
               required:
-                - alertTypes
-                - severities
-                - categories
-                - eventIds
+              - alertTypes
+              - severities
+              - categories
+              - eventIds
               properties:
                 alertTypes:
                   type: array
@@ -11300,51 +11548,46 @@ components:
               type: object
               required:
               - scriptType
-              - notifications
+              - emails
+              - slacks
               properties:
                 scriptType:
                   type: object
                   required:
-                  - type
+                  - language
                   - environment
                   properties:
-                    type:
+                    language:
                       type: string
                     environment:
                       type: string
-                notifications:
-                  type: object
-                  required:
-                  - slacks
-                  - emails
-                  properties:
-                    slacks:
-                      type: array
-                      items:
-                        type: object
-                        required:
-                        - name
-                        - url
-                        - description
-                        properties:
-                          name:
-                            type: string
-                          url:
-                            type: string
-                          description:
-                            type: string
-                    emails:
-                      type: array
-                      items:
-                        type: object
-                        required:
-                        - address
-                        - note
-                        properties:
-                          address:
-                            type: string
-                          note:
-                            type: string
+                slacks:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - url
+                    - description
+                    properties:
+                      name:
+                        type: string
+                      url:
+                        type: string
+                      description:
+                        type: string
+                emails:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - address
+                    - note
+                    properties:
+                      address:
+                        type: string
+                      note:
+                        type: string
         msg:
           type: string
           example: trigger materials retrieved successfully
@@ -11400,7 +11643,7 @@ components:
                 - name
                 - isBuiltIn
                 - description
-                - attributes
+                - attribute
                 - response
                 - status
                 - enabled
@@ -11411,7 +11654,7 @@ components:
                     type: boolean
                   description:
                     type: string
-                  attributes:
+                  attribute:
                     type: object
                     required:
                     - alertTypes
@@ -11439,6 +11682,7 @@ components:
                     type: object
                     required:
                     - types
+                    - script
                     - slacks
                     - emails
                     properties:
@@ -11449,10 +11693,10 @@ components:
                       script:
                         type: object
                         required:
-                        - filePath
+                        - name
                         - content
                         properties:
-                          filePath:
+                          name:
                             type: string
                           content:
                             type: string
@@ -11520,7 +11764,7 @@ components:
           - name
           - isBuiltIn
           - description
-          - attributes
+          - attribute
           - response
           - enabled
           properties:
@@ -11530,7 +11774,7 @@ components:
               type: boolean
             description:
               type: string
-            attributes:
+            attribute:
               type: object
               required:
               - alertTypes
@@ -11565,17 +11809,6 @@ components:
                   type: array
                   items:
                     type: string
-                script:
-                  type: object
-                  required:
-                  - filePath
-                  - content
-                  properties:
-                    filePath:
-                      type: string
-                    content:
-                      type: string
-                      description: Base64 encoded script content
                 slacks:
                   type: array
                   items:
@@ -11649,33 +11882,29 @@ components:
         response:
           type: object
           required:
-          - notifications
+          - script
+          - emails
+          - slacks
           properties:
             script:
               type: object
               required:
-              - filePath
+              - name
               - content
               properties:
-                filePath:
+                name:
                   type: string
                 content:
                   type: string
                   description: Base64 encoded script content
-            notifications:
-              type: object
-              required:
-              - slacks
-              - emails
-              properties:
-                slacks:
-                  type: array
-                  items:
-                    type: string
-                emails:
-                  type: array
-                  items:
-                    type: string
+            emails:
+              type: array
+              items:
+                type: string
+            slacks:
+              type: array
+              items:
+                type: string
     CreateTriggerResponse:
       type: object
       required:
@@ -11692,10 +11921,10 @@ components:
     UpdateTriggerRequest:
       type: object
       required:
-      - attributes
+      - attribute
       - response
       properties:
-        attributes:
+        attribute:
           type: object
           required:
           - alertTypes
@@ -11722,16 +11951,17 @@ components:
         response:
           type: object
           required:
+          - script
           - slacks
           - emails
           properties:
             script:
               type: object
               required:
-              - filePath
+              - name
               - content
               properties:
-                filePath:
+                name:
                   type: string
                 content:
                   type: string
@@ -11852,6 +12082,80 @@ components:
           type: string
         status:
           type: string
+    ListImageMaterialsResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          required:
+          - reservedImages
+          - projects
+          - oses
+          - destinations
+          - domains
+          - visibilities
+          properties:
+            reservedImages:
+              type: array
+              items:
+                type: object
+                required:
+                - file
+                - name
+                - os
+                - destination
+                - domain
+                - sourceFromAnotherHypervisor
+                - visibility
+                properties:
+                  file:
+                    type: string
+                  name:
+                    type: string
+                  os:
+                    type: string
+                  destination:
+                    type: string
+                  domain:
+                    type: string
+                  sourceFromAnotherHypervisor:
+                    type: boolean
+                  visibility:
+                    type: string
+            projects:
+              type: array
+              items:
+                type: string
+            oses:
+              type: array
+              items:
+                type: string
+            destinations:
+              type: array
+              items:
+                type: string
+            domains:
+              type: array
+              items:
+                type: string
+            visibilities:
+              type: array
+              items:
+                type: string
+        msg:
+          type: string
+          example: materials retrieved successfully
+        status:
+          type: string
+          example: ok
     MetricRank:
       type: object
       required:
