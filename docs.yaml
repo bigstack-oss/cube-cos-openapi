@@ -6449,7 +6449,7 @@ paths:
                         - CPU00004I
                         - CPU00006C
                       response:
-                        scriptTypes:
+                        scriptType:
                           type: Bash
                           environment: Alpine Linux
                         notifications:
@@ -8526,27 +8526,23 @@ components:
         code:
           type: integer
         data:
-          type: object
-          required:
-          - events
-          properties:
-            events:
-              type: array
-              items:
-                required:
-                - type
-                - id
-                - severity
-                - category
-                properties:
-                  type:
-                    type: string
-                  id:
-                    type: string
-                  severity:
-                    type: string
-                  category:
-                    type: string
+          type: array
+          items:
+            type: object
+            required:
+              - type
+              - id
+              - severity
+              - category
+            properties:
+              type:
+                type: string
+              id:
+                type: string
+              severity:
+                type: string
+              category:
+                type: string
         msg:
           type: string
         status:
@@ -11277,51 +11273,45 @@ components:
           - response
           properties:
             attribute:
-              type: array
-              items:
-                type: object
-                required:
+              type: object
+              required:
                 - alertTypes
                 - severities
                 - categories
                 - eventIds
-                properties:
-                  alertTypes:
-                    type: array
-                    items:
-                      type: string
-                  severities:
-                    type: array
-                    items:
-                      type: string
-                  categories:
-                    type: array
-                    items:
-                      type: string
-                  eventIds:
-                    type: array
-                    items:
-                      type: string
+              properties:
+                alertTypes:
+                  type: array
+                  items:
+                    type: string
+                severities:
+                  type: array
+                  items:
+                    type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+                eventIds:
+                  type: array
+                  items:
+                    type: string
             response:
               type: object
               required:
-              - scriptTypes
+              - scriptType
               - notifications
               properties:
-                scriptTypes:
+                scriptType:
                   type: object
                   required:
-                  - types
-                  - environments
+                  - type
+                  - environment
                   properties:
-                    types:
-                      type: array
-                      items:
-                        type: string
-                    environments:
-                      type: array
-                      items:
-                        type: string
+                    type:
+                      type: string
+                    environment:
+                      type: string
                 notifications:
                   type: object
                   required:
@@ -11449,7 +11439,6 @@ components:
                     type: object
                     required:
                     - types
-                    - script
                     - slacks
                     - emails
                     properties:
@@ -11576,6 +11565,17 @@ components:
                   type: array
                   items:
                     type: string
+                script:
+                  type: object
+                  required:
+                  - filePath
+                  - content
+                  properties:
+                    filePath:
+                      type: string
+                    content:
+                      type: string
+                      description: Base64 encoded script content
                 slacks:
                   type: array
                   items:
@@ -11615,7 +11615,6 @@ components:
       type: object
       required:
       - name
-      - description
       - attribute
       - response
       properties:
@@ -11650,7 +11649,6 @@ components:
         response:
           type: object
           required:
-          - script
           - notifications
           properties:
             script:
@@ -11696,7 +11694,6 @@ components:
       required:
       - attributes
       - response
-      - description
       properties:
         attributes:
           type: object
@@ -11725,28 +11722,15 @@ components:
         response:
           type: object
           required:
-          - script
           - slacks
           - emails
           properties:
             script:
               type: object
               required:
-              - script
               - filePath
               - content
               properties:
-                script:
-                  type: object
-                  required:
-                  - filePath
-                  - content
-                  properties:
-                    filePath:
-                      type: string
-                    content:
-                      type: string
-                      description: Base64 encoded script content
                 filePath:
                   type: string
                 content:
