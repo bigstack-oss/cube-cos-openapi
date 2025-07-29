@@ -8115,7 +8115,7 @@ paths:
                       visibilityType: public
                       createdAt: '2025-07-27T13:08:53+08:00'
                       status:
-                        cuurent: active
+                        current: active
                         isProcessing: false
                     - id: a5218f3c-47df-4ba2-ad41-5e9a50816e6c
                       name: example image 2
@@ -8126,7 +8126,7 @@ paths:
                       visibilityType: public
                       createdAt: '2025-07-29T13:08:53+08:00'
                       status:
-                        cuurent: importing
+                        current: importing
                         isProcessing: true
                         processPercent: 50.98
                     msg: fetch image list successfully
@@ -8151,7 +8151,7 @@ paths:
       operationId: importImage
       tags:
       - Images
-      summary: Improt an image
+      summary: Import an image
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       requestBody:
