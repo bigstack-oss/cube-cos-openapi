@@ -495,6 +495,9 @@ paths:
   "/api/v1/datacenters/{dataCenter}/events/predefined":
     get:
       operationId: getPredefinedEvents
+      description: Please note that if the 'types', 'categories', 'severities', or
+        'ids' query parameters are not specified, then 'NO' any predefined events
+        will be returned.
       tags:
       - Events
       summary: Retrieve the predefined events
@@ -695,9 +698,9 @@ paths:
                     data:
                       system:
                         severities:
-                        - Critical
-                        - Info
-                        - Warning
+                        - CRITICAL
+                        - INFO
+                        - WARNING
                         categories:
                         - KSN
                         - NET
@@ -6668,9 +6671,9 @@ paths:
                           - ETH00001I
                           - CPU00002W
                           severities:
-                          - Warning
-                          - Error
-                          - Critical
+                          - INFO
+                          - WARNING
+                          - CRITICAL
                           categories:
                           - DEV
                           - CPU
@@ -6694,7 +6697,8 @@ paths:
                           - address: example.user@example.com
                             note: example email recipient
                         status:
-                          isUpdating: false
+                          current: ok
+                          isProcessing: false
                         enabled: false
                       - name: Instance Level Notification
                         isBuiltIn: true
@@ -6710,9 +6714,9 @@ paths:
                           - ETH00001I
                           - CPU00002W
                           severities:
-                          - Warning
+                          - WARNING
                           - Error
-                          - Critical
+                          - CRITICAL
                           categories:
                           - DEV
                           - CPU
@@ -6736,7 +6740,7 @@ paths:
                           - address: example.user@example.com
                             note: example email recipient
                         status:
-                          isUpdating: false
+                          isProcessing: false
                         enabled: false
                       page:
                         total: 1
@@ -6800,7 +6804,7 @@ paths:
                     alertTypes:
                     - system
                     severities:
-                    - Critical
+                    - CRITICAL
                     categories:
                     - CPU
                     eventIds:
@@ -6896,9 +6900,9 @@ paths:
                         - ETH00001I
                         - CPU00002W
                         severities:
-                        - Warning
-                        - Error
-                        - Critical
+                        - WARNING
+                        - ERROR
+                        - CRITICAL
                         categories:
                         - DEV
                         - CPU
@@ -6921,6 +6925,9 @@ paths:
                         emails:
                         - address: example.user@example.com
                           note: example email recipient
+                      status:
+                        current: ok
+                        isProcessing: false
                       enabled: false
                     msg: fetch trigger successfully
                     status: ok
@@ -11693,107 +11700,7 @@ components:
             triggers:
               type: array
               items:
-                type: object
-                required:
-                - name
-                - isBuiltIn
-                - description
-                - attribute
-                - response
-                - status
-                - enabled
-                properties:
-                  name:
-                    type: string
-                  isBuiltIn:
-                    type: boolean
-                  description:
-                    type: string
-                  attribute:
-                    type: object
-                    required:
-                    - alertTypes
-                    - severities
-                    - categories
-                    - eventIds
-                    properties:
-                      alertTypes:
-                        type: array
-                        items:
-                          type: string
-                      severities:
-                        type: array
-                        items:
-                          type: string
-                      categories:
-                        type: array
-                        items:
-                          type: string
-                      eventIds:
-                        type: array
-                        items:
-                          type: string
-                  response:
-                    type: object
-                    required:
-                    - types
-                    - script
-                    - slacks
-                    - emails
-                    properties:
-                      types:
-                        type: array
-                        items:
-                          type: string
-                      script:
-                        type: object
-                        required:
-                        - name
-                        - content
-                        properties:
-                          name:
-                            type: string
-                          content:
-                            type: string
-                            description: Base64 encoded script content
-                      slacks:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                          - name
-                          - url
-                          - description
-                          properties:
-                            name:
-                              type: string
-                            url:
-                              type: string
-                            description:
-                              type: string
-                      emails:
-                        type: array
-                        items:
-                          type: object
-                          required:
-                          - address
-                          - note
-                          properties:
-                            address:
-                              type: string
-                            note:
-                              type: string
-                  status:
-                    type: object
-                    required:
-                    - isUpdating
-                    properties:
-                      current:
-                        type: string
-                      isUpdating:
-                        type: boolean
-                  enabled:
-                    type: boolean
+                "$ref": "#/components/schemas/Trigger"
             page:
               "$ref": "#/components/schemas/Page"
         msg:
@@ -11814,85 +11721,7 @@ components:
           type: integer
           example: 200
         data:
-          type: object
-          required:
-          - name
-          - isBuiltIn
-          - description
-          - attribute
-          - response
-          - enabled
-          properties:
-            name:
-              type: string
-            isBuiltIn:
-              type: boolean
-            description:
-              type: string
-            attribute:
-              type: object
-              required:
-              - alertTypes
-              - severities
-              - categories
-              - eventIds
-              properties:
-                alertTypes:
-                  type: array
-                  items:
-                    type: string
-                severities:
-                  type: array
-                  items:
-                    type: string
-                categories:
-                  type: array
-                  items:
-                    type: string
-                eventIds:
-                  type: array
-                  items:
-                    type: string
-            response:
-              type: object
-              required:
-              - types
-              - slacks
-              - emails
-              properties:
-                types:
-                  type: array
-                  items:
-                    type: string
-                slacks:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - name
-                    - url
-                    - description
-                    properties:
-                      name:
-                        type: string
-                      url:
-                        type: string
-                      description:
-                        type: string
-                emails:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - address
-                    - note
-                    properties:
-                      address:
-                        type: string
-                      note:
-                        type: string
-            enabled:
-              type: boolean
+          "$ref": "#/components/schemas/Trigger"
         msg:
           type: string
           example: triggers retrieved successfully
@@ -12648,6 +12477,100 @@ components:
               type: string
             isCreating:
               type: boolean
+    Trigger:
+      type: object
+      required:
+      - name
+      - isBuiltIn
+      - description
+      - attribute
+      - response
+      - enabled
+      properties:
+        name:
+          type: string
+        isBuiltIn:
+          type: boolean
+        description:
+          type: string
+        attribute:
+          type: object
+          required:
+          - alertTypes
+          - severities
+          - categories
+          - eventIds
+          properties:
+            alertTypes:
+              type: array
+              items:
+                type: string
+            severities:
+              type: array
+              items:
+                type: string
+            categories:
+              type: array
+              items:
+                type: string
+            eventIds:
+              type: array
+              items:
+                type: string
+        response:
+          type: object
+          required:
+          - types
+          - slacks
+          - emails
+          properties:
+            types:
+              type: array
+              items:
+                type: string
+                enum:
+                - script
+                - email
+                - slack
+            slacks:
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                - url
+                - description
+                properties:
+                  name:
+                    type: string
+                  url:
+                    type: string
+                  description:
+                    type: string
+            emails:
+              type: array
+              items:
+                type: object
+                required:
+                - address
+                - note
+                properties:
+                  address:
+                    type: string
+                  note:
+                    type: string
+        status:
+          type: object
+          required:
+          - current
+          - isProcessing
+          properties:
+            current:
+              type: string
+            isProcessing:
+              type: boolean
+        enabled:
+          type: boolean
     SupportFile:
       type: object
       required:
