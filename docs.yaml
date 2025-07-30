@@ -6715,7 +6715,7 @@ paths:
                           - CPU00002W
                           severities:
                           - WARNING
-                          - Error
+                          - INFO
                           - CRITICAL
                           categories:
                           - DEV
@@ -6740,6 +6740,7 @@ paths:
                           - address: example.user@example.com
                             note: example email recipient
                         status:
+                          current: ok
                           isProcessing: false
                         enabled: false
                       page:
@@ -6986,8 +6987,8 @@ paths:
                     - system
                     - host
                     severities:
-                    - Warning
-                    - Error
+                    - WARNING
+                    - INFO
                     categories:
                     - CPU
                     - DSK
@@ -8460,7 +8461,6 @@ components:
       description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
         'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops', 'diskWriteIops',
         'networkTrafficIn', or 'networkTrafficOut'.
-      example: 1
     viewType:
       in: path
       name: viewType
@@ -8473,7 +8473,6 @@ components:
         - rank
       description: The type of view to query, the value can be only 'summary', 'history',
         or 'rank'.
-      example: 1
     entityType:
       in: path
       name: entityType
@@ -12521,6 +12520,7 @@ components:
           type: object
           required:
           - types
+          - script
           - slacks
           - emails
           properties:
@@ -12567,6 +12567,11 @@ components:
           properties:
             current:
               type: string
+              enum:
+              - ok
+              - creating
+              - updating
+              - deleting
             isProcessing:
               type: boolean
         enabled:
