@@ -8327,13 +8327,14 @@ paths:
         description: Whether the source image comes from another hypervisor
       - name: visibility
         in: query
-        required: true
+        required: false
         schema:
           type: string
           enum:
           - private
           - public
-        description: Visibility setting for the image
+        description: Visibility setting for the image(only required when sourceFromAnotherHypervisor
+          is false).
       requestBody:
         description: for example, in the CURL, the image binary should be set by the
           '--data-binary' option like '--data-binary @/path/to/your-image'.
