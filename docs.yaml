@@ -6691,6 +6691,7 @@ paths:
                   summary: Trigger script verification result
                   value:
                     code: 200
+                    data: Hello\n
                     msg: trigger script verified successfully
                     status: ok
         '400':
@@ -6703,6 +6704,9 @@ paths:
                   code:
                     type: integer
                     example: 400
+                  data:
+                    type: string
+                    example: ""
                   msg:
                     type: string
                     example: invalid script content
@@ -6719,6 +6723,9 @@ paths:
                   code:
                     type: integer
                     example: 401
+                  data:
+                    type: string
+                    example: ""
                   msg:
                     type: string
                     example: 'invalid_grant: Invalid user credentials'
@@ -6735,6 +6742,9 @@ paths:
                   code:
                     type: integer
                     example: 500
+                  data:
+                    type: string
+                    example: ""
                   msg:
                     type: string
                     example: 'failed to verify trigger script: internal server error'
@@ -11883,12 +11893,16 @@ components:
       type: object
       required:
       - code
+      - data
       - msg
       - status
       properties:
         code:
           type: integer
           example: 200
+        data:
+          type: string
+          example: Hello\n
         msg:
           type: string
           example: trigger script verified successfully
