@@ -6691,7 +6691,9 @@ paths:
                   summary: Trigger script verification result
                   value:
                     code: 200
-                    data: Hello
+                    data: 'Hello
+
+                      '
                     msg: trigger script verified successfully
                     status: ok
         '400':
@@ -12581,11 +12583,15 @@ components:
                       current:
                         type: string
                         enum:
+                        - queued
+                        - saving
                         - uploading
                         - importing
                         - active
-                        - deleting
-                        - error
+                        - deactivated
+                        - killed
+                        - deleted
+                        - pending_delete
                       isProcessing:
                         type: boolean
                       processPercent:
@@ -12662,9 +12668,15 @@ components:
                         enum:
                         - uploading
                         - importing
-                        - active
+                        - available
+                        - creating
+                        - attaching
+                        - detaching
                         - deleting
-                        - error
+                        - reserved
+                        - maintenance
+                        - backing-up
+                        - restoring-backup
                       isProcessing:
                         type: boolean
                       processPercent:
