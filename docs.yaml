@@ -1197,6 +1197,12 @@ paths:
         required: false
         schema:
           type: string
+          enum:
+          - 1h
+          - 24h
+          - 7d
+          - 14d
+          - 30d
         description: The past time of the notifications to query, click 'try it out'
           to see a few options, but can specify with the 's'(second), 'm'(minute),
           'h'(hour), and 'd'(day) suffix for other time ranges.
