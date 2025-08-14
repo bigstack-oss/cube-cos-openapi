@@ -86,6 +86,12 @@ paths:
                       isLocal: true
                       isHaEnabled: false
                       utcTimeZone: "+00:00"
+                      firmware:
+                        version: Cube Appliance 3.1.0
+                        updatedAt: '2025-08-08T19:51:40+08:00'
+                      fixpack:
+                        version: Cube Fixpack 2025-08-10
+                        updatedAt: '2025-08-10T19:51:40+08:00'
                       additional:
                         helpUrl: https://www.bigstack.co/contact-us
                         v1ApiDocUrl: https://example-virtual-ip/api/v1/datacenters/example-datacenter/apidocs/index.html
@@ -145,6 +151,12 @@ paths:
                       isLocal: true
                       isHaEnabled: false
                       utcTimeZone: "+00:00"
+                      firmware:
+                        version: Cube Appliance 3.1.0
+                        updatedAt: '2025-08-08T19:51:40+08:00'
+                      fixpack:
+                        version: Cube Fixpack 2025-08-10
+                        updatedAt: '2025-08-10T19:51:40+08:00'
                       additional:
                         helpUrl: https://www.bigstack.co/contact-us
                         v1ApiDocUrl: https://example-virtual-ip/api/v1/datacenters/example-datacenter/apidocs/index.html
@@ -8598,6 +8610,246 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/firmwares":
+    get:
+      operationId: listFirmwares
+      tags:
+      - Firmwares
+      summary: List a firmware
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/pageNum"
+      - "$ref": "#/components/parameters/pageSize"
+      responses:
+        '200':
+          description: List firmwares successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ListFirmwaresResponse"
+              examples:
+                example:
+                  summary: Firmware list
+                  value:
+                    code: 200
+                    data:
+                      firmwares:
+                      - version: CUBE Appliance 3.1.0 f45c719
+                        releaseNotes: ''
+                        updatedAt: '2025-08-11T09:09:00+08:00'
+                        status:
+                          current: available
+                          isUpdatable: true
+                          isProcessing: false
+                      page:
+                        total: 1
+                        number: 1
+                        size: 2
+                        totalItemCount: 2
+                    msg: fetch firmware list successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to list firmware: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+    post:
+      operationId: uploadFirmware
+      tags:
+      - Firmwares
+      summary: Upload a firmware
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/file"
+      requestBody:
+        description: for example, in the CURL, the firmware pkg should be set by the
+          '-T /path/to/firmware'.
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: Firmware uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: Firmware uploaded successfully
+                  status:
+                    type: string
+                    example: accepted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to upload firmware: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/firmwares/md5sum":
+    post:
+      operationId: uploadFirmwareMd5Sum
+      tags:
+      - Firmwares
+      summary: Upload a firmware MD5 sum
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        "$ref": "#/components/requestBodies/applicationOctetStream"
+      responses:
+        '200':
+          description: Firmware MD5 uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  msg:
+                    type: string
+                    example: Firmware MD5 uploaded successfully
+                  status:
+                    type: string
+                    example: accepted
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to upload firmware md5: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/firmwares/md5sum/verify":
+    post:
+      operationId: vierfyFirmwareMd5Sum
+      tags:
+      - Firmwares
+      summary: Verify the firmware MD5 sum
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: Firmware and MD5 sum verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - data
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    properties:
+                      firmwareMd5:
+                        type: string
+                        example: c18ce9ddf80b065004152b6f2e609ff8
+                      expectedMd5:
+                        type: string
+                        example: c18ce9ddf80b065004152b6f2e609ff8
+                  msg:
+                    type: string
+                    example: Firmware and MD5 sum verified successfully
+                  status:
+                    type: string
+                    example: accepted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - data
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  data:
+                    type: object
+                    properties:
+                      firmwareMd5:
+                        type: string
+                        example: vvvwewegrehnfxcvxhn52b6wefh4123g
+                      expectedMd5:
+                        type: string
+                        example: c18ce9ddf80b065004152b6f2e609ff8
+                  msg:
+                    type: string
+                    example: 'failed to verify firmware md5: bad request'
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to upload firmware md5: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
 components:
   securitySchemes:
     BearerAuth:
@@ -12686,6 +12938,62 @@ components:
         status:
           type: string
           example: ok
+    ListFirmwaresResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - firmwares
+          - page
+          properties:
+            firmwares:
+              type: array
+              items:
+                type: object
+                required:
+                - version
+                - releaseNotes
+                - updatedAt
+                - status
+                properties:
+                  version:
+                    type: string
+                  releaseNotes:
+                    type: string
+                  updatedAt:
+                    type: string
+                    format: date-time
+                  status:
+                    type: object
+                    required:
+                    - current
+                    - isUpdatable
+                    - isProcessing
+                    properties:
+                      current:
+                        type: string
+                        enum:
+                        - available
+                        - processing
+                        - updated
+                      isUpdatable:
+                        type: boolean
+                      isProcessing:
+                        type: boolean
+            page:
+              "$ref": "#/components/schemas/Page"
+        msg:
+          type: string
+        status:
+          type: string
     MetricRank:
       type: object
       required:
@@ -12837,6 +13145,8 @@ components:
       - virtualIp
       - isHaEnabled
       - isLocal
+      - firmware
+      - fixpack
       - utcTimeZone
       - additional
       properties:
@@ -12866,6 +13176,10 @@ components:
           type: boolean
         isLocal:
           type: boolean
+        firmware:
+          "$ref": "#/components/schemas/SystemVersionDetails"
+        fixpack:
+          "$ref": "#/components/schemas/SystemVersionDetails"
         utcTimeZone:
           type: string
         additional:
@@ -12895,6 +13209,17 @@ components:
                 unlicense:
                   type: integer
                   example: 0
+    SystemVersionDetails:
+      type: object
+      required:
+      - version
+      - updatedAt
+      properties:
+        version:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
     Node:
       type: object
       required:
@@ -13784,5 +14109,15 @@ components:
               type: string
             description:
               type: string
+  requestBodies:
+    applicationOctetStream:
+      description: for example, in the CURL, the firmware pkg should be set by the
+        '-T /path/to/firmware'.
+      required: true
+      content:
+        application/octet-stream:
+          schema:
+            type: string
+            format: binary
 security:
 - BearerAuth: []
