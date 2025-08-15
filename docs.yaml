@@ -8695,6 +8695,22 @@ paths:
                   status:
                     type: string
                     example: ok
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: firmware already exists and under md5 verifying
+                  status:
+                    type: string
+                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -8742,6 +8758,22 @@ paths:
                   status:
                     type: string
                     example: ok
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: md5 already exists and under verifying
+                  status:
+                    type: string
+                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -8827,6 +8859,22 @@ paths:
                   status:
                     type: string
                     example: bad request
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: md5 verification is already in progress
+                  status:
+                    type: string
+                    example: conflict
         '500':
           description: Internal Server Error
           content:
