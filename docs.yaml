@@ -8615,7 +8615,7 @@ paths:
       operationId: listFirmwares
       tags:
       - Firmwares
-      summary: List a firmware
+      summary: List firmwares
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/pageNum"
@@ -8673,14 +8673,7 @@ paths:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/file"
       requestBody:
-        description: for example, in the CURL, the firmware pkg should be set by the
-          '-T /path/to/firmware'.
-        required: true
-        content:
-          application/octet-stream:
-            schema:
-              type: string
-              format: binary
+        "$ref": "#/components/requestBodies/applicationOctetStream"
       responses:
         '200':
           description: Firmware uploaded successfully
@@ -8701,7 +8694,7 @@ paths:
                     example: Firmware uploaded successfully
                   status:
                     type: string
-                    example: accepted
+                    example: ok
         '500':
           description: Internal Server Error
           content:
@@ -8748,7 +8741,7 @@ paths:
                     example: Firmware MD5 uploaded successfully
                   status:
                     type: string
-                    example: accepted
+                    example: ok
         '500':
           description: Internal Server Error
           content:
@@ -8803,7 +8796,7 @@ paths:
                     example: Firmware and MD5 sum verified successfully
                   status:
                     type: string
-                    example: accepted
+                    example: ok
         '400':
           description: Bad Request
           content:
