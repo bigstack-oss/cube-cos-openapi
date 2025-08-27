@@ -9059,7 +9059,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/firmwares/{version}/updatableNodes":
     get:
-      operationId: listUpdatableNodes
+      operationId: listFirmwareUpdatableNodes
       tags:
       - Firmwares
       summary: List nodes that can be updated to the specified firmware version
@@ -9072,7 +9072,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ListUpdatableNodesResponse"
+                "$ref": "#/components/schemas/ListFirmwareUpdatableNodesResponse"
               examples:
                 example1:
                   summary: Updatable node list
@@ -9093,6 +9093,26 @@ paths:
                         inactive: Cube Appliance 3.1.0
                     msg: fetch updatable nodes successfully
                     status: ok
+        '404': 
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: firmware CUBE Appliance 3.1.0 f45c719 not found
+                  status:
+                    type: string
+                    example: not found
         '500':
           description: Internal Server Error
           content:
@@ -13677,7 +13697,7 @@ components:
           type: string
         status:
           type: string
-    ListUpdatableNodesResponse:
+    ListFirmwareUpdatableNodesResponse:
       type: object
       required:
       - code
