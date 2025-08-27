@@ -8892,7 +8892,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/firmwares/md5sum/verify":
     post:
-      operationId: vierfyFirmwareMd5Sum
+      operationId: verifyFirmwareMd5Sum
       tags:
       - Firmwares
       summary: Verify the firmware MD5 sum
@@ -8916,6 +8916,9 @@ paths:
                     example: 200
                   data:
                     type: object
+                    required:
+                    - firmwareMd5
+                    - expectedMd5
                     properties:
                       firmwareMd5:
                         type: string
