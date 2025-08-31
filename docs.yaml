@@ -9908,6 +9908,7 @@ paths:
                     code: 200
                     data:
                       version: FIX_001
+                      operation: install
                       progresses:
                       - host: example-node-0
                         phase: ''
@@ -14351,6 +14352,7 @@ components:
                         - available
                         - processing
                         - updated
+                        - failed
                       isUpdatable:
                         type: boolean
                       isProcessing:
@@ -14511,7 +14513,8 @@ components:
                         - installing
                         - installed
                         - rolling back
-                        - failed
+                        - install failed
+                        - rollback failed
                       isInstallable:
                         type: boolean
                       isRollbackable:
@@ -14577,10 +14580,16 @@ components:
           type: object
           required:
           - version
+          - operation
           - progresses
           properties:
             version:
               type: string
+            operation:
+              type: string
+              enum:
+              - install
+              - rollback
             progresses:
               type: array
               items:
@@ -14609,7 +14618,8 @@ components:
                         - installing
                         - installed
                         - rolling back
-                        - failed
+                        - install failed
+                        - rollback failed
                       isProcessing:
                         type: boolean
                       processPercent:
