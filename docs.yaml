@@ -14439,6 +14439,7 @@ components:
                         - rebooting
                         - installed
                         - failed
+                        - resolved
                       isProcessing:
                         type: boolean
                       processPercent:
@@ -14613,6 +14614,7 @@ components:
                         - waitingReboot
                         - rebooting
                         - installed
+                        - resolved
                         - rolling back
                         - install failed
                         - rollback failed
