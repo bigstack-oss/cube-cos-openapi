@@ -221,6 +221,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - code
+                - msg
+                - status
                 properties:
                   code:
                     type: integer
@@ -238,6 +242,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - code
+                - msg
+                - status
                 properties:
                   code:
                     type: integer
@@ -255,6 +263,10 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                - code
+                - msg
+                - status
                 properties:
                   code:
                     type: integer
@@ -9826,7 +9838,6 @@ paths:
       summary: Get the progress of a fixpack operation
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/version"
       responses:
         '200':
           description: Fixpack update progress
