@@ -9855,21 +9855,18 @@ paths:
                       operation: install
                       progresses:
                       - host: example-node-0
-                        phase: ''
                         status:
                           current: installing
                           isProcessing: true
                           processPercent: 50
                           description: ''
                       - host: example-node-1
-                        phase: ''
                         status:
                           current: installing
                           isProcessing: true
                           processPercent: 50
                           description: ''
                       - host: example-node-2
-                        phase: ''
                         status:
                           current: installing
                           isProcessing: true
@@ -14544,12 +14541,9 @@ components:
                 type: object
                 required:
                 - host
-                - phase
                 - status
                 properties:
                   host:
-                    type: string
-                  phase:
                     type: string
                   status:
                     type: object
