@@ -2392,7 +2392,7 @@ paths:
                     type: string
                     example: accepted
         '409':
-          description: Bad Request
+          description: Conflict
           content:
             application/json:
               schema:
@@ -2404,7 +2404,7 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 400
+                    example: 409
                   msg:
                     type: string
                     example: storage name example-storage already exists
@@ -2523,7 +2523,7 @@ paths:
                     type: string
                     example: bad request
         '409':
-          description: Bad Request
+          description: Conflict
           content:
             application/json:
               schema:
@@ -2535,7 +2535,7 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 400
+                    example: 409
                   msg:
                     type: string
                     example: storage name example-storage already exists
@@ -2585,6 +2585,7 @@ paths:
                   value:
                     code: 200
                     data:
+                      asDefault: true
                       name: CubeStorage
                       isExternal: false
                       device:
@@ -2903,7 +2904,7 @@ paths:
                         image:
                           useMultipath: true
                           forceMultipath: true
-                        updateTime: '2025-09-09T10:30:00Z'
+                        updateTime: '2025-09-09T10:30:00+08:00'
                     msg: fetch storage models successfully
                     status: ok
         '500':
@@ -3038,8 +3039,7 @@ paths:
               "$ref": "#/components/schemas/PutIntegreatedStorageModelsRequest"
       responses:
         '202':
-          description: Receive the request to create an integrated storage model successfully,
-            processing
+          description: Receive the request to update the integrated storage models successfully, processing
           content:
             application/json:
               schema:
@@ -3054,8 +3054,7 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to create an integrated storage model
-                      successfully, processing
+                    example: Receive the request to update the integrated storage models successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -3075,7 +3074,7 @@ paths:
                     example: 400
                   msg:
                     type: string
-                    example: vendor and product are required fields
+                    example: some models's vendor or product are empty
                   status:
                     type: string
                     example: bad request
@@ -3115,8 +3114,7 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to create integrated storage model: internal
-                      server error'
+                    example: 'failed to update the integrated storage models: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -12618,11 +12616,14 @@ components:
         data:
           type: object
           required:
+          - asDefault
           - name
           - isExternal
           - device
           - storage
           properties:
+            asDefault:
+              type: boolean
             name:
               type: string
             isExternal:
