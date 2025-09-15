@@ -2366,9 +2366,6 @@ paths:
                       settings:
                       - key: volume_backend_name
                         value: ceph
-                    image:
-                      useMultipath: true
-                      forceMultipath: true
       responses:
         '202':
           description: Receive the request to integrate a storage successfully, processing
@@ -2410,7 +2407,7 @@ paths:
                     example: storage name example-storage already exists
                   status:
                     type: string
-                    example: bad request
+                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -2464,6 +2461,9 @@ paths:
                         settings:
                         - key: enabled_backends
                           value: ceph
+                      extraConfigFiles:
+                      - name: test.conf
+                        content: ZmlsZSBjb250ZW50IGluIGJhc2U2NA==
                     volumeType:
                       settings:
                       - key: volume_backend_name
@@ -2601,6 +2601,9 @@ paths:
                             settings:
                             - key: enabled_backends
                               value: ceph
+                          extraConfigFiles:
+                          - name: test.conf
+                            content: ZmlsZSBjb250ZW50IGluIGJhc2U2NA==
                         volumeType:
                           settings:
                           - key: volume_backend_name
@@ -2665,12 +2668,16 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/CreateIntegratedStorageRequest"
+              "$ref": "#/components/schemas/UpdateIntegratedStorageRequest"
             examples:
               example1:
                 summary: Update integrated storage request
                 value:
                   asDefault: true
+                  isExternal: false
+                  device:
+                    vendor: Dell
+                    product: PowerVault ME4024
                   storage:
                     service:
                       driverSection:
@@ -2688,9 +2695,6 @@ paths:
                       settings:
                       - key: volume_backend_name
                         value: lvm
-                    image:
-                      useMultipath: true
-                      forceMultipath: true
       responses:
         '202':
           description: Receive the request to update an integrated storage successfully,
@@ -2824,6 +2828,99 @@ paths:
                     type: string
                     example: 'failed to delete integrated storage: internal server
                       error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}/asDefault":
+    patch:
+      operationId: setStorageAsDefault
+      tags:
+      - Integrations
+      summary: Set an integrated storage as the default storage
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/storageName"
+      responses:
+        '202':
+          description: Receive the request to set an integrated storage as the default
+            storage successfully, processing
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 202
+                  msg:
+                    type: string
+                    example: receive the request to set an integrated storage as the
+                      default storage successfully, processing
+                  status:
+                    type: string
+                    example: accepted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: storage example-storage not found
+                  status:
+                    type: string
+                    example: not found
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: storage example-storage is already the default storage
+                  status:
+                    type: string
+                    example: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to set the integrated storage as the default
+                      storage: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -3039,7 +3136,8 @@ paths:
               "$ref": "#/components/schemas/PutIntegreatedStorageModelsRequest"
       responses:
         '202':
-          description: Receive the request to update the integrated storage models successfully, processing
+          description: Receive the request to update the integrated storage models
+            successfully, processing
           content:
             application/json:
               schema:
@@ -3054,7 +3152,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: Receive the request to update the integrated storage models successfully, processing
+                    example: Receive the request to update the integrated storage
+                      models successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -3114,7 +3213,8 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to update the integrated storage models: internal server error'
+                    example: 'failed to update the integrated storage models: internal
+                      server error'
                   status:
                     type: string
                     example: internal server error
@@ -9963,7 +10063,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/firmwares/continueAnyway":
+  "/api/v1/datacenters/{dataCenter}/firmwares/continueAnyway/{nodeName}":
     post:
       operationId: continueInterruptedFirmwareUpdate
       tags:
@@ -9971,6 +10071,7 @@ paths:
       summary: Continue an interrupted firmware update
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/nodeName"
       responses:
         '202':
           description: Firmware update continued successfully
@@ -11594,17 +11695,17 @@ components:
         type: string
       description: The name of the integrated storage.
     vendorName:
-      in: query
+      in: path
       name: vendorName
-      required: false
+      required: true
       schema:
         type: string
       description: The vendor name to filter models
       example: example-vendor
     productName:
-      in: query
+      in: path
       name: productName
-      required: false
+      required: true
       schema:
         type: string
       description: The product name to filter models
@@ -12524,6 +12625,33 @@ components:
                   type: array
                   items:
                     "$ref": "#/components/schemas/StorageKeyValuePair"
+                extraSettings:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - sectionHeader
+                    - settings
+                    properties:
+                      sectionHeader:
+                        type: string
+                      settings:
+                        type: array
+                        items:
+                          "$ref": "#/components/schemas/StorageKeyValuePair"
+                extraConfigFiles:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - content
+                    properties:
+                      name:
+                        type: string
+                      content:
+                        type: string
+                        description: Base64 encoded content of the config file
             volumeType:
               type: object
               required:
@@ -12533,28 +12661,91 @@ components:
                   type: array
                   items:
                     "$ref": "#/components/schemas/StorageKeyValuePair"
-            image:
+    UpdateIntegratedStorageRequest:
+      type: object
+      required:
+      - asDefault
+      - isExternal
+      - device
+      - storage
+      properties:
+        asDefault:
+          type: boolean
+        isExternal:
+          type: boolean
+        device:
+          type: object
+          required:
+          - vendor
+          - product
+          properties:
+            vendor:
+              type: string
+            product:
+              type: string
+        storage:
+          type: object
+          required:
+          - service
+          - volumeType
+          - image
+          properties:
+            service:
               type: object
               required:
-              - useMultipath
-              - forceMultipath
+              - driverSection
+              - extraSettings
+              - extraConfigFiles
               properties:
-                useMultipath:
-                  type: boolean
-                forceMultipath:
-                  type: boolean
+                driverSection:
+                  type: array
+                  items:
+                    "$ref": "#/components/schemas/StorageKeyValuePair"
+                extraSettings:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - sectionHeader
+                    - settings
+                    properties:
+                      sectionHeader:
+                        type: string
+                      settings:
+                        type: array
+                        items:
+                          "$ref": "#/components/schemas/StorageKeyValuePair"
+                extraConfigFiles:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - content
+                    properties:
+                      name:
+                        type: string
+                      content:
+                        type: string
+                        description: Base64 encoded content of the config file
+            volumeType:
+              type: object
+              required:
+              - settings
+              properties:
+                settings:
+                  type: array
+                  items:
+                    "$ref": "#/components/schemas/StorageKeyValuePair"
     VerifyStorageIntegrationRequest:
       type: object
       required:
       - name
-      - isExternal
       - device
       - storage
       properties:
         name:
           type: string
-        isExternal:
-          type: boolean
         device:
           type: object
           required:
@@ -12651,6 +12842,7 @@ components:
                   required:
                   - driverSection
                   - extraSettings
+                  - extraConfigFiles
                   properties:
                     driverSection:
                       type: array
@@ -12670,6 +12862,19 @@ components:
                             type: array
                             items:
                               "$ref": "#/components/schemas/StorageKeyValuePair"
+                    extraConfigFiles:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - name
+                        - content
+                        properties:
+                          name:
+                            type: string
+                          content:
+                            type: string
+                            description: Base64 encoded content of the config file
                 volumeType:
                   type: object
                   required:
@@ -15907,13 +16112,13 @@ components:
                       current:
                         type: string
                         enum:
-                        - available
                         - installing
                         - waitingReboot
                         - rebooting
                         - installed
                         - failed
                         - resolved
+                        - succeeded
                       isProcessing:
                         type: boolean
                       processPercent:
