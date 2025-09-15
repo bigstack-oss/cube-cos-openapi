@@ -2161,65 +2161,6 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/integrations":
-    get:
-      operationId: getIntegrations
-      tags:
-      - Integrations
-      summary: Retrieve the list of integrated applications
-      parameters:
-      - "$ref": "#/components/parameters/dataCenter"
-      responses:
-        '200':
-          description: Retrieve the list of integrated applications successfully
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/GetIntegrationsResponse"
-              examples:
-                example1:
-                  summary: Integrated applications
-                  value:
-                    code: 200
-                    data:
-                    - name: keycloak
-                      isHeaderShortcutEnabled: true
-                      description: Keycloak Dashboard
-                      isBuiltIn: true
-                      url: https://example-datat-center.host:10443/auth/admin
-                    - name: openstack
-                      isHeaderShortcutEnabled: true
-                      description: OpenStack Dashboard
-                      isBuiltIn: true
-                      url: https://example-datat-center.host:9999/base/overview
-                    - name: rancher
-                      isHeaderShortcutEnabled: true
-                      description: Rancher Dashboard
-                      isBuiltIn: true
-                      url: https://example-datat-center.host:10443
-                    - name: ceph
-                      isHeaderShortcutEnabled: true
-                      description: Ceph Dashboard
-                      isBuiltIn: true
-                      url: https://example-datat-center.host:7443/ceph/#/dashboard
-                    msg: fetch integrations successfully
-                    status: ok
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to fetch integrations: internal server error'
-                  status:
-                    type: string
-                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations/applications":
     get:
       operationId: getIntegratedApplications
@@ -12438,49 +12379,6 @@ components:
           type: string
         status:
           type: string
-    GetIntegrationsResponse:
-      type: object
-      required:
-      - code
-      - data
-      - msg
-      - status
-      properties:
-        code:
-          type: integer
-          example: 200
-        data:
-          type: array
-          items:
-            type: object
-            required:
-            - name
-            - isHeaderShortcutEnabled
-            - description
-            - isBuiltIn
-            - url
-            properties:
-              name:
-                type: string
-                example: openstack
-              isHeaderShortcutEnabled:
-                type: boolean
-                example: true
-              description:
-                type: string
-                example: openstack dashboard
-              isBuiltIn:
-                type: boolean
-                example: true
-              url:
-                type: string
-                example: https://10.10.10.10/skyline
-        msg:
-          type: string
-          example: fetch integrations successfully
-        status:
-          type: string
-          example: ok
     GetIntegratedApplicationsResponse:
       type: object
       required:
