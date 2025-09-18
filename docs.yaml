@@ -9573,7 +9573,7 @@ paths:
                         destination: CubeStorage
                         domainName: default
                         projectName: admin
-                        visibilityType: public
+                        visibility: public
                         diskType: raw
                         createdAt: '2025-07-27T13:08:53+08:00'
                         metadata:
@@ -9601,7 +9601,7 @@ paths:
                         destination: CubeStorage
                         domainName: default
                         projectName: admin
-                        visibilityType: private
+                        visibility: private
                         createdAt: '2025-07-29T13:08:53+08:00'
                         metadata:
                           cubeDefinedDestination: CubeStorage
