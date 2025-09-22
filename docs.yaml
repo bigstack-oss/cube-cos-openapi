@@ -9550,6 +9550,7 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/watch"
+      - "$ref": "#/components/parameters/projectNotRequired"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
       - "$ref": "#/components/parameters/keyword"
@@ -11637,7 +11638,15 @@ components:
       required: true
       schema:
         type: string
-      description: The project name to filter volumes
+      description: The project name to filter
+      example: example-project
+    projectNotRequired:
+      in: query
+      name: project
+      required: false
+      schema:
+        type: string
+      description: The project name to filter
       example: example-project
     deviceName:
       in: path
