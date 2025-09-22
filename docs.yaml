@@ -10168,6 +10168,85 @@ paths:
                   status:
                     type: string
                     example: internal server error
+    patch:
+      operationId: upgradeFirmware
+      tags:
+      - Firmwares
+      summary: Upgrade firmware on all nodes
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        "$ref": "#/components/requestBodies/upgradeFirmwareRequest"
+      responses:
+        '202':
+          description: Firmware upgrade initiated successfully, processing
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 202
+                  msg:
+                    type: string
+                    example: firmware upgrade initiated successfully, processing
+                  status:
+                    type: string
+                    example: accepted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: version is required
+                  status:
+                    type: string
+                    example: bad request
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: there is a firmware upgrade in processing, please try
+                      again later
+                  status:
+                    type: string
+                    example: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to upgrade firmware: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/firmwares/continueAnyway/{nodeName}":
     post:
       operationId: continueInterruptedFirmwareUpdate
@@ -11186,6 +11265,76 @@ paths:
                   status:
                     type: string
                     example: "'internal server error"
+  "/api/v1/datacenters/{dataCenter}/fixpacks/{version}/rollbackableNodes":
+    get:
+      operationId: listFixpackRollbackableNodes
+      tags:
+      - Fixpacks
+      summary: Get nodes that can be rolled back with the specified fixpack
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/version"
+      responses:
+        '200':
+          description: List of nodes that can be rolled back with the specified fixpack
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ListFixpackRollbackableNodesResponse"
+              examples:
+                example:
+                  summary: Rollbackable nodes
+                  value:
+                    code: 200
+                    data:
+                    - name: cube451
+                      updatedAt: '2025-08-08T19:51:40+08:00'
+                    - name: cube452
+                      updatedAt: '2025-08-08T19:51:40+08:00'
+                    - name: cube453
+                      updatedAt: '2025-08-08T19:51:40+08:00'
+                    msg: Fetched rollbackable nodes successfully
+                    status: ok
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: "'FIX_001' not found"
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to list rollbackable nodes: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/fixpacks/{version}/rollback":
     post:
       operationId: rollbackFixpack
@@ -16350,6 +16499,33 @@ components:
           type: string
         status:
           type: string
+    ListFixpackRollbackableNodesResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            - updatedAt
+            properties:
+              name:
+                type: string
+              updatedAt:
+                type: string
+                format: date-time
+        msg:
+          type: string
+        status:
+          type: string
     InstallFixpackRequest:
       type: object
       required:
@@ -17711,5 +17887,26 @@ components:
           schema:
             type: string
             format: binary
+    upgradeFirmwareRequest:
+      description: Request body for upgrading firmware
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - version
+            - autoRolling
+            properties:
+              version:
+                type: string
+                description: The version of the firmware to be upgraded to
+              autoRolling:
+                type: boolean
+                description: Whether to automatically roll the upgrade across all
+                  nodes
+          example:
+            version: CUBE 3.1.0
+            autoRolling: true
 security:
 - BearerAuth: []
