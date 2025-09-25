@@ -9517,7 +9517,8 @@ paths:
                       - Arch
                       - Others
                       destinations:
-                      - CubeStorage
+                      - name: CubeStorage
+                        isDefault: true
                       domains:
                       - default
                       visibility:
@@ -16014,10 +16015,16 @@ components:
               type: array
               items:
                 type: string
-            destinations:
-              type: array
-              items:
-                type: string
+            destination:
+              type: object
+              required:
+              - name
+              - isDefault
+              properties:
+                name:
+                  type: string
+                isDefault:
+                  type: boolean
             domains:
               type: array
               items:
@@ -16395,9 +16402,19 @@ components:
                         type: string
                         enum:
                         - installing
-                        - waitingReboot
+                        - waiting reboot
                         - rebooting
-                        - installed
+                        - bootstrapping cubecos
+                        - starting cluster
+                        - evacuting vms on host
+                        - moving vip away from host
+                        - moved vip away from host
+                        - rebooting host
+                        - cluster checking and repairing
+                        - cluster checked and repaired
+                        - reset and booted non-active server
+                        - cluster check and repair skipped as not all nodes are bootstrapped
+                          and synced
                         - failed
                         - resolved
                         - succeeded
