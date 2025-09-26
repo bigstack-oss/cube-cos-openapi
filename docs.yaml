@@ -16016,15 +16016,17 @@ components:
               items:
                 type: string
             destination:
-              type: object
-              required:
-              - name
-              - isDefault
-              properties:
-                name:
-                  type: string
-                isDefault:
-                  type: boolean
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                - isDefault
+                properties:
+                  name:
+                    type: string
+                  isDefault:
+                    type: boolean
             domains:
               type: array
               items:
