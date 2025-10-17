@@ -11214,7 +11214,7 @@ paths:
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/fixpacks/updateProgress":
+  "/api/v1/datacenters/{dataCenter}/fixpacks/updateProgress/{version}":
     get:
       operationId: getFixpackProgress
       tags:
@@ -11222,6 +11222,7 @@ paths:
       summary: Get the progress of a fixpack operation
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/version"
       responses:
         '200':
           description: Fixpack update progress
