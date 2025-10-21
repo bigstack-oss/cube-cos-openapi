@@ -2223,7 +2223,7 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations/storages":
     get:
-      operationId: listIntegratedStorages
+      operationId: listIntegrationStorages
       tags:
       - Integrations
       summary: Retrieve the list of integrated storages
@@ -2235,7 +2235,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ListIntegratedStoragesResponse"
+                "$ref": "#/components/schemas/ListIntegrationStoragesResponse"
               examples:
                 example1:
                   summary: Integrated storages
@@ -2271,7 +2271,7 @@ paths:
                     type: string
                     example: internal server error
     post:
-      operationId: createIntegratedStorage
+      operationId: createIntegrationStorage
       tags:
       - Integrations
       summary: Integreate a storage
@@ -2282,31 +2282,74 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/CreateIntegratedStorageRequest"
+              "$ref": "#/components/schemas/ApplyIntegrationStorageRequest"
             examples:
               example1:
-                summary: Create integrated storage request
+                summary: Create integration storage request
                 value:
-                  asDefault: true
-                  name: example-storage
-                  isExternal: false
-                  device:
-                    vendor: Dell
-                    product: PowerVault ME4024
+                  name: dell-emc-sc-fc
+                  driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                  isDefault: true
                   storage:
                     service:
                       driverSection:
-                      - key: volume_driver
-                        value: cinder.volume.drivers.rbd.RBDDriver
+                      - key: san_ip
+                        value: 10.32.10.250
+                      - key: san_login
+                        value: Admin
+                      - key: san_password
+                        value: bigstackcoltd
+                      - key: san_thin_provision
+                        value: 'true'
+                      - key: dell_sc_ssn
+                        value: '364940'
+                      - key: dell_sc_api_port
+                        value: '3033'
+                      - key: dell_sc_verify_cert
+                        value: 'false'
+                      - key: dell_sc_server_folder
+                        value: dev-servers/glance-cluster
+                      - key: dell_sc_volume_folder
+                        value: dev-vols
+                      - key: use_multipath_for_image_xfer
+                        value: 'true'
+                      - key: enforce_multipath_for_image_xfer
+                        value: 'true'
+                      - key: image_upload_use_cinder_backend
+                        value: 'true'
                       extraSettings:
                       - sectionHeader: DEFAULT
                         settings:
-                        - key: enabled_backends
-                          value: ceph
+                        - key: allowed_direct_url_schemes
+                          value: cinder
+                        - key: glance_request_timeout
+                          value: '1200'
+                      extraConfigFiles:
+                      - name: test.conf
+                        content: YWFhCg==
                     volumeType:
                       settings:
-                      - key: volume_backend_name
-                        value: ceph
+                      - key: storagetype:storageprofile
+                        value: ''
+                      - key: replication_enabled
+                        value: ''
+                      - key: replication_type
+                        value: ''
+                      - key: replication:activereplay
+                        value: ''
+                      - key: replication:livevolume
+                        value: ''
+                      - key: storagetype:volumeqos
+                        value: ''
+                      - key: storagetype:groupqos
+                        value: ''
+                      - key: storagetype:datareductionprofile
+                        value: ''
+                      - key: multiattach
+                        value: ''
+                    image:
+                      useMultipath: true
+                      forceMultipath: true
       responses:
         '202':
           description: Receive the request to integrate a storage successfully, processing
@@ -2365,7 +2408,7 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to create integrated storage: internal server
+                    example: 'failed to create integration storage: internal server
                       error'
                   status:
                     type: string
@@ -2506,54 +2549,90 @@ paths:
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}":
     get:
-      operationId: getIntegratedStorage
+      operationId: getIntegrationStorage
       tags:
       - Integrations
-      summary: Retrieve the details of an integrated storage
+      summary: Retrieve the details of an integration storage
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/storageName"
       responses:
         '200':
-          description: Retrieve the details of an integrated storage successfully
+          description: Retrieve the details of an integration storage successfully
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/GetIntegratedStorageResponse"
+                "$ref": "#/components/schemas/GetIntegrationStorageResponse"
               examples:
                 example1:
                   summary: Integrated storage details
                   value:
                     code: 200
                     data:
-                      asDefault: true
-                      name: CubeStorage
-                      isExternal: false
-                      device:
-                        vendor: Dell
-                        product: PowerVault ME4024
+                      name: dell-emc-sc-fc
+                      driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                      isDefault: true
                       storage:
                         service:
                           driverSection:
-                          - key: volume_driver
-                            value: cinder.volume.drivers.rbd.RBDDriver
+                          - key: san_ip
+                            value: 10.32.10.250
+                          - key: san_login
+                            value: Admin
+                          - key: san_password
+                            value: bigstackcoltd
+                          - key: san_thin_provision
+                            value: 'true'
+                          - key: dell_sc_ssn
+                            value: '364940'
+                          - key: dell_sc_api_port
+                            value: '3033'
+                          - key: dell_sc_verify_cert
+                            value: 'false'
+                          - key: dell_sc_server_folder
+                            value: dev-servers/glance-cluster
+                          - key: dell_sc_volume_folder
+                            value: dev-vols
+                          - key: use_multipath_for_image_xfer
+                            value: 'true'
+                          - key: enforce_multipath_for_image_xfer
+                            value: 'true'
+                          - key: image_upload_use_cinder_backend
+                            value: 'true'
                           extraSettings:
                           - sectionHeader: DEFAULT
                             settings:
-                            - key: enabled_backends
-                              value: ceph
+                            - key: allowed_direct_url_schemes
+                              value: cinder
+                            - key: glance_request_timeout
+                              value: '1200'
                           extraConfigFiles:
                           - name: test.conf
-                            content: ZmlsZSBjb250ZW50IGluIGJhc2U2NA==
+                            content: YWFhCg==
                         volumeType:
                           settings:
-                          - key: volume_backend_name
-                            value: ceph
+                          - key: storagetype:storageprofile
+                            value: ''
+                          - key: replication_enabled
+                            value: ''
+                          - key: replication_type
+                            value: ''
+                          - key: replication:activereplay
+                            value: ''
+                          - key: replication:livevolume
+                            value: ''
+                          - key: storagetype:volumeqos
+                            value: ''
+                          - key: storagetype:groupqos
+                            value: ''
+                          - key: storagetype:datareductionprofile
+                            value: ''
+                          - key: multiattach
+                            value: ''
                         image:
                           useMultipath: true
                           forceMultipath: true
-                        updateTime: '2025-09-09T12:00:00+08:00'
-                    msg: fetch integrated storage details successfully
+                    msg: fetch integration storage details successfully
                     status: ok
         '404':
           description: Not Found
@@ -2591,16 +2670,16 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to fetch integrated storage details: internal
+                    example: 'failed to fetch integration storage details: internal
                       server error'
                   status:
                     type: string
                     example: internal server error
     patch:
-      operationId: updateIntegratedStorage
+      operationId: updateIntegrationStorage
       tags:
       - Integrations
-      summary: Update an integrated storage
+      summary: Update an integration storage
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/storageName"
@@ -2609,36 +2688,77 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/UpdateIntegratedStorageRequest"
+              "$ref": "#/components/schemas/ApplyIntegrationStorageRequest"
             examples:
               example1:
-                summary: Update integrated storage request
+                summary: Update integration storage request
                 value:
-                  asDefault: true
-                  isExternal: false
-                  device:
-                    vendor: Dell
-                    product: PowerVault ME4024
+                  name: dell-emc-sc-fc
+                  driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                  isDefault: true
                   storage:
                     service:
                       driverSection:
-                      - key: volume_driver
-                        value: cinder.volume.drivers.lvm.LVMVolumeDriver
+                      - key: san_ip
+                        value: 10.32.10.250
+                      - key: san_login
+                        value: Admin
+                      - key: san_password
+                        value: bigstackcoltd
+                      - key: san_thin_provision
+                        value: 'true'
+                      - key: dell_sc_ssn
+                        value: '364940'
+                      - key: dell_sc_api_port
+                        value: '3033'
+                      - key: dell_sc_verify_cert
+                        value: 'false'
+                      - key: dell_sc_server_folder
+                        value: dev-servers/glance-cluster
+                      - key: dell_sc_volume_folder
+                        value: dev-vols
+                      - key: use_multipath_for_image_xfer
+                        value: 'true'
+                      - key: enforce_multipath_for_image_xfer
+                        value: 'true'
+                      - key: image_upload_use_cinder_backend
+                        value: 'true'
                       extraSettings:
                       - sectionHeader: DEFAULT
                         settings:
-                        - key: enabled_backends
-                          value: lvm
+                        - key: allowed_direct_url_schemes
+                          value: cinder
+                        - key: glance_request_timeout
+                          value: '1200'
                       extraConfigFiles:
                       - name: test.conf
-                        content: ZmlsZSBjb250ZW50IGluIGJhc2U2NA==
+                        content: YWFhCg==
                     volumeType:
                       settings:
-                      - key: volume_backend_name
-                        value: lvm
+                      - key: storagetype:storageprofile
+                        value: ''
+                      - key: replication_enabled
+                        value: ''
+                      - key: replication_type
+                        value: ''
+                      - key: replication:activereplay
+                        value: ''
+                      - key: replication:livevolume
+                        value: ''
+                      - key: storagetype:volumeqos
+                        value: ''
+                      - key: storagetype:groupqos
+                        value: ''
+                      - key: storagetype:datareductionprofile
+                        value: ''
+                      - key: multiattach
+                        value: ''
+                    image:
+                      useMultipath: true
+                      forceMultipath: true
       responses:
         '202':
-          description: Receive the request to update an integrated storage successfully,
+          description: Receive the request to update an integration storage successfully,
             processing
           content:
             application/json:
@@ -2654,8 +2774,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to update an integrated storage successfully,
-                      processing
+                    example: receive the request to update an integration storage
+                      successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -2695,22 +2815,22 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to update integrated storage: internal server
+                    example: 'failed to update integration storage: internal server
                       error'
                   status:
                     type: string
                     example: internal server error
     delete:
-      operationId: deleteIntegratedStorage
+      operationId: deleteIntegrationStorage
       tags:
       - Integrations
-      summary: Delete an integrated storage
+      summary: Delete an integration storage
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/storageName"
       responses:
         '202':
-          description: Receive the request to delete an integrated storage successfully,
+          description: Receive the request to delete an integration storage successfully,
             processing
           content:
             application/json:
@@ -2726,8 +2846,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to delete an integrated storage successfully,
-                      processing
+                    example: receive the request to delete an integration storage
+                      successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -2767,182 +2887,101 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to delete integrated storage: internal server
+                    example: 'failed to delete integration storage: internal server
                       error'
-                  status:
-                    type: string
-                    example: internal server error
-  "/api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}/asDefault":
-    patch:
-      operationId: setStorageAsDefault
-      tags:
-      - Integrations
-      summary: Set an integrated storage as the default storage
-      parameters:
-      - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/storageName"
-      responses:
-        '202':
-          description: Receive the request to set an integrated storage as the default
-            storage successfully, processing
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 202
-                  msg:
-                    type: string
-                    example: receive the request to set an integrated storage as the
-                      default storage successfully, processing
-                  status:
-                    type: string
-                    example: accepted
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 404
-                  msg:
-                    type: string
-                    example: storage example-storage not found
-                  status:
-                    type: string
-                    example: not found
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 409
-                  msg:
-                    type: string
-                    example: storage example-storage is already the default storage
-                  status:
-                    type: string
-                    example: conflict
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 500
-                  msg:
-                    type: string
-                    example: 'failed to set the integrated storage as the default
-                      storage: internal server error'
                   status:
                     type: string
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations/storages/models":
     get:
-      operationId: listIntegratedStorageModels
+      operationId: listIntegrationStorageModels
       tags:
       - Integrations
-      summary: Retrieve the list of integrated storage models
+      summary: Retrieve the list of integration storage models
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       responses:
         '200':
-          description: Retrieve the list of integrated storage models successfully
+          description: Retrieve the list of integration storage models successfully
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ListIntegratedStorageModelsResponse"
+                "$ref": "#/components/schemas/ListIntegrationStorageModelsResponse"
               examples:
                 example1:
                   summary: Integrated storage models
                   value:
                     code: 200
                     data:
-                    - vendor: Dell
-                      product: PowerVault
+                    - driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                      vendor: Dell EMC
+                      type: SC Series FC
                       multipath:
-                        defaults:
-                        - key: user_friendly_names
-                          value: 'yes'
-                        blacklist:
-                          devnode: sda
-                          devices:
-                          - vendor: Generic
-                            product: USB
-                            settings:
-                            - key: dev_loss_tmo
-                              value: '10'
-                        blacklistExceptions:
-                          devnode: sd[b-z]
-                          devices:
-                          - vendor: HP
-                            product: MSA
-                            settings:
-                            - key: polling_interval
-                              value: '5'
-                        devices:
-                        - vendor: EMC
-                          product: VNX
-                          settings:
-                          - key: no_path_retry
-                            value: fail
-                        overrides:
-                        - key: checker_timeout
-                          value: '30'
-                        multipaths:
-                        - wwid: 3600508b400105e210000900000490000
-                          settings:
-                          - key: path_grouping_policy
-                            value: group_by_prio
+                      - section: devices
+                        attributes: []
+                        subSections:
+                        - section: device
+                          attributes:
+                          - key: vendor
+                            value: COMPELNT
+                          - key: product
+                            value: Compellent Vol
+                          - key: user_friendly_names
+                            value: 'no'
+                          - key: flush_on_last_del
+                            value: 'yes'
                       storage:
                         service:
                           driverSection:
-                          - key: volume_driver
-                            value: cinder.volume.drivers.lvm.LVMVolumeDriver
-                          extraSettings:
-                          - sectionHeader: DEFAULT
-                            settings:
-                            - key: enabled_backends
-                              value: lvm
-                          extraConfigFiles:
-                          - name: test.conf
-                            content: ZmlsZSBjb250ZW50IGluIGJhc2U2NA==
+                          - key: san_ip
+                            value: ''
+                          - key: san_login
+                            value: ''
+                          - key: san_password
+                            value: ''
+                          - key: san_thin_provision
+                            value: 'true'
+                          - key: dell_sc_ssn
+                            value: ''
+                          - key: dell_sc_api_port
+                            value: ''
+                          - key: dell_sc_verify_cert
+                            value: 'false'
+                          - key: dell_sc_server_folder
+                            value: ''
+                          - key: dell_sc_volume_folder
+                            value: ''
+                          - key: use_multipath_for_image_xfer
+                            value: 'true'
+                          - key: enforce_multipath_for_image_xfer
+                            value: 'true'
+                          - key: image_upload_use_cinder_backend
+                            value: 'true'
+                          extraSettings: []
+                          extraConfigFiles: []
                         volumeType:
                           settings:
-                          - key: volume_backend_name
-                            value: lvm
+                          - key: storagetype:storageprofile
+                            value: ''
+                          - key: replication_enabled
+                            value: ''
+                          - key: replication_type
+                            value: ''
+                          - key: replication:activereplay
+                            value: ''
+                          - key: replication:livevolume
+                            value: ''
+                          - key: storagetype:volumeqos
+                            value: ''
+                          - key: storagetype:groupqos
+                            value: ''
+                          - key: storagetype:datareductionprofile
+                            value: ''
+                          - key: multiattach
+                            value: ''
                         image:
                           useMultipath: true
                           forceMultipath: true
-                        updateTime: '2025-09-09T10:30:00+08:00'
                     msg: fetch storage models successfully
                     status: ok
         '500':
@@ -2966,10 +3005,10 @@ paths:
                     type: string
                     example: internal server error
     post:
-      operationId: createIntegratedStorageModel
+      operationId: createIntegrationStorageModel
       tags:
       - Integrations
-      summary: Create an integrated storage model
+      summary: Create an integration storage model
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       requestBody:
@@ -2977,11 +3016,11 @@ paths:
         content:
           multipart/form-data:
             schema:
-              "$ref": "#/components/schemas/CreateOrUpdateIntegreatedStorageModelsRequest"
+              "$ref": "#/components/schemas/ApplyIntegreationStorageModelsRequest"
       responses:
         '202':
-          description: Receive the request to create an integrated storage model successfully,
-            processing
+          description: Receive the request to create an integration storage model
+            successfully, processing
           content:
             application/json:
               schema:
@@ -2996,8 +3035,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to create an integrated storage model
-                      successfully, processing
+                    example: receive the request to create an integration storage
+                      model successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -3021,26 +3060,6 @@ paths:
                   status:
                     type: string
                     example: bad request
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 409
-                  msg:
-                    type: string
-                    example: storage model Dell PowerVault already exists
-                  status:
-                    type: string
-                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -3057,16 +3076,16 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to create integrated storage model: internal
+                    example: 'failed to create integration storage model: internal
                       server error'
                   status:
                     type: string
                     example: internal server error
     put:
-      operationId: updateAllIntegratedStorageModels
+      operationId: updateIntegrationStorageModels
       tags:
       - Integrations
-      summary: Update all integrated storage models
+      summary: Update integration storage models
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       requestBody:
@@ -3074,10 +3093,10 @@ paths:
         content:
           multipart/form-data:
             schema:
-              "$ref": "#/components/schemas/PutIntegreatedStorageModelsRequest"
+              "$ref": "#/components/schemas/UpdateIntegreationStorageModelsRequest"
       responses:
         '202':
-          description: Receive the request to update the integrated storage models
+          description: Receive the request to update the integration storage models
             successfully, processing
           content:
             application/json:
@@ -3093,7 +3112,7 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: Receive the request to update the integrated storage
+                    example: Receive the request to update the integration storage
                       models successfully, processing
                   status:
                     type: string
@@ -3118,26 +3137,6 @@ paths:
                   status:
                     type: string
                     example: bad request
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 409
-                  msg:
-                    type: string
-                    example: storage model Dell PowerVault already exists
-                  status:
-                    type: string
-                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -3154,25 +3153,24 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to update the integrated storage models: internal
+                    example: 'failed to update the integration storage models: internal
                       server error'
                   status:
                     type: string
                     example: internal server error
-  "/api/v1/datacenters/{dataCenter}/integrations/storages/models/{vendorName}/{productName}":
+  "/api/v1/datacenters/{dataCenter}/integrations/storages/models/{driverName}":
     delete:
-      operationId: deleteIntegratedStorageModel
+      operationId: deleteIntegrationStorageModel
       tags:
       - Integrations
-      summary: Delete an integrated storage model
+      summary: Delete an integration storage model
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/vendorName"
-      - "$ref": "#/components/parameters/productName"
+      - "$ref": "#/components/parameters/driverName"
       responses:
         '202':
-          description: Receive the request to delete an integrated storage model successfully,
-            processing
+          description: Receive the request to delete an integration storage model
+            successfully, processing
           content:
             application/json:
               schema:
@@ -3187,8 +3185,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to delete an integrated storage model
-                      successfully, processing
+                    example: receive the request to delete an integration storage
+                      model successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -3249,30 +3247,29 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to delete integrated storage model: internal
+                    example: 'failed to delete integration storage model: internal
                       server error'
                   status:
                     type: string
                     example: internal server error
     patch:
-      operationId: updateIntegratedStorageModel
+      operationId: updateIntegrationStorageModel
       tags:
       - Integrations
-      summary: Create an integrated storage model
+      summary: Create an integration storage model
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/vendorName"
-      - "$ref": "#/components/parameters/productName"
+      - "$ref": "#/components/parameters/driverName"
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              "$ref": "#/components/schemas/CreateOrUpdateIntegreatedStorageModelsRequest"
+              "$ref": "#/components/schemas/ApplyIntegreationStorageModelsRequest"
       responses:
         '202':
-          description: Receive the request to update an integrated storage model successfully,
-            processing
+          description: Receive the request to update an integration storage model
+            successfully, processing
           content:
             application/json:
               schema:
@@ -3287,8 +3284,8 @@ paths:
                     example: 202
                   msg:
                     type: string
-                    example: receive the request to update an integrated storage model
-                      successfully, processing
+                    example: receive the request to update an integration storage
+                      model successfully, processing
                   status:
                     type: string
                     example: accepted
@@ -3332,27 +3329,6 @@ paths:
                   status:
                     type: string
                     example: not found
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                - code
-                - msg
-                - status
-                properties:
-                  code:
-                    type: integer
-                    example: 409
-                  msg:
-                    type: string
-                    example: storage model Dell PowerVault is under processing, try
-                      again later
-                  status:
-                    type: string
-                    example: conflict
         '500':
           description: Internal Server Error
           content:
@@ -3369,22 +3345,22 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to create integrated storage model: internal
+                    example: 'failed to create integration storage model: internal
                       server error'
                   status:
                     type: string
                     example: internal server error
   "/api/v1/datacenters/{dataCenter}/integrations/storages/vendors":
     get:
-      operationId: listIntegratedStorageVendors
+      operationId: listIntegrationStorageVendors
       tags:
       - Integrations
-      summary: Retrieve the list of integrated storage vendors
+      summary: Retrieve the list of integration storage vendors
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       responses:
         '200':
-          description: Retrieve the list of integrated storage vendors successfully
+          description: Retrieve the list of integration storage vendors successfully
           content:
             application/json:
               schema:
@@ -3414,7 +3390,7 @@ paths:
                     data:
                     - NetApp
                     - Dell
-                    msg: fetch integrated storage vendors successfully
+                    msg: fetch integration storage vendors successfully
                     status: ok
         '500':
           description: Internal Server Error
@@ -3428,7 +3404,7 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to fetch integrated storage vendors: internal
+                    example: 'failed to fetch integration storage vendors: internal
                       server error'
                   status:
                     type: string
@@ -11966,7 +11942,15 @@ components:
       required: true
       schema:
         type: string
-      description: The name of the integrated storage.
+      description: The name of the integration storage.
+    driverName:
+      in: path
+      name: driverName
+      required: true
+      schema:
+        type: string
+      description: The driver name to filter models
+      example: example-driver
     vendorName:
       in: path
       name: vendorName
@@ -12754,7 +12738,7 @@ components:
         status:
           type: string
           example: ok
-    ListIntegratedStoragesResponse:
+    ListIntegrationStoragesResponse:
       type: object
       required:
       - code
@@ -12812,16 +12796,16 @@ components:
         status:
           type: string
           example: ok
-    CreateIntegratedStorageRequest:
+    ApplyIntegrationStorageRequest:
       type: object
       required:
-      - asDefault
+      - isDefault
       - name
       - isExternal
       - device
       - storage
       properties:
-        asDefault:
+        isDefault:
           type: boolean
         name:
           type: string
@@ -12891,15 +12875,25 @@ components:
                   type: array
                   items:
                     "$ref": "#/components/schemas/StorageKeyValuePair"
-    UpdateIntegratedStorageRequest:
+            image:
+              type: object
+              required:
+              - useMultipath
+              - forceMultipath
+              properties:
+                useMultipath:
+                  type: boolean
+                forceMultipath:
+                  type: boolean
+    UpdateIntegrationStorageRequest:
       type: object
       required:
-      - asDefault
+      - isDefault
       - isExternal
       - device
       - storage
       properties:
-        asDefault:
+        isDefault:
           type: boolean
         isExternal:
           type: boolean
@@ -13023,7 +13017,7 @@ components:
                   type: boolean
                 forceMultipath:
                   type: boolean
-    GetIntegratedStorageResponse:
+    GetIntegrationStorageResponse:
       type: object
       required:
       - code
@@ -13037,13 +13031,13 @@ components:
         data:
           type: object
           required:
-          - asDefault
+          - isDefault
           - name
           - isExternal
           - device
           - storage
           properties:
-            asDefault:
+            isDefault:
               type: boolean
             name:
               type: string
@@ -13131,7 +13125,7 @@ components:
           type: string
         status:
           type: string
-    ListIntegratedStorageModelsResponse:
+    ListIntegrationStorageModelsResponse:
       type: object
       required:
       - code
@@ -13147,82 +13141,69 @@ components:
           items:
             type: object
             required:
+            - driver
             - vendor
-            - product
+            - type
             - multipath
             - storage
             properties:
+              driver:
+                type: string
               vendor:
                 type: string
-              product:
+              type:
                 type: string
               multipath:
-                type: object
-                required:
-                - defaults
-                - blacklist
-                - blacklistExceptions
-                - devices
-                - overrides
-                - multipaths
-                properties:
-                  defaults:
-                    type: array
-                    items:
-                      "$ref": "#/components/schemas/StorageKeyValuePair"
-                  blacklist:
-                    type: object
-                    required:
-                    - devnode
-                    - devices
-                    properties:
-                      devnode:
-                        type: string
-                      devices:
-                        type: array
-                        items:
-                          "$ref": "#/components/schemas/StorageModelVenderSetting"
-                  blacklistExceptions:
-                    type: object
-                    required:
-                    - devnode
-                    - devices
-                    properties:
-                      devnode:
-                        type: string
-                      devices:
-                        type: array
-                        items:
-                          "$ref": "#/components/schemas/StorageModelVenderSetting"
-                  devices:
-                    type: array
-                    items:
-                      "$ref": "#/components/schemas/StorageModelVenderSetting"
-                  overrides:
-                    type: array
-                    items:
-                      "$ref": "#/components/schemas/StorageKeyValuePair"
-                  multipaths:
-                    type: array
-                    items:
-                      type: object
-                      required:
-                      - wwid
-                      - settings
-                      properties:
-                        wwid:
-                          type: string
-                        settings:
-                          type: array
-                          items:
-                            "$ref": "#/components/schemas/StorageKeyValuePair"
+                type: array
+                items:
+                  type: object
+                  required:
+                  - section
+                  - attributes
+                  - subSections
+                  properties:
+                    section:
+                      type: string
+                    attributes:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - key
+                        - value
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                    subSections:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - section
+                        - attributes
+                        properties:
+                          section:
+                            type: string
+                          attributes:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                              - key
+                              - value
+                              properties:
+                                key:
+                                  type: string
+                                value:
+                                  type: string
               storage:
                 type: object
                 required:
                 - service
                 - volumeType
                 - image
-                - updateTime
                 properties:
                   service:
                     type: object
@@ -13234,34 +13215,36 @@ components:
                       driverSection:
                         type: array
                         items:
-                          "$ref": "#/components/schemas/StorageKeyValuePair"
+                          type: object
+                          required:
+                          - key
+                          - value
+                          properties:
+                            key:
+                              type: string
+                            value:
+                              type: string
                       extraSettings:
                         type: array
                         items:
                           type: object
                           required:
-                          - sectionHeader
-                          - settings
+                          - key
+                          - value
                           properties:
-                            sectionHeader:
+                            key:
                               type: string
-                            settings:
-                              type: array
-                              items:
-                                "$ref": "#/components/schemas/StorageKeyValuePair"
+                            value:
+                              type: string
                       extraConfigFiles:
                         type: array
                         items:
                           type: object
-                          required:
-                          - name
-                          - content
                           properties:
-                            name:
+                            key:
                               type: string
-                            content:
+                            value:
                               type: string
-                              description: Base64 encoded content of the config file
                   volumeType:
                     type: object
                     required:
@@ -13270,7 +13253,15 @@ components:
                       settings:
                         type: array
                         items:
-                          "$ref": "#/components/schemas/StorageKeyValuePair"
+                          type: object
+                          required:
+                          - key
+                          - value
+                          properties:
+                            key:
+                              type: string
+                            value:
+                              type: string
                   image:
                     type: object
                     required:
@@ -13281,16 +13272,13 @@ components:
                         type: boolean
                       forceMultipath:
                         type: boolean
-                  updateTime:
-                    type: string
-                    format: date-time
         msg:
           type: string
-          example: fetch integrated storage models successfully
+          example: fetch integration storage models successfully
         status:
           type: string
           example: ok
-    PutIntegreatedStorageModelsRequest:
+    UpdateIntegreationStorageModelsRequest:
       type: object
       required:
       - storageModels
@@ -13299,7 +13287,7 @@ components:
           type: string
           format: text
           description: The array YAML content of multiple storage models
-    CreateOrUpdateIntegreatedStorageModelsRequest:
+    ApplyIntegreationStorageModelsRequest:
       type: object
       required:
       - storageModel
@@ -17378,6 +17366,18 @@ components:
       - "$ref": "#/components/schemas/OSD00002E"
       - "$ref": "#/components/schemas/OSD00003I"
       - "$ref": "#/components/schemas/OSD00003E"
+      - "$ref": "#/components/schemas/MDL00001I"
+      - "$ref": "#/components/schemas/MDL00001E"
+      - "$ref": "#/components/schemas/MDL00002I"
+      - "$ref": "#/components/schemas/MDL00002E"
+      - "$ref": "#/components/schemas/MDL00003I"
+      - "$ref": "#/components/schemas/MDL00003E"
+      - "$ref": "#/components/schemas/STG00001I"
+      - "$ref": "#/components/schemas/STG00001E"
+      - "$ref": "#/components/schemas/STG00002I"
+      - "$ref": "#/components/schemas/STG00002E"
+      - "$ref": "#/components/schemas/STG00003I"
+      - "$ref": "#/components/schemas/STG00003E"
       discriminator:
         propertyName: id
         mapping:
@@ -17395,6 +17395,18 @@ components:
           OSD00002E: "#/components/schemas/OSD00002E"
           OSD00003I: "#/components/schemas/OSD00003I"
           OSD00003E: "#/components/schemas/OSD00003E"
+          MDL00001I: "#/components/schemas/MDL00001I"
+          MDL00001E: "#/components/schemas/MDL00001E"
+          MDL00002I: "#/components/schemas/MDL00002I"
+          MDL00002E: "#/components/schemas/MDL00002E"
+          MDL00003I: "#/components/schemas/MDL00003I"
+          MDL00003E: "#/components/schemas/MDL00003E"
+          STG00001I: "#/components/schemas/STG00001I"
+          STG00001E: "#/components/schemas/STG00001E"
+          STG00002I: "#/components/schemas/STG00002I"
+          STG00002E: "#/components/schemas/STG00002E"
+          STG00003I: "#/components/schemas/STG00003I"
+          STG00003E: "#/components/schemas/STG00003E"
     StorageModel:
       type: object
       required:
@@ -17913,6 +17925,322 @@ components:
             osdId:
               type: string
             description:
+              type: string
+    MDL00001I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+    MDL00001E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+            description:
+              type: string
+    MDL00002I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+    MDL00002E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+    MDL00003I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+    MDL00003E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^MDL"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - type
+          - vendor
+          - driver
+          properties:
+            type:
+              type: string
+            vendor:
+              type: string
+            driver:
+              type: string
+    STG00001I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00001E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+    STG00002I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00002E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00003I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00003E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
               type: string
   requestBodies:
     applicationOctetStream:
