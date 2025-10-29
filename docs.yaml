@@ -17964,8 +17964,6 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
             type:
@@ -17993,8 +17991,6 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
             type:
@@ -18024,8 +18020,6 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
             type:
@@ -18082,8 +18076,6 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
             type:
@@ -18111,8 +18103,6 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
             type:
