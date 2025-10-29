@@ -16312,9 +16312,12 @@ components:
                         type: string
                         enum:
                         - available
-                        - processing
-                        - updated
+                        - installing
+                        - waiting reboot
+                        - rebooting
                         - failed
+                        - resolved
+                        - succeeded
                       isUpdatable:
                         type: boolean
                       isProcessing:
@@ -16396,6 +16399,7 @@ components:
                   phase:
                     type: string
                     enum:
+                    - partitioning
                     - bootstrapping cubecos
                     - starting cluster
                     - evacuting vms on host
