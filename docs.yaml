@@ -12852,6 +12852,7 @@ components:
                     - creating
                     - updating
                     - deleting
+                    - setting to default
                   isProcessing:
                     type: boolean
         msg:
