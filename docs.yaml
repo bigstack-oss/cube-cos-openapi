@@ -16624,7 +16624,7 @@ components:
                         enum:
                         - available
                         - installing
-                        - waitingReboot
+                        - waiting reboot
                         - rebooting
                         - installed
                         - rolling back
@@ -17397,6 +17397,10 @@ components:
       - "$ref": "#/components/schemas/STG00002E"
       - "$ref": "#/components/schemas/STG00003I"
       - "$ref": "#/components/schemas/STG00003E"
+      - "$ref": "#/components/schemas/STG00004I"
+      - "$ref": "#/components/schemas/STG00004E"
+      - "$ref": "#/components/schemas/STG00005I"
+      - "$ref": "#/components/schemas/STG00005E"
       discriminator:
         propertyName: id
         mapping:
@@ -18014,10 +18018,6 @@ components:
           required:
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
     MDL00002E:
@@ -18207,6 +18207,110 @@ components:
             name:
               type: string
     STG00003E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00004I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          - isCinderServiceUp
+          - isTestVolumeSuccessful
+          properties:
+            name:
+              type: string
+            isCinderServiceUp:
+              type: boolean
+            isTestVolumeSuccessful:
+              type: boolean
+    STG00004E:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          - isCinderServiceUp
+          - isTestVolumeSuccessful
+          properties:
+            name:
+              type: string
+            isCinderServiceUp:
+              type: boolean
+            isTestVolumeSuccessful:
+              type: boolean
+    STG00005I:
+      type: object
+      required:
+      - id
+      - nodeName
+      - time
+      - additionalInfo
+      properties:
+        id:
+          type: string
+          pattern: "^STG"
+        nodeName:
+          type: string
+        time:
+          type: string
+          format: date-time
+        additionalInfo:
+          type: object
+          required:
+          - name
+          properties:
+            name:
+              type: string
+    STG00005E:
       type: object
       required:
       - id
