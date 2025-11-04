@@ -12848,7 +12848,7 @@ components:
                     type: string
                     enum:
                     - ok
-                    - validating
+                    - verifying
                     - creating
                     - updating
                     - deleting
@@ -17966,10 +17966,6 @@ components:
           required:
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
     MDL00001E:
@@ -17993,10 +17989,6 @@ components:
           required:
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
             description:
@@ -18047,14 +18039,8 @@ components:
         additionalInfo:
           type: object
           required:
-          - type
-          - vendor
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
     MDL00003I:
@@ -18078,10 +18064,6 @@ components:
           required:
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
     MDL00003E:
@@ -18105,10 +18087,6 @@ components:
           required:
           - driver
           properties:
-            type:
-              type: string
-            vendor:
-              type: string
             driver:
               type: string
     STG00001I:
