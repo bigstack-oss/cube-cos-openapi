@@ -9927,7 +9927,7 @@ paths:
       summary: List volumes
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
-      - "$ref": "#/components/parameters/project"
+      - "$ref": "#/components/parameters/projectNotRequired"
       - "$ref": "#/components/parameters/watch"
       - "$ref": "#/components/parameters/pageSize"
       - "$ref": "#/components/parameters/pageNum"
