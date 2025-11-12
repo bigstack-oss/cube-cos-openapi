@@ -2630,8 +2630,9 @@ paths:
                   value:
                     code: 200
                     data:
-                      name: dell-emc-sc-fc
                       driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                      name: dell-emc-sc-fc
+                      vendor: Dell EMC
                       isDefault: true
                       storage:
                         service:
@@ -13121,7 +13122,8 @@ components:
           - isDefault
           - name
           - isExternal
-          - device
+          - vendor
+          - driver
           - storage
           properties:
             isDefault:
@@ -13130,16 +13132,10 @@ components:
               type: string
             isExternal:
               type: boolean
-            device:
-              type: object
-              required:
-              - vendor
-              - product
-              properties:
-                vendor:
-                  type: string
-                product:
-                  type: string
+            driver:
+              type: string
+            vendor: 
+              type: string 
             storage:
               type: object
               required:
@@ -13335,11 +13331,11 @@ components:
                                     type: string
                       extraConfigFiles:
                         type: array
-                        required:
-                        - name
-                        - content
                         items:
                           type: object
+                          required:
+                          - name
+                          - content
                           properties:
                             name:
                               type: string
