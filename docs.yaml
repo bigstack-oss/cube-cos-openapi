@@ -13134,8 +13134,8 @@ components:
               type: boolean
             driver:
               type: string
-            vendor: 
-              type: string 
+            vendor:
+              type: string
             storage:
               type: object
               required:
@@ -13429,6 +13429,11 @@ components:
                     type: string
                   type:
                     type: string
+                    enum:
+                    - trial
+                    - perpetual
+                    - community
+                    - enterprise
                   hosts:
                     type: array
                     items:
@@ -13445,12 +13450,20 @@ components:
                         type: string
                       feature:
                         type: string
+                        enum:
+                        - basic
+                        - advanced
+                        - premium
                   issue:
                     "$ref": "#/components/schemas/LicenseIssue"
                   quantity:
                     type: string
                   supportPlan:
                     type: string
+                    enum:
+                    - ESA
+                    - EEA
+                    - FMA
                   expiry:
                     type: object
                     required:
