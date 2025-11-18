@@ -13449,21 +13449,13 @@ components:
                       name:
                         type: string
                       feature:
-                        type: string
-                        enum:
-                        - basic
-                        - advanced
-                        - premium
+                        "$ref": "#/components/schemas/LicenseFeature"
                   issue:
                     "$ref": "#/components/schemas/LicenseIssue"
                   quantity:
                     type: string
                   supportPlan:
-                    type: string
-                    enum:
-                    - ESA
-                    - EEA
-                    - FMA
+                    "$ref": "#/components/schemas/LicenseSupportPlan"
                   expiry:
                     type: object
                     required:
@@ -13532,13 +13524,13 @@ components:
                     name:
                       type: string
                     feature:
-                      type: string
+                      "$ref": "#/components/schemas/LicenseFeature"
                 issue:
                   "$ref": "#/components/schemas/LicenseIssue"
                 quantity:
                   type: string
                 supportPlan:
-                  type: string
+                  "$ref": "#/components/schemas/LicenseSupportPlan"
                 expiry:
                   type: object
                   required:
@@ -17049,13 +17041,13 @@ components:
                 name:
                   type: string
                 feature:
-                  type: string
+                  "$ref": "#/components/schemas/LicenseFeature"
             issue:
               "$ref": "#/components/schemas/LicenseIssue"
             quantity:
               type: string
             supportPlan:
-              type: string
+              "$ref": "#/components/schemas/LicenseSupportPlan"
             expiry:
               type: object
               required:
@@ -17457,6 +17449,20 @@ components:
           - expired
         isExpiring:
           type: boolean
+    LicenseFeature:
+      type: string
+      enum:
+      - N/A  
+      - basic
+      - advanced
+      - premium
+    LicenseSupportPlan:
+      type: string
+      enum:
+      - N/A
+      - ESA
+      - EEA
+      - FMA
     SettingStatus:
       type: object
       required:
