@@ -16403,7 +16403,6 @@ components:
                         - waiting reboot
                         - rebooting
                         - failed
-                        - resolved
                         - succeeded
                       isUpdatable:
                         type: boolean
@@ -16594,6 +16593,8 @@ components:
                         enum:
                         - available
                         - installing
+                        - waiting reboot
+                        - rebooting
                         - installed
                         - rolling back
                         - install failed
@@ -17399,6 +17400,20 @@ components:
         date:
           type: string
           format: date-time
+    LicenseFeature:
+      type: string
+      enum:
+      - N/A
+      - basic
+      - advanced
+      - premium
+    LicenseSupportPlan:
+      type: string
+      enum:
+      - N/A
+      - ESA
+      - EEA
+      - FMA
     ListLicenseCurrentStatus:
       type: string
       enum:
@@ -17449,20 +17464,6 @@ components:
           - expired
         isExpiring:
           type: boolean
-    LicenseFeature:
-      type: string
-      enum:
-      - N/A  
-      - basic
-      - advanced
-      - premium
-    LicenseSupportPlan:
-      type: string
-      enum:
-      - N/A
-      - ESA
-      - EEA
-      - FMA
     SettingStatus:
       type: object
       required:
