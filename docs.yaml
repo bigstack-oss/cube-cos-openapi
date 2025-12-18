@@ -14580,6 +14580,7 @@ components:
                     - ok
                     - warning
                     - fail
+                    - processing
                   isPromotable:
                     type: boolean
                   isDemotable:
