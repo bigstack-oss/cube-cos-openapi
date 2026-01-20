@@ -11861,14 +11861,7 @@ components:
       schema:
         type: array
         items:
-          type: string
-          enum:
-          - control-converged
-          - control
-          - compute
-          - storage
-          - edge-core
-          - moderator
+          "$ref": "#/components/schemas/NodeRole"
       description: The role of the host
       example: control-converged
     listLicenseStatuses:
@@ -13558,7 +13551,7 @@ components:
                   name:
                     type: string
                   role:
-                    type: string
+                    "$ref": "#/components/schemas/NodeRole"
                   expiry:
                     type: object
                     required:
@@ -13626,7 +13619,7 @@ components:
               hostname:
                 type: string
               role:
-                type: string
+                "$ref": "#/components/schemas/NodeRole"
               product:
                 type: string
               status:
@@ -16913,14 +16906,7 @@ components:
         roles:
           type: array
           items:
-            type: string
-            enum:
-            - control-converged
-            - control
-            - compute
-            - storage
-            - edge-core
-            - moderator
+            "$ref": "#/components/schemas/NodeRole"
         version:
           type: string
         virtualIp:
@@ -16987,6 +16973,15 @@ components:
         updatedAt:
           type: string
           format: date-time
+    NodeRole:
+      type: string
+      enum:
+      - control-converged
+      - control
+      - compute
+      - storage
+      - edge-core
+      - moderator
     Node:
       type: object
       required:
@@ -17020,7 +17015,7 @@ components:
         hostname:
           type: string
         role:
-          type: string
+          "$ref": "#/components/schemas/NodeRole"
         address:
           type: string
         ip:
