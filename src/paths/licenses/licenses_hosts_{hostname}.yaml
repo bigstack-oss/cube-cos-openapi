@@ -1,0 +1,44 @@
+post:
+  operationId: importNodeLicense
+  tags:
+  - Licenses
+  summary: Update licenses for specific node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/hostname.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../../components/schemas/PostLicenseRequest.yaml
+  responses:
+    '200':
+      description: Update licenses successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PostLicenseResponse.yaml
+          examples:
+            example1:
+              summary: License import result
+              value:
+                code: 200
+                msg: import license successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update licenses: internal server error'
+              status:
+                type: string
+                example: internal server error

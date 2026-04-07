@@ -1,0 +1,5 @@
+type: string
+enum:
+- unlicense
+- valid
+- expired

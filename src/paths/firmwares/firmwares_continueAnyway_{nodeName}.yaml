@@ -1,0 +1,61 @@
+post:
+  operationId: continueInterruptedFirmwareUpdate
+  tags:
+  - Firmwares
+  summary: Continue an interrupted firmware update
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  responses:
+    '202':
+      description: Firmware update continued successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: Firmware update continued successfully
+              status:
+                type: string
+                example: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: no interrupted firmware update found to continue
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to continue firmware update: internal server error'
+              status:
+                type: string
+                example: internal server error

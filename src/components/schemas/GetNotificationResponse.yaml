@@ -1,0 +1,15 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    $ref: ./Notification.yaml
+  msg:
+    type: string
+  status:
+    type: string

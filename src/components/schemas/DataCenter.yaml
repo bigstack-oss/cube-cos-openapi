@@ -1,0 +1,66 @@
+type: object
+required:
+- type
+- name
+- roles
+- version
+- virtualIp
+- isHaEnabled
+- isLocal
+- firmware
+- fixpack
+- utcTimeZone
+- additional
+properties:
+  type:
+    type: string
+    enum:
+    - cloud
+    - edge
+  name:
+    type: string
+  roles:
+    type: array
+    items:
+      $ref: ./NodeRole.yaml
+  version:
+    type: string
+  virtualIp:
+    type: string
+  isHaEnabled:
+    type: boolean
+  isLocal:
+    type: boolean
+  firmware:
+    $ref: ./FirmwareVersionDetails.yaml
+  fixpack:
+    $ref: ./FixpackVersionDetails.yaml
+  utcTimeZone:
+    type: string
+  additional:
+    type: object
+    required:
+    - helpUrl
+    - v1ApiDocUrl
+    - nodeLicenseStatus
+    properties:
+      helpUrl:
+        type: string
+      v1ApiDocUrl:
+        type: string
+      nodeLicenseStatus:
+        type: object
+        required:
+        - valid
+        - expired
+        - unlicense
+        properties:
+          valid:
+            type: integer
+            example: 1
+          expired:
+            type: integer
+            example: 0
+          unlicense:
+            type: integer
+            example: 0

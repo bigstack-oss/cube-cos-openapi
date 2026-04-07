@@ -1,0 +1,62 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - system
+    - instance
+    - host
+    properties:
+      system:
+        type: object
+        required:
+        - severities
+        - categories
+        properties:
+          severities:
+            type: array
+            items:
+              type: string
+          categories:
+            type: array
+            items:
+              type: string
+      instance:
+        type: object
+        required:
+        - ids
+        - categories
+        properties:
+          ids:
+            type: array
+            items:
+              type: string
+          categories:
+            type: array
+            items:
+              type: string
+      host:
+        type: object
+        required:
+        - names
+        - categories
+        properties:
+          names:
+            type: array
+            items:
+              type: string
+          categories:
+            type: array
+            items:
+              type: string
+  msg:
+    type: string
+  status:
+    type: string

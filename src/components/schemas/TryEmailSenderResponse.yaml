@@ -1,0 +1,15 @@
+type: object
+required:
+- code
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  msg:
+    type: string
+    example: email sender tried successfully
+  status:
+    type: string
+    example: ok

@@ -1,0 +1,8 @@
+type: object
+required:
+- license
+properties:
+  license:
+    type: string
+    format: binary
+    description: License file (must have a .license extension)

@@ -1,0 +1,101 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - overall
+    - services
+    properties:
+      overall:
+        type: object
+        required:
+        - status
+        properties:
+          status:
+            type: object
+            required:
+            - current
+            - isFixing
+            properties:
+              current:
+                type: string
+                enum:
+                - ok
+                - ng
+              isFixing:
+                type: boolean
+              description:
+                type: string
+      services:
+        type: array
+        items:
+          required:
+          - name
+          - category
+          - status
+          - modules
+          properties:
+            name:
+              type: string
+              example: clusterLink
+            category:
+              type: string
+              example: core
+            status:
+              type: object
+              required:
+              - current
+              - isFixing
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - ok
+                  - ng
+                isFixing:
+                  type: boolean
+                description:
+                  type: string
+            modules:
+              type: array
+              required:
+              - name
+              - status
+              items:
+                type: object
+                required:
+                - name
+                - status
+                properties:
+                  name:
+                    type: string
+                    example: link
+                  status:
+                    type: object
+                    required:
+                    - current
+                    - isFixing
+                    properties:
+                      current:
+                        type: string
+                        enum:
+                        - ok
+                        - ng
+                      isFixing:
+                        type: boolean
+                      description:
+                        type: string
+  msg:
+    type: string
+    example: fetch health successfully
+  status:
+    type: string
+    example: ok

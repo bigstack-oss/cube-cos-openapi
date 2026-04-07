@@ -1,0 +1,134 @@
+get:
+  operationId: getNodes
+  tags:
+  - Nodes
+  summary: Retrieve the list of nodes
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  - $ref: ../../components/parameters/roles.yaml
+  - $ref: ../../components/parameters/nodeLicenseStatuses.yaml
+  - $ref: ../../components/parameters/products.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the list of nodes successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetNodesResponse.yaml
+          examples:
+            example:
+              summary: Nodes
+              value:
+                code: 200
+                data:
+                  nodes:
+                  - id: abc0005e
+                    serialNumber: 1H2ZLG2
+                    dataCenter: example-data-center
+                    hostname: example-node-0
+                    role: control-converged
+                    address: 10.10.10.10:8001
+                    ip: 10.10.10.10
+                    managementIP: 10.10.10.10
+                    storageIP: 10.10.10.10
+                    isVirtualIpOwner: true
+                    license:
+                      name: example-license
+                      type: trial
+                      hostname: example-node-0
+                      serial: 1H2ZLG2
+                      product:
+                        name: CubeCOS
+                        feature: virtualization
+                      issue:
+                        by: Bigstack co., ltd.
+                        to: bigstack
+                        hardware: '*'
+                        date: '2025-01-23T14:51:50+08:00'
+                      quantity: some of string about cpu capacity
+                      supportPlan: FMA
+                      expiry:
+                        date: '2025-03-24T14:51:50+08:00'
+                        days: 9
+                      status:
+                        current: valid
+                        isExpiring: true
+                    status: up
+                    cpuSpec: Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
+                    networkInterfaces:
+                    - interface: eth0
+                      label: IF.1
+                      busIdSlaves: '0000:01:00.0'
+                      driver: tg3
+                      state: UP
+                      speed: 1000F/1000F
+                    - interface: eth1
+                      label: IF.2
+                      busIdSlaves: '0000:01:00.1'
+                      driver: tg3
+                      state: DOWN
+                      speed: NA/1000F
+                    - interface: eth2
+                      label: IF.3
+                      busIdSlaves: '0000:02:00.0'
+                      driver: tg3
+                      state: DOWN
+                      speed: NA/1000F
+                    - interface: eth3
+                      label: IF.4
+                      busIdSlaves: '0000:02:00.1'
+                      driver: tg3
+                      state: DOWN
+                      speed: NA/1000F
+                    ipmi:
+                      isSupported: true
+                      isConnected: false
+                      ip: 10.32.10.45
+                    vcpu:
+                      totalCores: 48
+                      usedCores: 40
+                      usedPercent: 83.3333
+                      freeCores: 8
+                      freePercent: 16.6666
+                    memory:
+                      totalMiB: 257822
+                      usedMiB: 100520
+                      usedPercent: 38.9881
+                      freeMiB: 157302
+                      freePercent: 61.0118
+                    storage:
+                      totalMiB: 12571648
+                      usedMiB: 1126400
+                      usedPercent: 8.9598
+                      freeMiB: 11445248
+                      freePercent: 91.0401
+                    uptimeSeconds: 2461586.74
+                    labels:
+                      isGpuEnabled: 'false'
+                  page:
+                    total: 1
+                    number: 1
+                    size: 1
+                    totalItemCount: 1
+                msg: fetch nodes list successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch nodes: internal server error'
+              status:
+                type: string
+                example: internal server error

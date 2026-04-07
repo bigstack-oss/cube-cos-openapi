@@ -1,0 +1,109 @@
+get:
+  operationId: getTriggerMaterials
+  tags:
+  - Triggers
+  summary: Retrieve all trigger materials
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Retrieve trigger materials successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetTriggerMaterialsResponse.yaml
+          examples:
+            example:
+              summary: Trigger materials list
+              value:
+                code: 200
+                data:
+                  attribute:
+                    alertTypes:
+                    - system
+                    - host
+                    - instance
+                    severities:
+                    - INFO
+                    - WARNING
+                    - CTRITICAL
+                    categories:
+                    - KSN
+                    - CMP
+                    - ETH
+                    - CPU
+                    eventIds:
+                    - KSN00001I
+                    - CMP01001I
+                    - ETH00001I
+                    - CPU00002W
+                    - CPU00004I
+                    - CPU00006C
+                  response:
+                    scriptType:
+                      language: Bash
+                      environment: Alpine Linux
+                      builtInVariable:
+                        name: EVENT
+                        type: object
+                        description: the 'case sensitive' event env variable that
+                          triggered the action
+                        value:
+                          id: alert id string
+                          message: alert message, from the TICKscript
+                          details: user-defined HTML content for a more detailed message
+                          duration: an integer value in seconds
+                          level: OK or INFO or WARNING or CRITICAL
+                          previousLevel: OK or INFO or WARNING or CRITICAL
+                          recoverable: bool value like true or false
+                          data:
+                            time: YYYY-MM-DDTHH:MM:SSZ
+                            name: measurement name
+                            group: group by tags concatenated
+                            tags:
+                              tag_key_1: tag value 1
+                              tag_key_2: tag value 2
+                            fields:
+                              field_key_1: some integer value
+                              field_key_2: some string value
+                    emails:
+                    - address: example-user@bigstack.co
+                      note: example email recipient
+                    slacks:
+                    - name: Example slack channel
+                      url: https://example.slack.com/archives/exmpale-token-abc
+                      description: example slack channel
+                msg: fetched trigger materials successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get trigger materials: internal server error'
+              status:
+                type: string
+                example: internal server error

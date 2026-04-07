@@ -1,0 +1,6 @@
+name: sourceFromAnotherHypervisor
+in: query
+required: true
+schema:
+  type: boolean
+description: Whether the source image comes from another hypervisor

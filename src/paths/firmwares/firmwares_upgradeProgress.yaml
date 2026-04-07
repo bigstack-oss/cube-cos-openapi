@@ -1,0 +1,63 @@
+get:
+  operationId: getFirmwareUpgradeProgress
+  tags:
+  - Firmwares
+  summary: Get firmware upgrade progress for all nodes
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Firmware upgrade progress retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetFirmwareUpgradeProgressResponse.yaml
+          examples:
+            example1:
+              summary: Firmware upgrade progress
+              value:
+                code: 200
+                data:
+                  version: CUBE Appliance 3.1.0
+                  isRollingApplied: true
+                  progresses:
+                  - host: example-node-0
+                    phase: paritioning
+                    status:
+                      current: installing
+                      isProcessing: true
+                      processPercent: 75
+                      description: swapping partition for Cube Appliance 3.1.0
+                  - host: example-node-1
+                    phase: ''
+                    status:
+                      current: waiting
+                      isProcessing: false
+                      processPercent: 0
+                      description: ''
+                  - host: example-node-2
+                    phase: ''
+                    status:
+                      current: waiting
+                      isProcessing: false
+                      processPercent: 0
+                      description: ''
+                msg: fetch firmware upgrade progress successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get firmware upgrade progress: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

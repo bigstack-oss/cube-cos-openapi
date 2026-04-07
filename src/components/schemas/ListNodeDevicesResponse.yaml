@@ -1,0 +1,110 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - serial
+      - device
+      - type
+      - class
+      - sizeMiB
+      - availability
+      - osd
+      - status
+      properties:
+        serial:
+          type: string
+        device:
+          type: string
+        class:
+          $ref: ./DeviceType.yaml
+        type:
+          type: string
+        sizeMiB:
+          type: number
+        availability:
+          type: string
+          enum:
+          - available
+          - in-use
+          - system
+        osd:
+          type: object
+          required:
+          - pgs
+          - reweight
+          - daemons
+          properties:
+            pgs:
+              type: integer
+            reweight:
+              type: number
+            daemons:
+              type: array
+              items:
+                type: object
+                required:
+                - id
+                - usagePercent
+                - status
+                properties:
+                  id:
+                    type: string
+                  usagePercent:
+                    type: number
+                  status:
+                    type: object
+                    required:
+                    - current
+                    - isProcessing
+                    properties:
+                      current:
+                        type: string
+                        enum:
+                        - up
+                        - down
+                        - warning
+                        - error
+                      isProcessing:
+                        type: boolean
+        status:
+          type: object
+          required:
+          - current
+          - description
+          - isPromotable
+          - isDemotable
+          - isProcessing
+          properties:
+            current:
+              type: string
+              enum:
+              - ok
+              - warning
+              - fail
+              - processing
+              - unknown
+            isPromotable:
+              type: boolean
+            isDemotable:
+              type: boolean
+            isProcessing:
+              type: boolean
+            description:
+              type: string
+  msg:
+    type: string
+    example: list node devices successfully
+  status:
+    type: string
+    example: ok

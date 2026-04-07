@@ -1,0 +1,60 @@
+get:
+  operationId: getFixpackProgress
+  tags:
+  - Fixpacks
+  summary: Get the progress of a fixpack operation
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/version.yaml
+  responses:
+    '200':
+      description: Fixpack update progress
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetFixpackUpdateProgressResponse.yaml
+          examples:
+            example1:
+              summary: Fixpack operation progress
+              value:
+                code: 200
+                data:
+                  version: FIX_001
+                  operation: install
+                  progresses:
+                  - host: example-node-0
+                    status:
+                      current: installing
+                      isProcessing: true
+                      processPercent: 50
+                      description: ''
+                  - host: example-node-1
+                    status:
+                      current: installing
+                      isProcessing: true
+                      processPercent: 50
+                      description: ''
+                  - host: example-node-2
+                    status:
+                      current: installing
+                      isProcessing: true
+                      processPercent: 50
+                      description: ''
+                msg: Fetched fixpack progress successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get fixpack progress: internal server error'
+              status:
+                type: string
+                example: '''internal server error'

@@ -1,0 +1,101 @@
+post:
+  operationId: verifyStorageIntegration
+  tags:
+  - Integrations
+  summary: Verify the connectivity of an external storage
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/storageName.yaml
+  responses:
+    '200':
+      description: Verify the connectivity of an external storage successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - data
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              data:
+                type: object
+                properties:
+                  isCinderServiceUp:
+                    type: boolean
+                    example: true
+                  isTestVolumeSuccessful:
+                    type: boolean
+                    example: true
+              msg:
+                type: string
+                example: verify the connectivity of an external storage successfully
+              status:
+                type: string
+                example: accepted
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid request body: missing required field ''name'''
+              status:
+                type: string
+                example: bad request
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: storage example-storage is under processing, please try again
+                  later
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to verify the storage connectivity: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

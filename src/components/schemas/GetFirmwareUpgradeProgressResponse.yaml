@@ -1,0 +1,73 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - version
+    - isRollingApplied
+    - progresses
+    properties:
+      version:
+        type: string
+      isRollingApplied:
+        type: boolean
+      progresses:
+        type: array
+        items:
+          type: object
+          required:
+          - host
+          - phase
+          - status
+          properties:
+            host:
+              type: string
+            phase:
+              type: string
+              enum:
+              - partitioning
+              - bootstrapping cubecos
+              - starting cluster
+              - evacuting vms on host
+              - moving vip away from host
+              - moved vip away from host
+              - rebooting host
+              - cluster checking and repairing
+              - cluster checked and repaired
+              - reset and booted non-active server
+              - cluster check and repair skipped as not all nodes are bootstrapped
+                and synced
+            status:
+              type: object
+              required:
+              - current
+              - isProcessing
+              - processPercent
+              - description
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - installing
+                  - waiting reboot
+                  - rebooting
+                  - failed
+                  - resolved
+                  - succeeded
+                isProcessing:
+                  type: boolean
+                processPercent:
+                  type: number
+                description:
+                  type: string
+  msg:
+    type: string
+  status:
+    type: string

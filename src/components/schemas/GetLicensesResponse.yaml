@@ -1,0 +1,81 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - licenses
+    - page
+    properties:
+      licenses:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - type
+          - hosts
+          - serial
+          - product
+          - issue
+          - quantity
+          - supportPlan
+          - expiry
+          - status
+          properties:
+            name:
+              type: string
+            type:
+              type: string
+              enum:
+              - trial
+              - perpetual
+              - community
+              - enterprise
+            hosts:
+              type: array
+              items:
+                type: string
+            serial:
+              type: string
+            product:
+              type: object
+              required:
+              - name
+              - feature
+              properties:
+                name:
+                  type: string
+                feature:
+                  $ref: ./LicenseFeature.yaml
+            issue:
+              $ref: ./LicenseIssue.yaml
+            quantity:
+              type: string
+            supportPlan:
+              $ref: ./LicenseSupportPlan.yaml
+            expiry:
+              type: object
+              required:
+              - date
+              - days
+              properties:
+                date:
+                  type: string
+                days:
+                  type: integer
+            status:
+              $ref: ./ListLicenseStatus.yaml
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+  status:
+    type: string

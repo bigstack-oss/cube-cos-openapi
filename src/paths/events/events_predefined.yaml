@@ -1,0 +1,165 @@
+get:
+  operationId: getPredefinedEvents
+  description: Please note that if the 'types', 'categories', 'severities', or 'ids'
+    query parameters are not specified, then 'NO' any predefined events will be returned.
+  tags:
+  - Events
+  summary: Retrieve the predefined events
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: query
+    name: types
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+        - system
+        - host
+        - instance
+    description: The types of event to query, the value can be only 'system', 'host',
+      and 'instance'.
+    example: system
+  - in: query
+    name: categories
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+        - PLC
+        - BSP
+        - RUG
+        - KSN
+        - CMP
+        - CEP
+        - NET
+        - SRV
+        - SDN
+        - VRT
+        - ETH
+        - CPU
+        - DSK
+        - MEM
+        - DEV
+    description: The categories of the event to query.
+    example: CPU
+  - in: query
+    name: severities
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+        - INFO
+        - WARNING
+        - CRITICAL
+    description: The severities of the event to query.
+    example: Info
+  - in: query
+    name: ids
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+        enum:
+        - PLC00001I
+        - PLC00002I
+        - BSP00001I
+        - RUG00001I
+        - KSN00001I
+        - KSN00002I
+        - CMP01001I
+        - CMP01002I
+        - CMP02001I
+        - CMP02002I
+        - CMP02003I
+        - CEP00001I
+        - CEP00002W
+        - NET00001I
+        - NET00002W
+        - NET00003I
+        - NET00004W
+        - SRV00001I
+        - SRV00002W
+        - SRV00003C
+        - SRV01001I
+        - SRV01002I
+        - SDN00001I
+        - SDN00002I
+        - VRT00001I
+        - VRT00002W
+        - VRT00003C
+        - ETH00001I
+        - ETH00002W
+        - CPU00001I
+        - CPU00002W
+        - CPU00003C
+        - DSK00001I
+        - DSK00002W
+        - DSK00003C
+        - MEM00001I
+        - MEM00002W
+        - MEM00003C
+        - DEV00001I
+        - DEV00002W
+        - CPU00004I
+        - CPU00005W
+        - CPU00006C
+        - CPU00007I
+        - MEM00004I
+        - MEM00005W
+        - MEM00006C
+        - MEM00007I
+    description: The ids of the event to query.
+    example: CPU00004I
+  responses:
+    '200':
+      description: Retrieve the predefined events successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetPredefinedEventFilterResponse.yaml
+          examples:
+            example1:
+              summary: Predefined event list
+              value:
+                code: 200
+                data:
+                - type: system
+                  id: PLC00001I
+                  severity: INFO
+                  category: PLC
+                  description: CubeCOS node policy is successfully applied
+                - type: system
+                  id: PLC00002I
+                  severity: INFO
+                  category: PLC
+                  description: CubeCOS cluster policy is successfully applied
+                - type: system
+                  id: BSP00001I
+                  severity: INFO
+                  category: BSP
+                  description: CubeCOS node bootstrapping is started
+                msg: fetch predefined events successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch predefined events: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,7 @@
+in: query
+name: project
+required: false
+schema:
+  type: string
+description: The project name to filter
+example: example-project

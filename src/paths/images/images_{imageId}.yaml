@@ -1,0 +1,130 @@
+patch:
+  operationId: updateImage
+  tags:
+  - Images
+  summary: Update an image
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: imageId
+    required: true
+    schema:
+      type: string
+    description: The id of the image
+    example: 763655de-1cfc-45d4-b67c-5579ea43a6e1
+  requestBody:
+    description: At least one of the fields must be provided.
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The new name of the image
+              example: renamed-example-image
+            os:
+              type: string
+              description: The new operating system type of the image
+              example: Ubuntu
+            visibility:
+              type: string
+              description: The new visibility type of the image, can be either 'public'
+                or 'private'
+              enum:
+              - public
+              - private
+              example: private
+        examples:
+          example:
+            summary: Update image request
+            value:
+              name: renamed-example-image
+              os: Ubuntu
+              visibility: private
+  responses:
+    '200':
+      description: Image updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              msg:
+                type: string
+                example: image updated successfully
+              status:
+                type: string
+                example: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: at least one of the fields must be provided
+              status:
+                type: string
+                example: bad request
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: image not found
+              status:
+                type: string
+                example: not found
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: image is under processing, cannot be updated
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update image: internal server error'
+              status:
+                type: string
+                example: internal server error

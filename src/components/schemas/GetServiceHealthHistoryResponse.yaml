@@ -1,0 +1,71 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - category
+      - service
+      - isRepairable
+      - history
+      - module
+      properties:
+        category:
+          type: string
+        service:
+          type: string
+        isRepairable:
+          type: boolean
+        history:
+          type: array
+          items:
+            type: object
+            required:
+            - time
+            - hostname
+            - status
+            properties:
+              time:
+                type: string
+                format: date-time
+              hostname:
+                type: string
+                example: example-node-0
+              status:
+                type: string
+                enum:
+                - ok
+                - fixing
+                - ng
+              error:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  reason:
+                    type: string
+                  nodes:
+                    type: array
+                    items:
+                      type: string
+                  description:
+                    type: string
+                  details:
+                    type: string
+                  log:
+                    type: string
+                    format: uri
+        module:
+          type: string
+  msg:
+    type: string
+  status:
+    type: string

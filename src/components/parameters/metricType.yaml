@@ -1,0 +1,19 @@
+in: path
+name: metricType
+required: true
+schema:
+  type: string
+  enum:
+  - cpuUsage
+  - memoryUsage
+  - diskUsage
+  - diskBandwidth
+  - diskIops
+  - diskLatency
+  - diskReadIops
+  - diskWriteIops
+  - networkTrafficIn
+  - networkTrafficOut
+description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
+  'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops', 'diskWriteIops',
+  'networkTrafficIn', or 'networkTrafficOut'.

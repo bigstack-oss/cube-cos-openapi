@@ -1,0 +1,32 @@
+type: object
+required:
+- name
+- description
+- files
+- sizeMiB
+- status
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  files:
+    type: array
+    items:
+      type: object
+      $ref: ./SupportFile.yaml
+  sizeMiB:
+    type: number
+  status:
+    type: object
+    required:
+    - current
+    - createdAt
+    - isCreating
+    properties:
+      current:
+        type: string
+      createdAt:
+        type: string
+      isCreating:
+        type: boolean

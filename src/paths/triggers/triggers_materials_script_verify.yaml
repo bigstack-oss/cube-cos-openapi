@@ -1,0 +1,92 @@
+post:
+  operationId: verifyTriggerScript
+  tags:
+  - Triggers
+  summary: Verify trigger script
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/VerifyMaterialScriptRequest.yaml
+        examples:
+          example:
+            summary: Trigger script verification request
+            value:
+              script: base64-encoded-script-content
+  responses:
+    '200':
+      description: Trigger script verified successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/VerifyMaterialScriptResponse.yaml
+          examples:
+            example:
+              summary: Trigger script verification result
+              value:
+                code: 200
+                data: 'Hello
+
+                  '
+                msg: trigger script verified successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              data:
+                type: string
+                example: ''
+              msg:
+                type: string
+                example: invalid script content
+              status:
+                type: string
+                example: bad request
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              data:
+                type: string
+                example: ''
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              data:
+                type: string
+                example: ''
+              msg:
+                type: string
+                example: 'failed to verify trigger script: internal server error'
+              status:
+                type: string
+                example: internal server error

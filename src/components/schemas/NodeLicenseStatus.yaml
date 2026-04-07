@@ -1,0 +1,9 @@
+type: object
+required:
+- current
+- isExpiring
+properties:
+  current:
+    $ref: ./NodeLicenseCurrentStatus.yaml
+  isExpiring:
+    type: boolean

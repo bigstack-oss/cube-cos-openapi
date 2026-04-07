@@ -1,0 +1,155 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - attribute
+    - response
+    properties:
+      attribute:
+        type: object
+        required:
+        - alertTypes
+        - severities
+        - categories
+        - eventIds
+        properties:
+          alertTypes:
+            type: array
+            items:
+              type: string
+          severities:
+            type: array
+            items:
+              type: string
+          categories:
+            type: array
+            items:
+              type: string
+          eventIds:
+            type: array
+            items:
+              type: string
+      response:
+        type: object
+        required:
+        - scriptType
+        - emails
+        - slacks
+        properties:
+          scriptType:
+            type: object
+            required:
+            - language
+            - environment
+            - builtInVariable
+            properties:
+              language:
+                type: string
+              environment:
+                type: string
+              builtInVariable:
+                type: object
+                required:
+                - name
+                - type
+                - description
+                - value
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+                  description:
+                    type: string
+                  value:
+                    type: object
+                    required:
+                    - id
+                    - message
+                    - details
+                    - duration
+                    - level
+                    - previousLevel
+                    - recoverable
+                    - data
+                    properties:
+                      id:
+                        type: string
+                      message:
+                        type: string
+                      details:
+                        type: string
+                      duration:
+                        type: integer
+                      level:
+                        type: string
+                      previousLevel:
+                        type: string
+                      recoverable:
+                        type: boolean
+                      data:
+                        type: object
+                        required:
+                        - time
+                        - name
+                        - group
+                        - tags
+                        - fields
+                        properties:
+                          time:
+                            type: string
+                            format: date-time
+                          name:
+                            type: string
+                          group:
+                            type: string
+                          tags:
+                            type: object
+                            additionalProperties:
+                              type: string
+                          fields:
+                            type: object
+                            additionalProperties:
+                              type: string
+          slacks:
+            type: array
+            items:
+              type: object
+              required:
+              - name
+              - url
+              - description
+              properties:
+                name:
+                  type: string
+                url:
+                  type: string
+                description:
+                  type: string
+          emails:
+            type: array
+            items:
+              type: object
+              required:
+              - address
+              - note
+              properties:
+                address:
+                  type: string
+                note:
+                  type: string
+  msg:
+    type: string
+    example: trigger materials retrieved successfully
+  status:
+    type: string
+    example: ok

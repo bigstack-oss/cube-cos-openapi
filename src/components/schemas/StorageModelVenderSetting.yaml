@@ -1,0 +1,14 @@
+type: object
+required:
+- vendor
+- product
+- settings
+properties:
+  vendor:
+    type: string
+  product:
+    type: string
+  settings:
+    type: array
+    items:
+      $ref: ./StorageKeyValuePair.yaml

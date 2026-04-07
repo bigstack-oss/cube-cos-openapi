@@ -1,0 +1,13 @@
+type: object
+required:
+- name
+- version
+- updatedAt
+properties:
+  name:
+    type: string
+  version:
+    type: string
+  updatedAt:
+    type: string
+    format: date-time

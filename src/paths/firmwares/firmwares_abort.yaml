@@ -1,0 +1,37 @@
+post:
+  operationId: abortFirmwareUpdate
+  tags:
+  - Firmwares
+  summary: Abort ongoing firmware update
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Firmware update aborted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/AbortFirmwareUpdateResponse.yaml
+          examples:
+            example1:
+              summary: Firmware update aborted
+              value:
+                code: 200
+                msg: Firmware update aborted successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to abort firmware update: internal server error'
+              status:
+                type: string
+                example: internal server error

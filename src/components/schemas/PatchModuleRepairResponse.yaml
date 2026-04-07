@@ -1,0 +1,16 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 202
+  msg:
+    type: string
+    example: the request of unhealthy module repair is accepted and repairing
+  status:
+    type: string
+    example: accepted

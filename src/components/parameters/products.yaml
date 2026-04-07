@@ -1,0 +1,12 @@
+in: query
+name: products
+required: false
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+    - CubeCOS
+    - CubeCMP
+description: The products of the host
+example: CubeCOS

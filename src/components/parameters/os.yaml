@@ -1,0 +1,17 @@
+name: os
+in: query
+required: true
+schema:
+  type: string
+  enum:
+  - CentOS
+  - Fedora
+  - Ubuntu
+  - Debian
+  - Windows
+  - Rocky
+  - FreeBSD
+  - CoreOS
+  - Arch
+  - Others
+description: Operating system of the image

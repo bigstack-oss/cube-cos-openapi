@@ -1,0 +1,10 @@
+in: path
+name: entityType
+required: true
+schema:
+  type: string
+  enum:
+  - hosts
+  - vms
+description: The type of entity to query, the value can be 'hosts' or 'vms'
+example: hosts

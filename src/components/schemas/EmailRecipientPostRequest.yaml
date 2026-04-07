@@ -1,0 +1,9 @@
+type: object
+required:
+- address
+- note
+properties:
+  address:
+    type: string
+  note:
+    type: string

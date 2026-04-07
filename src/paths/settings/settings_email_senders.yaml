@@ -1,0 +1,91 @@
+post:
+  operationId: createEmailSender
+  tags:
+  - Settings
+  summary: Create an email sender
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EmailSenderPostRequest.yaml
+        examples:
+          example:
+            summary: Email Sender
+            value:
+              host: email-smtp.example.mailserver.com
+              port: 587
+              username: example-user
+              password: example-password
+              from: noreply@example.com
+  responses:
+    '201':
+      description: Email sender created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PostEmailSenderResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch email sender: internal server error'
+              status:
+                type: string
+                example: internal server error
+get:
+  operationId: getEmailSenders
+  tags:
+  - Settings
+  summary: Retrieve email senders
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Email senders retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetEmailSendersResponse.yaml
+          examples:
+            example:
+              summary: Email Senders List
+              value:
+                code: 200
+                data:
+                - host: email-smtp.example.mailserver.com
+                  port: 587
+                  username: example-user
+                  from: noreply@bigstack.co
+                  accessVerified: true
+                  status:
+                    current: ok
+                    isUpdating: false
+                msg: email senders retrieved successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch email sender: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,77 @@
+get:
+  operationId: getNotifications
+  tags:
+  - Notifications
+  summary: Retrieve the notifications
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+    description: The past time of the notifications to query, click 'try it out' to
+      see a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+      and 'd'(day) suffix for other time ranges.
+    example: 1h
+  - $ref: ../../components/parameters/keyword.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  responses:
+    '200':
+      description: Retrieve the notifications successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListNotificationsResponse.yaml
+          examples:
+            example1:
+              summary: Notifications
+              value:
+                code: 200
+                data:
+                  notifications:
+                  - id: DEV00002I
+                    nodeName: example-node-0
+                    time: '2025-07-21T04:09:30+08:00'
+                    additionalInfo:
+                      class: SSD
+                      device: /dev/sdb
+                  - id: DEV00002E
+                    nodeName: example-node-0
+                    time: '2025-07-21T04:09:30+08:00'
+                    additionalInfo:
+                      class: SSD
+                      device: /dev/sdb
+                      description: cannot promote disk while ceph is recovering
+                  - id: OSD00002E
+                    nodeName: example-node-1
+                    time: '2025-07-21T04:09:30+08:00'
+                    additionalInfo:
+                      osdId: osd.1
+                      reweight: 0.75
+                  page:
+                    pageNum: 1
+                    pageSize: 10
+                    total: 3
+                    totalPage: 1
+                msg: fetch notifications successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch notifications: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,102 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - tunings
+    - page
+    properties:
+      tunings:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - value
+          - hosts
+          - description
+          - enabled
+          - isModified
+          - limitation
+          - status
+          properties:
+            name:
+              type: string
+            value:
+              type: string
+            hosts:
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                - role
+                - ip
+                properties:
+                  name:
+                    type: string
+                  role:
+                    type: string
+                  ip:
+                    type: string
+            description:
+              type: string
+            enabled:
+              type: boolean
+            isModified:
+              type: boolean
+            limitation:
+              type: object
+              required:
+              - type
+              - default
+              - min
+              - max
+              properties:
+                type:
+                  $ref: ./TuningLimitationType.yaml
+                default:
+                  oneOf:
+                  - type: string
+                  - type: integer
+                  - type: number
+                  - type: boolean
+                min:
+                  oneOf:
+                  - type: integer
+                  - type: number
+                max:
+                  oneOf:
+                  - type: integer
+                  - type: number
+                regex:
+                  type: string
+            status:
+              type: object
+              required:
+              - current
+              - updatedAt
+              - isUpdating
+              properties:
+                current:
+                  type: string
+                updatedAt:
+                  type: string
+                isUpdating:
+                  type: boolean
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: tuning list retrieved successfully
+  status:
+    type: string
+    example: ok

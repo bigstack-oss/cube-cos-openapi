@@ -1,0 +1,11 @@
+in: path
+name: viewType
+required: true
+schema:
+  type: string
+  enum:
+  - summary
+  - history
+  - rank
+description: The type of view to query, the value can be only 'summary', 'history',
+  or 'rank'.

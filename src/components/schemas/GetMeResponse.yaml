@@ -1,0 +1,20 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - name
+    properties:
+      name:
+        type: string
+  msg:
+    type: string
+  status:
+    type: string

@@ -1,0 +1,77 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - fixpacks
+    - page
+    properties:
+      fixpacks:
+        type: array
+        items:
+          type: object
+          required:
+          - version
+          - name
+          - note
+          - details
+          - updatedAt
+          - rebootRequired
+          - status
+          properties:
+            version:
+              type: string
+            name:
+              type: string
+            note:
+              type: string
+            details:
+              type: string
+            updatedAt:
+              type: string
+              format: date-time
+            rebootRequired:
+              type: boolean
+            status:
+              type: object
+              required:
+              - current
+              - isInstallable
+              - isRollbackable
+              - isProcessing
+              - isRemovable
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - available
+                  - installing
+                  - waiting reboot from install
+                  - waiting reboot from rollback
+                  - rebooting from install
+                  - rebooting from rollback
+                  - installed
+                  - rolling back
+                  - install failed
+                  - rollback failed
+                isInstallable:
+                  type: boolean
+                isRollbackable:
+                  type: boolean
+                isProcessing:
+                  type: boolean
+                isRemovable:
+                  type: boolean
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+  status:
+    type: string

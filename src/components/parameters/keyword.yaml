@@ -1,0 +1,7 @@
+in: query
+name: keyword
+required: false
+schema:
+  type: string
+description: The keyword to search, can be any string
+example: example-keyword

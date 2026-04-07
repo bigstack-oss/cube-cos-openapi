@@ -1,0 +1,74 @@
+post:
+  operationId: operateNodeIpmi
+  tags:
+  - Nodes
+  summary: Operate the node by IPMI
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - name: operation
+    in: path
+    description: The operation to perform on the node IPMI
+    required: true
+    schema:
+      type: string
+      enum:
+      - poweron
+      - poweroff
+      - powercycle
+    example: poweroff
+  responses:
+    '202':
+      description: the ipmi oepration request received
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/OperateNodeIpmiResponse.yaml
+    '404':
+      description: Node not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node not found
+              status:
+                type: string
+                example: not found
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: node(example-node-0) is not powered on, cannot power cycle
+              status:
+                type: string
+                example: status conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to operate node: internal server error'
+              status:
+                type: string
+                example: internal server error

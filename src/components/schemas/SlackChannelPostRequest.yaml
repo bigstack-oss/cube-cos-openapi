@@ -1,0 +1,12 @@
+type: object
+required:
+- name
+- url
+- description
+properties:
+  name:
+    type: string
+  url:
+    type: string
+  description:
+    type: string

@@ -1,0 +1,72 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - description
+      - limitation
+      - roles
+      - selector
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        limitation:
+          type: object
+          required:
+          - type
+          - default
+          properties:
+            type:
+              $ref: ./TuningLimitationType.yaml
+            default:
+              oneOf:
+              - type: string
+              - type: integer
+              - type: boolean
+            min:
+              oneOf:
+              - type: integer
+            max:
+              oneOf:
+              - type: integer
+            regex:
+              type: string
+        roles:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            - hosts
+            properties:
+              name:
+                type: string
+              hosts:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - name
+                  - ip
+                  properties:
+                    name:
+                      type: string
+                    ip:
+                      type: string
+  msg:
+    type: string
+  status:
+    type: string

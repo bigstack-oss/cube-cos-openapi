@@ -1,0 +1,21 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: string
+    example: 'Hello
+
+      '
+  msg:
+    type: string
+    example: trigger script verified successfully
+  status:
+    type: string
+    example: ok

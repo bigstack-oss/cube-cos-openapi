@@ -1,0 +1,231 @@
+get:
+  operationId: getTriggers
+  tags:
+  - Triggers
+  summary: Retrieve all triggers
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  responses:
+    '200':
+      description: Retrieve triggers successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetTriggersResponse.yaml
+          examples:
+            example:
+              summary: Triggers list
+              value:
+                code: 200
+                data:
+                  triggers:
+                  - name: Administrative Level Notification
+                    isBuiltIn: true
+                    description: Configure how you are going to be notified for system
+                      events and host alerts, including levels 'warning', 'error',
+                      and 'critical'.
+                    attribute:
+                      alertTypes:
+                      - system
+                      - host
+                      - instance
+                      eventIds:
+                      - KSN00001I
+                      - ETH00001I
+                      - CPU00002W
+                      severities:
+                      - INFO
+                      - WARNING
+                      - CRITICAL
+                      categories:
+                      - DEV
+                      - CPU
+                      - DSK
+                    response:
+                      types:
+                      - script
+                      - email
+                      - slack
+                      script:
+                        name: example-script
+                        content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
+                      slacks:
+                      - name: example-slack-channel-0
+                        url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                        description: example slack channel 1
+                      - name: example-slack-channel-1
+                        url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                        description: example slack channel 2
+                      emails:
+                      - address: example.user@example.com
+                        note: example email recipient
+                    status:
+                      current: ok
+                      isProcessing: false
+                    enabled: false
+                  - name: Instance Level Notification
+                    isBuiltIn: true
+                    description: Configure how you are going to be notified for instance
+                      alerts, including levels 'warning', and 'critical'.
+                    attribute:
+                      alertTypes:
+                      - system
+                      - host
+                      - instance
+                      eventIds:
+                      - KSN00001I
+                      - ETH00001I
+                      - CPU00002W
+                      severities:
+                      - WARNING
+                      - INFO
+                      - CRITICAL
+                      categories:
+                      - DEV
+                      - CPU
+                      - DSK
+                    response:
+                      types:
+                      - script
+                      - email
+                      - slack
+                      script:
+                        name: example-script
+                        content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
+                      slacks:
+                      - name: example-slack-channel-0
+                        url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                        description: example slack channel 1
+                      - name: example-slack-channel-1
+                        url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                        description: example slack channel 2
+                      emails:
+                      - address: example.user@example.com
+                        note: example email recipient
+                    status:
+                      current: ok
+                      isProcessing: false
+                    enabled: false
+                  page:
+                    total: 1
+                    number: 1
+                    size: 2
+                    totalItemCount: 2
+                msg: fetch triggers successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list triggers: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: createTrigger
+  tags:
+  - Triggers
+  summary: Create trigger
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/CreateTriggerRequest.yaml
+        examples:
+          example:
+            summary: Create trigger request
+            value:
+              name: example-trigger
+              description: This is an example trigger
+              attribute:
+                alertTypes:
+                - system
+                severities:
+                - CRITICAL
+                categories:
+                - CPU
+                eventIds:
+                - CPU00006C
+              response:
+                script:
+                  name: example-script
+                  content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
+                emails:
+                - example-user@bigstack.co
+                slacks:
+                - https://hooks.slack.com/services/T00000000/B00000000/XXXXX
+  responses:
+    '202':
+      description: Trigger creation request received
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/CreateTriggerResponse.yaml
+          examples:
+            example:
+              summary: Trigger creation request received
+              value:
+                code: 202
+                msg: trigger creation request received
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list triggers: internal server error'
+              status:
+                type: string
+                example: internal server error

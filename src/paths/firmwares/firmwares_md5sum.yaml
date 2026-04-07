@@ -1,0 +1,63 @@
+post:
+  operationId: uploadFirmwareMd5Sum
+  tags:
+  - Firmwares
+  summary: Upload a firmware MD5 sum
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    $ref: ../../components/requestBodies/applicationOctetStream.yaml
+  responses:
+    '200':
+      description: Firmware MD5 uploaded successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              msg:
+                type: string
+                example: Firmware MD5 uploaded successfully
+              status:
+                type: string
+                example: ok
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: there is a firmware in uploading status, please try again
+                  later
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to upload firmware md5: internal server error'
+              status:
+                type: string
+                example: internal server error

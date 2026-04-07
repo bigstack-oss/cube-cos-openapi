@@ -1,0 +1,107 @@
+patch:
+  operationId: updateNodeOsd
+  tags:
+  - Nodes
+  summary: Update an OSD on the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/osdId.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateNodeOsdRequest.yaml
+        examples:
+          example:
+            summary: Reweight an OSD
+            value:
+              reweight: 0.75
+  responses:
+    '202':
+      description: the request to update node OSD is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UpdateNodeOsdResponse.yaml
+    '404':
+      description: Node or OSD not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node or osd not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update osd: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteNodeOsd
+  tags:
+  - Nodes
+  summary: Delete an OSD on the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/osdId.yaml
+  responses:
+    '202':
+      description: the request to delete node OSD is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteNodeOsdResponse.yaml
+    '404':
+      description: Node or OSD not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node or osd not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete osd: internal server error'
+              status:
+                type: string
+                example: internal server error

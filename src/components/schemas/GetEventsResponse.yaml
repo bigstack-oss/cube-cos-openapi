@@ -1,0 +1,76 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - events
+    - page
+    properties:
+      events:
+        type: array
+        items:
+          type: object
+          required:
+          - type
+          - severity
+          - id
+          - description
+          - host
+          - category
+          - service
+          - metadata
+          - time
+          properties:
+            type:
+              type: string
+              example: system
+            severity:
+              type: string
+              example: Info
+            id:
+              type: string
+              example: NET00003I
+            description:
+              type: string
+              example: instance 0125741a-7dbe-4309-bc1a-53d2880d2925 at 192.168.0.91
+                is reachable
+            host:
+              type: string
+              example: bigstack-host
+            category:
+              type: string
+              example: net
+            service:
+              type: string
+              example: neutron
+            metadata:
+              type: object
+              required:
+              - id
+              - ip
+              properties:
+                id:
+                  type: string
+                  example: 0125741a-7dbe-4309-bc1a-53d2880d2925
+                ip:
+                  type: string
+                  example: 192.168.0.91
+            time:
+              type: string
+              example: '2025-01-01T01:00:00+00:00'
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: fetch events successfully
+  status:
+    type: string
+    example: ok

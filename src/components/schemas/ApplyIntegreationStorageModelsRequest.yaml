@@ -1,0 +1,8 @@
+type: object
+required:
+- storageModel
+properties:
+  storageModel:
+    type: string
+    format: binary
+    description: The YAML content of a storage model

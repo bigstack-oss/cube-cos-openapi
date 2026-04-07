@@ -1,0 +1,36 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - category
+      - modules
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        modules:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            properties:
+              name:
+                type: string
+  msg:
+    type: string
+  status:
+    type: string

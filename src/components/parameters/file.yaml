@@ -1,0 +1,6 @@
+name: file
+in: query
+required: true
+schema:
+  type: string
+description: Name of the file to store

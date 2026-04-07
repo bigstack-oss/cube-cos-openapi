@@ -1,0 +1,7 @@
+in: path
+name: deviceName
+required: true
+schema:
+  type: string
+description: The device name to remove from the node
+example: sdb

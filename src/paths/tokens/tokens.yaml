@@ -1,0 +1,66 @@
+post:
+  operationId: getToken
+  tags:
+  - Tokens
+  summary: Retrieve the time-limited token for the data center
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    description: The user name and password to generate the token
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/GetTokensRequest.yaml
+  responses:
+    '200':
+      description: Retrieve the time-limited token for the data center successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetTokensResponse.yaml
+          examples:
+            example:
+              summary: Token
+              value:
+                code: 201
+                data:
+                  token: example-token
+                  refresh: example-refresh-token
+                  expires:
+                    access: 7200
+                    refresh: 1800
+                msg: create token successfully
+                status: created
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to create token: internal server error'
+              status:
+                type: string
+                example: internal server error

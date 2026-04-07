@@ -1,0 +1,178 @@
+get:
+  operationId: getSupportFiles
+  tags:
+  - Support Files
+  summary: Retrieve all support files
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - $ref: ../../components/parameters/roles.yaml
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  responses:
+    '200':
+      description: Retrieve support files successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetSupportFilesResponse.yaml
+          examples:
+            example:
+              summary: Support file set list
+              value:
+                code: 200
+                data:
+                  supportFileSet:
+                  - name: CUBE COS 3.0.0 Support File Set 2025-03-18T03:37:19+00:00
+                    description: example-description
+                    files:
+                    - name: CUBE_3.0.0_20250318-033723_example-node-0.support
+                      group: Cube Appliance 3.0.0 Support File Set 2025-03-18T03:37:19+00:00
+                      description: example-description
+                      source:
+                        role: control-converged
+                        host: example-node-0
+                      sizeMiB: 98.3954
+                      url: http://example-data-center/supportfiles/CUBE_3.0.0_20250318-215742_example-node-0.support?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Checksum-Mode=ENABLED&X-Amz-Credential=admin%2F20250318%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250318T140312Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=ae8c2a39d348709b51d6c0d4b731716f1dc33c172ba43c2919357106cbb15389
+                      status:
+                        isCreating: false
+                    - name: CUBE_3.0.0_20250318-033723_example-node-1.support
+                      group: Cube Appliance 3.0.0 Support File Set 2025-03-18T03:37:19+00:00
+                      description: example-description
+                      source:
+                        role: control-converged
+                        host: example-node-1
+                      sizeMiB: 98.3954
+                      url: http://example-data-center/supportfiles/CUBE_3.0.0_20250318-215742_example-node-1.support?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Checksum-Mode=ENABLED&X-Amz-Credential=admin%2F20250318%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20250318T140312Z&X-Amz-Expires=604800&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=ae8c2a39d348709b51d6c0d4b731716f1dc33c172ba43c2919357106cbb15389
+                      status:
+                        isCreating: false
+                    sizeMiB: 196.7908
+                    status:
+                      current: completed
+                      createdAt: '2025-03-18T03:37:19+00:00'
+                      isCreating: false
+                  page:
+                    total: 1
+                    number: 1
+                    size: 1
+                    totalItemCount: 1
+                msg: retrieved support files successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list support files: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: createSupportFiles
+  tags:
+  - Support Files
+  summary: Create one or more support files
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/CreateSupportFilesRequest.yaml
+        examples:
+          example:
+            summary: Support file creation request
+            value:
+              description: example-description
+              hosts:
+              - example-node-0
+  responses:
+    '202':
+      description: Support file creation request received
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/CreateSupportFilesResponse.yaml
+          examples:
+            example:
+              summary: Support file creation response
+              value:
+                code: 202
+                msg: support file creation request received
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: invalid host found
+              status:
+                type: string
+                example: bad request
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to request support file creation: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

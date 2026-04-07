@@ -1,0 +1,25 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - unit
+    - history
+    properties:
+      unit:
+        type: string
+      history:
+        type: array
+        items:
+          $ref: ./TimeValuePair.yaml
+  msg:
+    type: string
+  status:
+    type: string

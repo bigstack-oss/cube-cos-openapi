@@ -1,0 +1,84 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - volumes
+    - page
+    properties:
+      volumes:
+        type: array
+        items:
+          type: object
+          required:
+          - id
+          - name
+          - type
+          - diskTag
+          - attachedTo
+          - bootable
+          - shared
+          - createdAt
+          - status
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            type:
+              type: string
+            diskTag:
+              type: string
+              enum:
+              - os disk
+              - data disk
+            attachedTo:
+              type: string
+            bootable:
+              type: boolean
+            shared:
+              type: boolean
+            sizeMiB:
+              type: number
+            createdAt:
+              type: string
+            status:
+              type: object
+              required:
+              - current
+              - isProcessing
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - uploading
+                  - importing
+                  - available
+                  - creating
+                  - attaching
+                  - detaching
+                  - deleting
+                  - reserved
+                  - maintenance
+                  - backing-up
+                  - restoring-backup
+                isProcessing:
+                  type: boolean
+                processPercent:
+                  type: number
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: volumes retrieved successfully
+  status:
+    type: string
+    example: ok

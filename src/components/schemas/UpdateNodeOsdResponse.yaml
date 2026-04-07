@@ -1,0 +1,15 @@
+type: object
+required:
+- code
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 202
+  msg:
+    type: string
+    example: the request to update node OSD is accepted successfully
+  status:
+    type: string
+    example: ok

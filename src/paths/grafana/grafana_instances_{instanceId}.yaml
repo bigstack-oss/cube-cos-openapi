@@ -1,0 +1,64 @@
+get:
+  operationId: getGrafanaInstances
+  tags:
+  - Grafana
+  summary: Get Grafana instances dashboard
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: instanceId
+    required: true
+    schema:
+      type: string
+    description: The instance ID of the instance to operate
+    example: example-instance-id
+  responses:
+    '200':
+      description: Get Grafana instances dashboard
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetGrafanaDashboardLinkResponse.yaml
+          examples:
+            example:
+              summary: Grafana instances dashboard link
+              value:
+                code: 200
+                data:
+                  link: http://example-data-center/grafana/d/qzfq087Wk/instance?refresh=5m&orgId=1&var-TID=example-instance-id&var-TOP=50&var-TENANT=admin
+                  enabled: true
+                msg: fetch top instance link successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get Grafana instances dashboard: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,38 @@
+type: object
+required:
+- unit
+- rank
+properties:
+  unit:
+    type: string
+  rank:
+    type: array
+    items:
+      type: object
+      required:
+      - id
+      - name
+      - value
+      - history
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        device:
+          type: string
+        value:
+          type: number
+        history:
+          type: array
+          items:
+            type: object
+            required:
+            - time
+            - value
+            properties:
+              time:
+                type: string
+                format: date-time
+              value:
+                type: number

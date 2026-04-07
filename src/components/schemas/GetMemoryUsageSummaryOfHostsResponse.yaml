@@ -1,0 +1,34 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - totalMiB
+    - usedMiB
+    - usedPercent
+    - freeMiB
+    - freePercent
+    properties:
+      totalMiB:
+        type: integer
+      usedMiB:
+        type: integer
+      usedPercent:
+        type: number
+      freeMiB:
+        type: integer
+      freePercent:
+        type: number
+  msg:
+    type: string
+    example: fetch metrics successfully
+  status:
+    type: string
+    example: ok

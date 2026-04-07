@@ -1,0 +1,8 @@
+in: query
+name: start
+required: false
+schema:
+  type: string
+description: The start time of the event to query, the value should be in RFC3339
+  format (default is 24 hours ago).
+example: '2025-01-01T01:00:00+00:00'

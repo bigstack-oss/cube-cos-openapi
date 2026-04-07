@@ -1,0 +1,9 @@
+in: query
+name: licenseStatuses
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../schemas/NodeLicenseCurrentStatus.yaml
+description: The license status of the host
+example: valid

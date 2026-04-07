@@ -1,0 +1,43 @@
+type: object
+required:
+- name
+- group
+- description
+- source
+- url
+- sizeMiB
+- status
+properties:
+  name:
+    type: string
+  sizeMiB:
+    type: number
+  group:
+    type: string
+  description:
+    type: string
+  source:
+    type: object
+    required:
+    - role
+    - host
+    properties:
+      role:
+        type: string
+      host:
+        type: string
+  url:
+    type: string
+  status:
+    type: object
+    required:
+    - current
+    - createdAt
+    - isCreating
+    properties:
+      current:
+        type: string
+      createdAt:
+        type: string
+      isCreating:
+        type: boolean

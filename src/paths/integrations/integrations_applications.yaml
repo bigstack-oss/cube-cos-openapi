@@ -1,0 +1,59 @@
+get:
+  operationId: getIntegratedApplications
+  tags:
+  - Integrations
+  summary: Retrieve the list of integrated applications
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Retrieve the list of integrated applications successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetIntegratedApplicationsResponse.yaml
+          examples:
+            example1:
+              summary: Integrated applications
+              value:
+                code: 200
+                data:
+                - name: keycloak
+                  isHeaderShortcutEnabled: true
+                  description: Keycloak Dashboard
+                  isBuiltIn: true
+                  url: https://example-datat-center.host:10443/auth/admin
+                - name: openstack
+                  isHeaderShortcutEnabled: true
+                  description: OpenStack Dashboard
+                  isBuiltIn: true
+                  url: https://example-datat-center.host:9999/base/overview
+                - name: rancher
+                  isHeaderShortcutEnabled: true
+                  description: Rancher Dashboard
+                  isBuiltIn: true
+                  url: https://example-datat-center.host:10443
+                - name: ceph
+                  isHeaderShortcutEnabled: true
+                  description: Ceph Dashboard
+                  isBuiltIn: true
+                  url: https://example-datat-center.host:7443/ceph/#/dashboard
+                msg: fetch integrated applications successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch integrated applications: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

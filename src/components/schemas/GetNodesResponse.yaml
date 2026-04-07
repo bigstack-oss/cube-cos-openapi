@@ -1,0 +1,28 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - nodes
+    - page
+    properties:
+      nodes:
+        type: array
+        items:
+          $ref: ./Node.yaml
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: fetch nodes successfully
+  status:
+    type: string
+    example: ok

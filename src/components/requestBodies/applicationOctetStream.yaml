@@ -1,0 +1,7 @@
+description: for example, in the CURL, the firmware pkg should be set by the '-T /path/to/firmware'.
+required: true
+content:
+  application/octet-stream:
+    schema:
+      type: string
+      format: binary

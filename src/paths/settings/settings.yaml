@@ -1,0 +1,78 @@
+get:
+  operationId: getSettings
+  tags:
+  - Settings
+  summary: Retrieve setting
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Setting retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetSettingResponse.yaml
+          examples:
+            example:
+              summary: Setting list
+              value:
+                code: 200
+                data:
+                  titlePrefix:
+                    value: example title prefix
+                    status:
+                      current: ok
+                      isUpdating: false
+                  email:
+                    recipients:
+                    - address: example.user.1@example.com
+                      note: example note 1
+                      status:
+                        current: ok
+                        isUpdating: false
+                    - address: example.user.2@example.com
+                      note: example note 2
+                      status:
+                        current: updating
+                        isUpdating: true
+                    senders:
+                    - host: email-smtp.example.mailserver.com
+                      port: 587
+                      username: ABBBBBBMJM56DCCCCJR
+                      from: noreply@example.com
+                      accessVerified: true
+                      status:
+                        current: ok
+                        isUpdating: false
+                  slack:
+                    channels:
+                    - name: '#example-alert-channel-1'
+                      url: https://hooks.slack.com/services/example-token
+                      description: example alert channel 1
+                      status:
+                        current: ok
+                        isUpdating: false
+                    - name: '#example-alert-channel-2'
+                      url: https://hooks.slack.com/services/example-token
+                      description: example alert channel 2
+                      status:
+                        current: ok
+                        isUpdating: false
+                msg: all setting retrieved successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch setting: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,112 @@
+get:
+  operationId: getMetricByHostOrVm
+  tags:
+  - Metrics
+  summary: Retrieve the various metrics with different view from single host or single
+    vm
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/metricType.yaml
+  - $ref: ../../components/parameters/viewType.yaml
+  - $ref: ../../components/parameters/entityType.yaml
+  - in: path
+    name: entityId or Name
+    required: true
+    schema:
+      type: string
+    description: The id or name of the entity to query
+    example: example-node-0
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+      enum:
+      - 1h
+      - 24h
+      - 7d
+      - 14d
+    description: The past time of the health history to query, click 'try it out'
+      to see a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+      and 'd'(day) suffix for other time ranges.
+    example: 1d
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the various metrics with different view from single host
+        or single vm
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/HostMetricHistoryResponse.yaml
+          examples:
+            example1:
+              summary: Cpu usage history of host
+              value:
+                code: 200
+                data:
+                  unit: percentage
+                  history:
+                  - time: '2025-03-24T09:39:00+08:00'
+                    value: 10.9059
+                  - time: '2025-03-24T09:40:00+08:00'
+                    value: 10.5089
+                  - time: '2025-03-24T09:41:00+08:00'
+                    value: 15.3512
+                  - time: '2025-03-24T09:42:00+08:00'
+                    value: 12.3685
+                msg: fetch metrics successfully
+                status: ok
+            example2:
+              summary: Memory size history of host
+              value:
+                code: 200
+                data:
+                  unit: sizeMiB
+                  history:
+                  - time: '2025-04-15T05:42:00+08:00'
+                    value: 25918.1601
+                  - time: '2025-04-15T05:43:00+08:00'
+                    value: 26017.2656
+                  - time: '2025-04-15T05:44:00+08:00'
+                    value: 25927.0429
+                  - time: '2025-04-15T05:45:00+08:00'
+                    value: 25998.707
+                msg: fetch metrics successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: metricType should be cpuUsage, memoryUsage, diskUsage, diskBandwidth,
+                  diskIops, diskLatency, diskReadIops, diskWriteIops, networkTrafficIn,
+                  or networkTrafficOut
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch nodes: internal server error'
+              status:
+                type: string
+                example: internal server error

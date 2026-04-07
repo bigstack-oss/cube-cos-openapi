@@ -1,0 +1,12 @@
+type: object
+required:
+- current
+- isExpiring
+properties:
+  current:
+    type: string
+    enum:
+    - valid
+    - expired
+  isExpiring:
+    type: boolean

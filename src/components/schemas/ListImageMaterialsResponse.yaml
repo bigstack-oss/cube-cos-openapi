@@ -1,0 +1,89 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - reservedImages
+    - projects
+    - oses
+    - destinations
+    - domains
+    - visibilities
+    properties:
+      reservedImages:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - os
+          - destination
+          - domain
+          - project
+          - sourceFromAnotherHypervisor
+          - visibility
+          - reserved
+          properties:
+            name:
+              type: string
+            os:
+              type: string
+            destination:
+              type: string
+            domain:
+              type: string
+            project:
+              type: string
+            sourceFromAnotherHypervisor:
+              type: boolean
+            visibility:
+              type: string
+            reserved:
+              type: object
+              required:
+              - prefix
+              properties:
+                prefix:
+                  type: string
+      projects:
+        type: array
+        items:
+          type: string
+      oses:
+        type: array
+        items:
+          type: string
+      destination:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - isDefault
+          properties:
+            name:
+              type: string
+            isDefault:
+              type: boolean
+      domains:
+        type: array
+        items:
+          type: string
+      visibilities:
+        type: array
+        items:
+          type: string
+  msg:
+    type: string
+    example: materials retrieved successfully
+  status:
+    type: string
+    example: ok

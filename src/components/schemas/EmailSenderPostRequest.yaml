@@ -1,0 +1,17 @@
+type: object
+required:
+- host
+- port
+- from
+- status
+properties:
+  host:
+    type: string
+  port:
+    type: integer
+  username:
+    type: string
+  password:
+    type: string
+  from:
+    type: string

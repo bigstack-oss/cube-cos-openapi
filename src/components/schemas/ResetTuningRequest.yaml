@@ -1,0 +1,8 @@
+type: object
+required:
+- hosts
+properties:
+  hosts:
+    type: array
+    items:
+      type: string

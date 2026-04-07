@@ -1,0 +1,83 @@
+get:
+  operationId: listImageMaterials
+  tags:
+  - Images
+  summary: List image materials
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: List image materials successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListImageMaterialsResponse.yaml
+          examples:
+            example:
+              summary: Image material list
+              value:
+                code: 200
+                data:
+                  reservedImages:
+                  - name: amphora-x64-haproxy
+                    os: Ubuntu
+                    destination: CubeStorage
+                    domain: default
+                    sourceFromAnotherHypervisor: false
+                    visibility: private
+                    reserved:
+                      prefix: amphora-
+                  - name: manila-service-image
+                    os: Ubuntu
+                    destination: CubeStorage
+                    domain: default
+                    sourceFromAnotherHypervisor: false
+                    visibility: private
+                    reserved:
+                      prefix: manila-
+                  projects:
+                  - name: admin
+                    domain: default
+                    enabled: true
+                    description: Bootstrap project for initializing the cloud.
+                  - name: example-project
+                    domain: default
+                    enabled: true
+                    description: Example project
+                  oses:
+                  - CentOS
+                  - Fedora
+                  - Ubuntu
+                  - Debian
+                  - Windows
+                  - Rocky
+                  - FreeBSD
+                  - CoreOS
+                  - Arch
+                  - Others
+                  destinations:
+                  - name: CubeStorage
+                    isDefault: true
+                  domains:
+                  - default
+                  visibility:
+                  - public
+                  - private
+                msg: fetch image materials successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list image materials: internal server error'
+              status:
+                type: string
+                example: internal server error

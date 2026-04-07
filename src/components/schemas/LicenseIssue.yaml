@@ -1,0 +1,21 @@
+type: object
+required:
+- by
+- to
+- hardware
+- date
+properties:
+  by:
+    type: string
+  to:
+    type: string
+  hardware:
+    type: string
+    description: "this field will be the serial number(s) of the host(s) that the\
+      \ license is issued to. '*' means all hosts, genearlly, it's for trial license\
+      \ only. for the paid license, it will be the comma separated serial numbers\
+      \ of the hosts.\nexamples:\n  - \"*\"\n  - example-serial-number-1, example-serial-number-2,\
+      \ ...\n"
+  date:
+    type: string
+    format: date-time

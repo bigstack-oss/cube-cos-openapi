@@ -1,0 +1,8 @@
+type: string
+enum:
+- control-converged
+- control
+- compute
+- storage
+- edge-core
+- moderator

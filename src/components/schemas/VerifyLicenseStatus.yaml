@@ -1,0 +1,15 @@
+type: object
+required:
+- current
+- isExpiring
+properties:
+  current:
+    type: string
+    enum:
+    - valid
+    - unmatched hardware
+    - invalid signature
+    - system compromised
+    - expired
+  isExpiring:
+    type: boolean

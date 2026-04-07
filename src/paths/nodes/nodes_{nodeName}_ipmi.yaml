@@ -1,0 +1,61 @@
+post:
+  operationId: setNodeIpmi
+  tags:
+  - Nodes
+  summary: Set the node IPMI setting
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/NodeIpmiSettingRequest.yaml
+        examples:
+          example:
+            summary: Set node IPMI setting
+            value:
+              ip: 10.10.10.10
+              port: 623
+              username: admin
+              password: example-password
+  responses:
+    '200':
+      description: Node IPMI setting set successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/SetNodeIpmiSettingResponse.yaml
+    '404':
+      description: Node not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to set node IPMI setting: internal server error'
+              status:
+                type: string
+                example: internal server error

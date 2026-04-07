@@ -1,0 +1,34 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - token
+    - refresh
+    - expires
+    properties:
+      token:
+        type: string
+      refresh:
+        type: string
+      expires:
+        type: object
+        required:
+        - access
+        - refresh
+        properties:
+          access:
+            type: integer
+          refresh:
+            type: integer
+  msg:
+    type: string
+  status:
+    type: string

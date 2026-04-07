@@ -1,0 +1,6 @@
+type: string
+enum:
+- N/A
+- basic
+- advanced
+- premium

@@ -1,0 +1,142 @@
+get:
+  operationId: getHealths
+  tags:
+  - Health
+  summary: Retrieve the overall health status of all modules
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+      enum:
+      - 1h
+      - 24h
+      - 7d
+      - 14d
+      - 30d
+    description: The past time of the health to query, click 'try it out' to see a
+      few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour), and
+      'd'(day) suffix for other time ranges.
+    example: 1h
+  responses:
+    '200':
+      description: Retrieve the list of health successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetHealthsResponse.yaml
+          examples:
+            example1:
+              summary: Health check ok
+              value:
+                code: 200
+                data:
+                  overall:
+                    status:
+                      current: ok
+                      isFixing: false
+                  services:
+                  - name: clusterLink
+                    category: core
+                    status:
+                      current: ok
+                    modules:
+                    - name: link
+                      status:
+                        current: ok
+                msg: fetch health successfully
+                status: ok
+            example2:
+              summary: Health check ng
+              value:
+                code: 200
+                data:
+                  overall:
+                    status:
+                      current: ng
+                      isFixing: false
+                      description: ceph has 2 ceph_osd down
+                  services:
+                  - name: storage
+                    category: storage
+                    status:
+                      current: ng
+                    modules:
+                    - name: ceph_osd
+                      status:
+                        current: ng
+                        description: ceph has 2 ceph_osd down
+                msg: fetch health successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch health checks: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: repairAllModulesHealth
+  tags:
+  - Health
+  summary: Repair the health for all modules
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '202':
+      description: The Request of the all modules repair is accepted
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PatchRepairResponse.yaml
+          examples:
+            example1:
+              summary: Accept the repair request
+              value:
+                code: 202
+                msg: the request of all modules repair is accepted and repairing
+                status: accepted
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: the repair process is already running
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: failed to request repair
+              status:
+                type: string
+                example: internal server error

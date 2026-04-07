@@ -1,0 +1,19 @@
+type: object
+required:
+- ip
+- port
+- username
+- password
+properties:
+  ip:
+    type: string
+    description: IP address of the node's IPMI interface
+  port:
+    type: integer
+    description: Port number of the node's IPMI interface
+  username:
+    type: string
+    description: Username for the node's IPMI interface
+  password:
+    type: string
+    description: Password for the node's IPMI interface

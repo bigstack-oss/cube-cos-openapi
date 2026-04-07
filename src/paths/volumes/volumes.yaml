@@ -1,0 +1,74 @@
+get:
+  operationId: listVolumes
+  tags:
+  - Volumes
+  summary: List volumes
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/projectNotRequired.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  responses:
+    '200':
+      description: List volumes successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListVolumesResponse.yaml
+          examples:
+            example:
+              summary: Volume list
+              value:
+                code: 200
+                data:
+                  volumes:
+                  - id: 763655de-1cfc-45d4-b67c-5579ea43a6e1
+                    name: example volume 0
+                    type: CubeStorage
+                    diskTag: os disk
+                    attachedTo: /dev/sda on example-vm-0
+                    bootable: true
+                    shared: false
+                    sizeMiB: 40960
+                    createdAt: '2025-07-27T13:08:53+08:00'
+                    status:
+                      current: active
+                      isProcessing: false
+                  - id: 888955de-4ghu-5325-1734-5579ea43a6e2
+                    name: example volume 1
+                    type: CubeStorage
+                    diskTag: data disk
+                    attachedTo: ''
+                    bootable: false
+                    shared: false
+                    sizeMiB: 20480
+                    createdAt: '2025-07-27T13:08:53+08:00'
+                    status:
+                      current: importing
+                      isProcessing: true
+                      processPercent: 50.98
+                  page:
+                    total: 1
+                    number: 1
+                    size: 2
+                    totalItemCount: 2
+                msg: fetch volume list successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list volumes: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,136 @@
+post:
+  operationId: tryEmailRecipient
+  tags:
+  - Settings
+  summary: Try an email recipient
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: recipientEmail
+    required: true
+    schema:
+      type: string
+    description: recipient email to operate
+  responses:
+    '200':
+      description: Email recipient tried successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TryEmailRecipientResponse.yaml
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: recipient not found
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to try email recipient: internal server error'
+              status:
+                type: string
+                example: internal server error
+put:
+  operationId: updateEmailRecipient
+  tags:
+  - Settings
+  summary: Update an email recipient
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: recipientEmail
+    required: true
+    schema:
+      type: string
+    description: recipient email to update
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EmailRecipientPutRequest.yaml
+        examples:
+          example:
+            summary: Email Recipient
+            value:
+              address: example.user.1@example.com
+              note: Updated recipients
+  responses:
+    '200':
+      description: Email recipient updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PutEmailRecipientResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update email recipient: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteEmailRecipient
+  tags:
+  - Settings
+  summary: Delete an email recipient
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: recipientEmail
+    required: true
+    schema:
+      type: string
+    description: recipient email to delete
+  responses:
+    '200':
+      description: Email recipient deleted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteEmailRecipientResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete email recipient: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,265 @@
+get:
+  operationId: listIntegrationStorageModels
+  tags:
+  - Integrations
+  summary: Retrieve the list of integration storage models
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Retrieve the list of integration storage models successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListIntegrationStorageModelsResponse.yaml
+          examples:
+            example1:
+              summary: Integrated storage models
+              value:
+                code: 200
+                data:
+                - driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                  vendor: Dell EMC
+                  type: SC Series FC
+                  multipath:
+                  - section: devices
+                    attributes: []
+                    subSections:
+                    - section: device
+                      attributes:
+                      - key: vendor
+                        value: COMPELNT
+                      - key: product
+                        value: Compellent Vol
+                      - key: user_friendly_names
+                        value: 'no'
+                      - key: flush_on_last_del
+                        value: 'yes'
+                  storage:
+                    service:
+                      driverSection:
+                      - key: san_ip
+                        value: ''
+                      - key: san_login
+                        value: ''
+                      - key: san_password
+                        value: ''
+                      - key: san_thin_provision
+                        value: 'true'
+                      - key: dell_sc_ssn
+                        value: ''
+                      - key: dell_sc_api_port
+                        value: ''
+                      - key: dell_sc_verify_cert
+                        value: 'false'
+                      - key: dell_sc_server_folder
+                        value: ''
+                      - key: dell_sc_volume_folder
+                        value: ''
+                      - key: use_multipath_for_image_xfer
+                        value: 'true'
+                      - key: enforce_multipath_for_image_xfer
+                        value: 'true'
+                      - key: image_upload_use_cinder_backend
+                        value: 'true'
+                      extraSettings: []
+                      extraConfigFiles: []
+                    volumeType:
+                      settings:
+                      - key: storagetype:storageprofile
+                        value: ''
+                      - key: replication_enabled
+                        value: ''
+                      - key: replication_type
+                        value: ''
+                      - key: replication:activereplay
+                        value: ''
+                      - key: replication:livevolume
+                        value: ''
+                      - key: storagetype:volumeqos
+                        value: ''
+                      - key: storagetype:groupqos
+                        value: ''
+                      - key: storagetype:datareductionprofile
+                        value: ''
+                      - key: multiattach
+                        value: ''
+                    image:
+                      useMultipath: true
+                      forceMultipath: true
+                msg: fetch storage models successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch storage models: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: createIntegrationStorageModel
+  tags:
+  - Integrations
+  summary: Create an integration storage model
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../../components/schemas/ApplyIntegreationStorageModelsRequest.yaml
+  responses:
+    '202':
+      description: Receive the request to create an integration storage model successfully,
+        processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: receive the request to create an integration storage model
+                  successfully, processing
+              status:
+                type: string
+                example: accepted
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: vendor and product are required fields
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to create integration storage model: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error
+put:
+  operationId: updateIntegrationStorageModels
+  tags:
+  - Integrations
+  summary: Update integration storage models
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../../components/schemas/UpdateIntegreationStorageModelsRequest.yaml
+  responses:
+    '202':
+      description: Receive the request to update the integration storage models successfully,
+        processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: Receive the request to update the integration storage models
+                  successfully, processing
+              status:
+                type: string
+                example: accepted
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: some models's vendor or product are empty
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update the integration storage models: internal
+                  server error'
+              status:
+                type: string
+                example: internal server error

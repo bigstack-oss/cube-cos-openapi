@@ -1,0 +1,20 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      $ref: ./DataCenter.yaml
+  msg:
+    type: string
+    example: fetch data center list successfully
+  status:
+    type: string
+    example: ok

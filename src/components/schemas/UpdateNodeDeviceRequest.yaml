@@ -1,0 +1,6 @@
+type: object
+required:
+- class
+properties:
+  class:
+    $ref: ./DeviceType.yaml

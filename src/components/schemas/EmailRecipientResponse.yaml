@@ -1,0 +1,12 @@
+type: object
+required:
+- address
+- note
+- status
+properties:
+  address:
+    type: string
+  note:
+    type: string
+  status:
+    $ref: ./SettingStatus.yaml

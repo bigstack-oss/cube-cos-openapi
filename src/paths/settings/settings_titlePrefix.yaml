@@ -1,0 +1,46 @@
+put:
+  operationId: updateTitlePrefix
+  tags:
+  - Settings
+  summary: Update title prefix
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+          - value
+          properties:
+            value:
+              type: string
+        examples:
+          example:
+            summary: Title prefix
+            value:
+              value: example title prefix
+  responses:
+    '200':
+      description: Title prefix updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UpdateTitlePrefixResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update title prefix: internal server error'
+              status:
+                type: string
+                example: internal server error

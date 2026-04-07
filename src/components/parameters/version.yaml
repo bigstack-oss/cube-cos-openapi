@@ -1,0 +1,7 @@
+in: path
+name: version
+required: true
+schema:
+  type: string
+description: The version of the file to delete
+example: example-version-0

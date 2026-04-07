@@ -1,0 +1,364 @@
+get:
+  operationId: getHealthHistory
+  tags:
+  - Health
+  summary: Retrieve the health history of module
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: serviceType
+    required: true
+    schema:
+      type: string
+      enum:
+      - clusterLink
+      - clusterSys
+      - clusterSettings
+      - haCluster
+      - msgQueue
+      - iaasDb
+      - virtualIp
+      - storage
+      - apiService
+      - singleSignOn
+      - network
+      - compute
+      - bareMetal
+      - image
+      - blockStor
+      - fileStor
+      - objectStor
+      - orchestration
+      - lbaas
+      - dnsaas
+      - k8saas
+      - instanceHa
+      - businessLogic
+      - dataPipe
+      - metrics
+      - logAnalytics
+      - notifications
+    description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
+      to get the service list and their modules.
+  - in: path
+    name: moduleType
+    required: true
+    schema:
+      type: string
+      enum:
+      - link
+      - clock
+      - dns
+      - bootstrap
+      - license
+      - etcd
+      - nodelist
+      - hacluster
+      - rabbitmq
+      - mysql
+      - mongodb
+      - vip
+      - haproxy_ha
+      - ceph
+      - ceph_mon
+      - ceph_osd
+      - ceph_rgw
+      - ceph_mds
+      - ceph_mgr
+      - rbd_target
+      - haproxy
+      - httpd
+      - skyline
+      - api
+      - memcache
+      - k3s
+      - keycloak
+      - neutron
+      - nova
+      - cyborg
+      - ironic
+      - glance
+      - cinder
+      - manila
+      - swift
+      - heat
+      - octavia
+      - designate
+      - rancher
+      - masakari
+      - zookeeper
+      - kafka
+      - monasca
+      - telegraf
+      - grafana
+      - filebeat
+      - auditbeat
+      - logstash
+      - opensearch
+      - opensearch-dashboards
+      - influxdb
+      - kapacitor
+    description: The name of the module to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services/{serviceType}
+      to get the module list.
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+      enum:
+      - 1h
+      - 24h
+      - 7d
+      - 14d
+      - 30d
+    description: The past time of the health history to query, click 'try it out'
+      to see a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+      and 'd'(day) suffix for other time ranges.
+    example: 1d
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - in: query
+    name: aggregate
+    required: false
+    schema:
+      type: boolean
+      default: false
+    description: If true, the health history will be aggregated by time and status(fixing
+      related status > ng related status > ok related status), otherwise it will return
+      the raw history data.
+    example: 'false'
+  responses:
+    '200':
+      description: Retrieve the health history of module successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetModuleHealthHistoryResponse.yaml
+          examples:
+            example1:
+              summary: Health history of module
+              value:
+                code: 200
+                data:
+                  category: cloud computing
+                  name: compute
+                  module: nova
+                  isRepairable: true
+                  history:
+                  - time: '2025-02-01T03:00:00.882026422+00:00'
+                    hostname: example-node-0
+                    status: ok
+                  - time: '2025-02-01T02:55:00.882026425+00:00'
+                    hostname: example-node-0
+                    status: ok
+                  - time: '2025-02-01T02:50:00.882026422+00:00'
+                    hostname: example-node-0
+                    status: ng
+                    error:
+                      type: service down
+                      reason: 1 node down
+                      nodes:
+                      - example-node-0
+                      description: nova has 1 node down due to the memory exhausted,
+                        and the abnormal memory competition from PID(24887) is detected
+                      details: '{ ... best effort error summary / direction ...}'
+                      log: http://datacenter1:8888/log/nova/example-data-center-20250205113459-b3gc.log
+                  - time: '2025-02-01T02:45:00.882026422+00:00'
+                    hostname: example-node-0
+                    status: ok
+                  status:
+                    current: ok
+                    isFixing: false
+                msg: retrieve health history of module successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid serviceType: example-service'
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: failed to retrieve health history
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: repairModuleHealth
+  tags:
+  - Health
+  summary: Repair the unhealthy module
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: serviceType
+    required: true
+    schema:
+      type: string
+      enum:
+      - clusterLink
+      - clusterSys
+      - clusterSettings
+      - haCluster
+      - msgQueue
+      - iaasDb
+      - virtualIp
+      - storage
+      - apiService
+      - singleSignOn
+      - network
+      - compute
+      - bareMetal
+      - image
+      - blockStor
+      - fileStor
+      - objectStor
+      - orchestration
+      - lbaas
+      - dnsaas
+      - k8saas
+      - instanceHa
+      - businessLogic
+      - dataPipe
+      - metrics
+      - logAnalytics
+      - notifications
+    description: The name of the service which cover the module you tend to repair.
+      use GET /api/v1/datacenters/{dataCenter}/services to get the service list and
+      their modules.
+  - in: path
+    name: moduleType
+    required: true
+    schema:
+      type: string
+      enum:
+      - link
+      - clock
+      - dns
+      - bootstrap
+      - license
+      - etcd
+      - nodelist
+      - hacluster
+      - rabbitmq
+      - mysql
+      - mongodb
+      - vip
+      - haproxy_ha
+      - ceph
+      - ceph_mon
+      - ceph_osd
+      - ceph_rgw
+      - ceph_mds
+      - ceph_mgr
+      - rbd_target
+      - haproxy
+      - httpd
+      - skyline
+      - api
+      - memcache
+      - k3s
+      - keycloak
+      - neutron
+      - nova
+      - cyborg
+      - ironic
+      - glance
+      - cinder
+      - manila
+      - swift
+      - heat
+      - octavia
+      - designate
+      - rancher
+      - masakari
+      - zookeeper
+      - kafka
+      - monasca
+      - telegraf
+      - grafana
+      - filebeat
+      - auditbeat
+      - logstash
+      - opensearch
+      - opensearch-dashboards
+      - influxdb
+      - kapacitor
+    description: The name of the module to repair. use GET /api/v1/datacenters/{dataCenter}/services/{serviceType}
+      to get the module list.
+  responses:
+    '202':
+      description: The Request of the unhealthy module repair is accepted
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PatchModuleRepairResponse.yaml
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid serviceType: example-service'
+              status:
+                type: string
+                example: bad request
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: the repair process is already running
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch health checks: internal server error'
+              status:
+                type: string
+                example: internal server error

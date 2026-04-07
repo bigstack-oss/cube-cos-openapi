@@ -1,0 +1,147 @@
+get:
+  operationId: getLicenses
+  tags:
+  - Licenses
+  summary: Retrieve the list of licenses
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  - $ref: ../../components/parameters/products.yaml
+  - $ref: ../../components/parameters/listLicenseStatuses.yaml
+  - $ref: ../../components/parameters/types.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the list of licenses successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetLicensesResponse.yaml
+          examples:
+            example1:
+              summary: License list
+              value:
+                code: 200
+                data:
+                  licenses:
+                  - name: example-license
+                    type: trial
+                    hosts:
+                    - example-node-0
+                    serial: 1H2ZLG2
+                    product:
+                      name: CubeCOS
+                      feature: kubernetes
+                    issue:
+                      by: Bigstack co., ltd.
+                      to: bigstack
+                      hardware: '*'
+                      date: '2025-03-16T17:31:21+08:00'
+                    quantity: some of string about cpu capacity
+                    supportPlan: FMA
+                    expiry:
+                      date: '2025-05-15T17:31:21+08:00'
+                      days: 56
+                    status:
+                      current: valid
+                      isExpiring: false
+                  page:
+                    total: 1
+                    number: 1
+                    size: 1
+                    totalItemCount: 1
+                msg: fetch licenses successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch licenses: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: importClusterLicense
+  tags:
+  - Licenses
+  summary: Import licenses for the cluster
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../../components/schemas/PostLicenseRequest.yaml
+  responses:
+    '200':
+      description: Import licenses successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PostLicenseResponse.yaml
+          examples:
+            example1:
+              summary: License import result
+              value:
+                code: 200
+                msg: import license successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update licenses: internal server error'
+              status:
+                type: string
+                example: internal server error

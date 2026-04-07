@@ -1,0 +1,26 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - supportFileSet
+    - page
+    properties:
+      supportFileSet:
+        type: array
+        items:
+          $ref: ./SupportFileSet.yaml
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+  status:
+    type: string

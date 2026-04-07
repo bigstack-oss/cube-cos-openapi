@@ -1,0 +1,54 @@
+delete:
+  operationId: disconnectNodeIpmi
+  tags:
+  - Nodes
+  summary: Disconnect the node IPMI control
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  responses:
+    '200':
+      description: Disconnect the node IPMI successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DisconnectNodeIpmiResponse.yaml
+          examples:
+            example:
+              summary: Disconnect node IPMI
+              value:
+                code: 200
+                msg: node IPMI is disconnected successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'failed to disconnect node IPMI: bad request'
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to disconnect node IPMI: internal server error'
+              status:
+                type: string
+                example: internal server error

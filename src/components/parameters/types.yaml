@@ -1,0 +1,14 @@
+in: query
+name: types
+required: false
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+    - trial
+    - perpetual
+    - community
+    - enterprise
+description: The type of the license to query, click 'try it out' to see a few options.
+example: trial

@@ -1,0 +1,198 @@
+get:
+  operationId: listFirmwares
+  tags:
+  - Firmwares
+  summary: List firmwares
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  responses:
+    '200':
+      description: List firmwares successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListFirmwaresResponse.yaml
+          examples:
+            example:
+              summary: Firmware list
+              value:
+                code: 200
+                data:
+                  firmwares:
+                  - version: CUBE Appliance 3.1.0
+                    releaseNotes: The CubeCOS 3.1.0(f45c719) firmware release since
+                      2025-08-11T09:09:00+08:00
+                    updatedAt: '2025-08-11T09:09:00+08:00'
+                    status:
+                      current: available
+                      isUpdatable: true
+                      isProcessing: false
+                      isRemovable: true
+                  page:
+                    total: 1
+                    number: 1
+                    size: 2
+                    totalItemCount: 2
+                msg: fetch firmware list successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list firmware: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: uploadFirmware
+  tags:
+  - Firmwares
+  summary: Upload a firmware
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/file.yaml
+  requestBody:
+    $ref: ../../components/requestBodies/applicationOctetStream.yaml
+  responses:
+    '200':
+      description: Firmware uploaded successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              msg:
+                type: string
+                example: Firmware uploaded successfully
+              status:
+                type: string
+                example: ok
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: there is a firmware in uploading status, please try again
+                  later
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to upload firmware: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: upgradeFirmware
+  tags:
+  - Firmwares
+  summary: Upgrade firmware on all nodes
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    $ref: ../../components/requestBodies/upgradeFirmwareRequest.yaml
+  responses:
+    '202':
+      description: Firmware upgrade initiated successfully, processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: firmware upgrade initiated successfully, processing
+              status:
+                type: string
+                example: accepted
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: version is required
+              status:
+                type: string
+                example: bad request
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: there is a firmware upgrade in processing, please try again
+                  later
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to upgrade firmware: internal server error'
+              status:
+                type: string
+                example: internal server error

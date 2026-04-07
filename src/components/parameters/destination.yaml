@@ -1,0 +1,7 @@
+name: destination
+in: query
+required: true
+schema:
+  type: string
+description: Target storage destination. Refer the GET /images/materials endpoint
+  for available options

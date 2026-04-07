@@ -1,0 +1,21 @@
+type: object
+required:
+- host
+- port
+- username
+- from
+- accessVerified
+- status
+properties:
+  host:
+    type: string
+  port:
+    type: integer
+  username:
+    type: string
+  from:
+    type: string
+  accessVerified:
+    type: boolean
+  status:
+    $ref: ./SettingStatus.yaml

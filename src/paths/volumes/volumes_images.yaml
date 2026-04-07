@@ -1,0 +1,61 @@
+post:
+  operationId: convertImageToVolume
+  tags:
+  - Volumes
+  summary: Import a volume from an image
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/file.yaml
+  - $ref: ../../components/parameters/name.yaml
+  - $ref: ../../components/parameters/os.yaml
+  - $ref: ../../components/parameters/destination.yaml
+  - $ref: ../../components/parameters/domain.yaml
+  - $ref: ../../components/parameters/project.yaml
+  - $ref: ../../components/parameters/sourceFromAnotherHypervisor.yaml
+  - $ref: ../../components/parameters/visibility.yaml
+  requestBody:
+    description: for example, in the CURL, the image binary should be set by the '--data-binary'
+      option like '--data-binary @/path/to/small-image' or '-T /path/to/large-image'.
+    required: true
+    content:
+      application/octet-stream:
+        schema:
+          type: string
+          format: binary
+  responses:
+    '202':
+      description: Image volume convertion accepted and under processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: image volume convertion accepted and under processing
+              status:
+                type: string
+                example: accepted
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to convert image to volume: internal server error'
+              status:
+                type: string
+                example: internal server error

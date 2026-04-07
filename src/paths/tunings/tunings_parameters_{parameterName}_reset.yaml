@@ -1,0 +1,89 @@
+post:
+  operationId: resetTuning
+  tags:
+  - Tunings
+  summary: Reset a specific tuning parameter
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: parameterName
+    required: true
+    schema:
+      type: string
+    description: The name of the parameter to reset. use GET /api/v1/datacenters/{dataCenter}/tunings/specs
+      to get the list of parameters
+    example: barbican.debug.enabled
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ResetTuningRequest.yaml
+        examples:
+          example:
+            summary: Tuning reset request
+            value:
+              hosts:
+              - example-node-0
+  responses:
+    '202':
+      description: Reset the tuning successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ResetTuningResponse.yaml
+          examples:
+            example:
+              summary: Tuning reset request received
+              value:
+                code: 202
+                msg: tuning reset request received
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: invalid parameter name
+              status:
+                type: string
+                example: bad request
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to request tuning update: internal server error'
+              status:
+                type: string
+                example: internal server error

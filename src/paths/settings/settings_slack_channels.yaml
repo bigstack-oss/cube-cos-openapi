@@ -1,0 +1,94 @@
+post:
+  operationId: createSlackChannel
+  tags:
+  - Settings
+  summary: Create a slack channel
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/SlackChannelPostRequest.yaml
+        examples:
+          example:
+            summary: Slack Channel
+            value:
+              name: '#example-alert-channel-1'
+              url: https://hooks.slack.com/services/example-token
+              description: example alert channel 1
+  responses:
+    '201':
+      description: Slack channel created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PostSlackChannelResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to create slack channel: internal server error'
+              status:
+                type: string
+                example: internal server error
+get:
+  operationId: getSlackChannels
+  tags:
+  - Settings
+  summary: Retrieve slack channels
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Slack channels retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetSlackChannelsResponse.yaml
+          examples:
+            example:
+              summary: Slack channel List
+              value:
+                code: 200
+                data:
+                  slackChannels:
+                  - name: '#example-alert-channel-1'
+                    url: https://hooks.slack.com/services/example-token
+                    description: example alert channel 1
+                    status:
+                      current: ok
+                      isUpdating: false
+                  - name: '#example-alert-channel-2'
+                    url: https://hooks.slack.com/services/example-token
+                    description: example alert channel 2
+                    status:
+                      current: ok
+                      isUpdating: false
+                msg: slack channels retrieved successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update slack channel: internal server error'
+              status:
+                type: string
+                example: internal server error

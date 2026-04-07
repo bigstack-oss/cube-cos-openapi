@@ -1,0 +1,7 @@
+in: query
+name: pageNum
+required: false
+schema:
+  type: integer
+description: The page number to retrieve
+example: 1

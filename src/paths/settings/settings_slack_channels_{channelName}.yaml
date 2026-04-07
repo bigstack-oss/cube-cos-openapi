@@ -1,0 +1,121 @@
+post:
+  operationId: trySlackChannel
+  tags:
+  - Settings
+  summary: Try a slack channel
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: channelName
+    required: true
+    schema:
+      type: string
+    description: channel name to update
+  responses:
+    '200':
+      description: Slack channel tried successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TrySlackChannelResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to try slack channel: internal server error'
+              status:
+                type: string
+                example: internal server error
+put:
+  operationId: updateSlackChannel
+  tags:
+  - Settings
+  summary: Update a slack channel
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: channelName
+    required: true
+    schema:
+      type: string
+    description: channel name to update
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/SlackChannelPutRequest.yaml
+        examples:
+          example:
+            summary: Slack channel
+            value:
+              name: '#example-alert-channel-1'
+              url: https://hooks.slack.com/services/example-token
+              description: example alert channel 1
+  responses:
+    '200':
+      description: Slack channel updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PutSlackChannelResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update slack channel: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteSlackChannel
+  tags:
+  - Settings
+  summary: Delete a slack channel
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: channelName
+    required: true
+    schema:
+      type: string
+    description: channel name to delete
+  responses:
+    '200':
+      description: Slack channel deleted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteSlackChannelResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete slack channel: internal server error'
+              status:
+                type: string
+                example: internal server error

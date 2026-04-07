@@ -1,0 +1,268 @@
+get:
+  operationId: listFixpacks
+  tags:
+  - Fixpacks
+  summary: List fixpacks
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  responses:
+    '200':
+      description: List fixpacks successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListFixpacksResponse.yaml
+          examples:
+            example:
+              summary: Fixpack list
+              value:
+                code: 200
+                data:
+                  fixpacks:
+                  - version: FIX_001
+                    name: Need_Reboot
+                    note: Test need reboot -- DO NOT DISTRIBUTE
+                    details: 'FIXPACK_ID="FIX_001"
+
+                      FIXPACK_NAME="Need_Reboot"
+
+                      FIXPACK_DESCRIPTION="Test need reboot -- DO NOT DISTRIBUTE"
+
+                      '
+                    updatedAt: '2025-08-19T19:37:20+08:00'
+                    rebootRequired: false
+                    status:
+                      current: installed
+                      isInstallable: false
+                      isRollbackable: true
+                      isProcessing: false
+                      isRemovable: false
+                  - version: FIX_002
+                    name: Success
+                    note: A sample fixpack that touches a single file and backups
+                      hex_config
+                    details: 'FIXPACK_ID="FIX_002"
+
+                      FIXPACK_NAME="Success"
+
+                      FIXPACK_DESCRIPTION="A sample fixpack that touches a single
+                      file and backups hex_config"
+
+                      '
+                    updatedAt: '2025-08-14T22:58:44+08:00'
+                    rebootRequired: false
+                    status:
+                      current: installed
+                      isInstallable: false
+                      isRollbackable: true
+                      isProcessing: false
+                      isRemovable: false
+                  page:
+                    total: 1
+                    number: 1
+                    size: 2
+                    totalItemCount: 2
+                msg: fetch fixpack list successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list fixpack: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: uploadFixpack
+  tags:
+  - Fixpacks
+  summary: Upload a fixpack
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/file.yaml
+  requestBody:
+    $ref: ../../components/requestBodies/applicationOctetStream.yaml
+  responses:
+    '200':
+      description: Fixpack uploaded successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              msg:
+                type: string
+                example: Fixpack uploaded successfully
+              status:
+                type: string
+                example: ok
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: there is a fixpack in uploading status, please try again
+                  later
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to upload fixpack: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: installFixpack
+  tags:
+  - Fixpacks
+  summary: Install a fixpack to nodes
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    description: Fixpack installation request body
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/InstallFixpackRequest.yaml
+        examples:
+          example1:
+            summary: Install fixpack request body
+            value:
+              version: FIX_001
+  responses:
+    '202':
+      description: Fixpack installation started
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: Fixpack installation started
+              status:
+                type: string
+                example: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid request body: missing field ''version'''
+              status:
+                type: string
+                example: bad request
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: '''FIX_001'' not found'
+              status:
+                type: string
+                example: not found
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: has on going fixpack operation, please wait until it finishes
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to start fixpack installation: internal server error'
+              status:
+                type: string
+                example: internal server error

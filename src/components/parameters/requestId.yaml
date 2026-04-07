@@ -1,0 +1,7 @@
+in: path
+name: requestId
+required: true
+schema:
+  type: string
+description: The request id of the openstack instance operation
+example: req-aa95057d-aa8e-4c2c-af56-46ad614e6c33

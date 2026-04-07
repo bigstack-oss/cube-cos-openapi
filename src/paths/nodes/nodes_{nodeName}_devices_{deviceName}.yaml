@@ -1,0 +1,111 @@
+delete:
+  operationId: removeNodeDevice
+  tags:
+  - Nodes
+  summary: Remove a device from the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/deviceName.yaml
+  responses:
+    '202':
+      description: the request to remove node device is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/RemoveNodeDeviceResponse.yaml
+    '404':
+      description: Node or device not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node or device not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to remove device: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: updateNodeDevice
+  tags:
+  - Nodes
+  summary: Update a device on the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/deviceName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateNodeDeviceRequest.yaml
+        examples:
+          example1:
+            summary: Promote a device to SSD class
+            value:
+              class: SSD
+          example2:
+            summary: Demote a device to HDD class
+            value:
+              class: HDD
+  responses:
+    '202':
+      description: the request to update node device is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UpdateNodeDeviceResponse.yaml
+    '404':
+      description: Node or device not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node or device not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update device: internal server error'
+              status:
+                type: string
+                example: internal server error

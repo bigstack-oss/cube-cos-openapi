@@ -1,0 +1,13 @@
+type: object
+required:
+- name
+- password
+properties:
+  name:
+    type: string
+    description: the name of user to generate the token
+    example: example-name
+  password:
+    type: string
+    description: the password of user to generate the token
+    example: example-password

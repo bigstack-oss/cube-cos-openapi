@@ -1,0 +1,58 @@
+get:
+  operationId: getOpenSearchRequestDashboard
+  tags:
+  - OpenSearch
+  summary: Get OpenSearch dashboard by request id
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/requestId.yaml
+  responses:
+    '200':
+      description: Get OpenSearch request id dashboard
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetOpenSearchDashboardLinkResponse.yaml
+          examples:
+            example:
+              summary: Opensearch request id dashboard link
+              value:
+                code: 200
+                data:
+                  link: http://example-data-center/opensearch-dashboards/app/data-explorer/discover/#/view/req-aa95057d-aa8e-4c2c-af56-46ad614e6c33
+                  enabled: true
+                msg: fetch opensearch dashboard link of request id successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get OpenSearch dashboard of request id: internal
+                  server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,7 @@
+in: query
+name: pageSize
+required: false
+schema:
+  type: integer
+description: The number of items per page (default is unlimit).
+example: 10

@@ -1,0 +1,109 @@
+post:
+  operationId: verifyFixpackMd5Sum
+  tags:
+  - Fixpacks
+  summary: Verify the fixpack MD5 sum
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Fixpack and MD5 sum verified successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - data
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              data:
+                type: object
+                properties:
+                  fixpackMd5:
+                    type: string
+                    example: c18ce9ddf80b065004152b6f2e609ff8
+                  expectedMd5:
+                    type: string
+                    example: c18ce9ddf80b065004152b6f2e609ff8
+              msg:
+                type: string
+                example: Fixpack and MD5 sum verified successfully
+              status:
+                type: string
+                example: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - data
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              data:
+                type: object
+                properties:
+                  fixpackMd5:
+                    type: string
+                    example: vvvwewegrehnfxcvxhn52b6wefh4123g
+                  expectedMd5:
+                    type: string
+                    example: c18ce9ddf80b065004152b6f2e609ff8
+              msg:
+                type: string
+                example: 'failed to verify fixpack md5: bad request'
+              status:
+                type: string
+                example: bad request
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: there is a fixpack in verifying status, please try again
+                  later
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to verify fixpack md5: internal server error'
+              status:
+                type: string
+                example: internal server error

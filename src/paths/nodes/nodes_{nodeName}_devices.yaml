@@ -1,0 +1,179 @@
+get:
+  operationId: listNodeDevices
+  tags:
+  - Nodes
+  summary: Retrieve the node devices
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the node devices successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListNodeDevicesResponse.yaml
+          examples:
+            example:
+              summary: Node Devices
+              value:
+                code: 200
+                data:
+                - serial: 57T0A05UF5YE
+                  device: sda
+                  type: HDD
+                  class: HDD
+                  osd:
+                    pgs: 646
+                    reweight: 1
+                    daemons:
+                    - id: osd.0
+                      usagePercent: 21.9012
+                      status:
+                        current: up
+                        isProcessing: false
+                    - id: osd.1
+                      usagePercent: 17.4514
+                      status:
+                        current: up
+                        isProcessing: false
+                  sizeMiB: 533008.5754
+                  availability: in-use
+                  status:
+                    current: ok
+                    isPromotable: true
+                    isDemotable: false
+                    isProcessing: false
+                - serial: 183222E1E59B
+                  device: sdb
+                  type: SSD
+                  class: ''
+                  osd:
+                    pgs: 0
+                    reweight: 0
+                    daemons: []
+                  sizeMiB: 426387.7868
+                  availability: system
+                  status:
+                    current: ok
+                    isPromotable: true
+                    isDemotable: false
+                    isProcessing: false
+                - serial: 57P0A0EWF5YE
+                  device: sdc
+                  type: HDD
+                  class: HDD
+                  osd:
+                    pgs: 634
+                    reweight: 1
+                    daemons:
+                    - id: osd.2
+                      usagePercent: 15.748
+                      status:
+                        current: up
+                        isProcessing: false
+                    - id: osd.3
+                      usagePercent: 21.4815
+                      status:
+                        current: up
+                        isProcessing: false
+                  sizeMiB: 533008.5754
+                  availability: in-use
+                  status:
+                    current: ok
+                    isPromotable: true
+                    isDemotable: false
+                    isProcessing: false
+                msg: fetch node devices successfully
+                status: ok
+    '404':
+      description: Node device not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node device not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch setting: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: addNodeDevice
+  tags:
+  - Nodes
+  summary: Add a device to the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/AddNodeDeviceRequest.yaml
+        examples:
+          example:
+            summary: Add Node Device
+            value:
+              device: sdb
+  responses:
+    '202':
+      description: the request to add node device is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/AddNodeDeviceResponse.yaml
+    '404':
+      description: Node not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to add device: internal server error'
+              status:
+                type: string
+                example: internal server error

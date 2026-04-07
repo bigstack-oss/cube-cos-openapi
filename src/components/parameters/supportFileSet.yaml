@@ -1,0 +1,8 @@
+in: path
+name: supportFileSet
+required: true
+schema:
+  type: string
+description: The name of the support file set to delete. (have to be done the http
+  encode)
+example: Cube Appliance 3.0.0 Support File Set 2025-06-18T15:54:48+00:00

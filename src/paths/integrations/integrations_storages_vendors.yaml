@@ -1,0 +1,58 @@
+get:
+  operationId: listIntegrationStorageVendors
+  tags:
+  - Integrations
+  summary: Retrieve the list of integration storage vendors
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Retrieve the list of integration storage vendors successfully
+      content:
+        application/json:
+          schema:
+            description: Integrated storage vendors
+            type: object
+            required:
+            - code
+            - data
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+              data:
+                type: array
+                items:
+                  type: string
+              msg:
+                type: string
+              status:
+                type: string
+          examples:
+            example1:
+              summary: Storage vendors
+              value:
+                code: 200
+                data:
+                - NetApp
+                - Dell
+                msg: fetch integration storage vendors successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch integration storage vendors: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,17 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: array
+    items:
+      $ref: ./EmailRecipientResponse.yaml
+  msg:
+    type: string
+  status:
+    type: string

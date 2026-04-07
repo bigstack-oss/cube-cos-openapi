@@ -1,0 +1,270 @@
+get:
+  operationId: getTrigger
+  tags:
+  - Triggers
+  summary: Retrieve a specific trigger
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/triggerName.yaml
+  responses:
+    '200':
+      description: Retrieve trigger successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetTriggerResponse.yaml
+          examples:
+            example:
+              summary: Trigger
+              value:
+                code: 200
+                data:
+                  name: Administrative Level Notification
+                  isBuiltIn: true
+                  description: Configure how you are going to be notified for system
+                    events and host alerts, including levels 'warning', 'error', and
+                    'critical'.
+                  attribute:
+                    alertTypes:
+                    - system
+                    - host
+                    - instance
+                    eventIds:
+                    - KSN00001I
+                    - ETH00001I
+                    - CPU00002W
+                    severities:
+                    - WARNING
+                    - ERROR
+                    - CRITICAL
+                    categories:
+                    - DEV
+                    - CPU
+                    - DSK
+                  response:
+                    types:
+                    - script
+                    - email
+                    - slack
+                    script:
+                      name: example-script
+                      content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICdzdWNjZXNzJzsgfQ==
+                    slacks:
+                    - name: example-slack-channel-0
+                      url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                      description: example slack channel 1
+                    - name: example-slack-channel-1
+                      url: https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                      description: example slack channel 2
+                    emails:
+                    - address: example.user@example.com
+                      note: example email recipient
+                  status:
+                    current: ok
+                    isProcessing: false
+                  enabled: false
+                msg: fetch trigger successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list triggers: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: updateTrigger
+  tags:
+  - Triggers
+  summary: Update a specific trigger
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/triggerName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateTriggerRequest.yaml
+        examples:
+          example:
+            summary: Trigger update request
+            value:
+              attribute:
+                alertTypes:
+                - system
+                - host
+                severities:
+                - WARNING
+                - INFO
+                categories:
+                - CPU
+                - DSK
+                eventIds:
+                - CPU00006C
+              description: example-update-description
+              response:
+                script:
+                  name: example-script
+                  content: IyEvYmluL2Jhc2gKCmN1cmwgaHR0cDovL2V4YW1wbGUuY29tICR7IHN0YXR1cyA9ICd1cGRhdGVkJzsgfQ==
+                slacks:
+                - https://hooks.slack.com/services/<hookHash>/<hookHash>/<hookHash>
+                emails:
+                - example.user@example.com
+  responses:
+    '202':
+      description: Update trigger request received
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/UpdateTriggerResponse.yaml
+          examples:
+            example:
+              summary: Trigger update request received
+              value:
+                code: 202
+                msg: trigger update request received
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: invalid trigger name
+              status:
+                type: string
+                example: bad request
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to request trigger update: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteTrigger
+  tags:
+  - Triggers
+  summary: Delete a specific trigger
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/triggerName.yaml
+  responses:
+    '202':
+      description: Delete trigger request received
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteTriggerResponse.yaml
+          examples:
+            example:
+              summary: Trigger deletion request received
+              value:
+                code: 202
+                msg: trigger deletion request received
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: trigger not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete trigger: internal server error'
+              status:
+                type: string
+                example: internal server error

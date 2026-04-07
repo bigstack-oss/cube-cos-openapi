@@ -1,0 +1,55 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - board
+    - product
+    properties:
+      board:
+        type: object
+        required:
+        - manufacturingDate
+        - manufacturer
+        - product
+        - serial
+        - partNumber
+        properties:
+          manufacturingDate:
+            type: string
+            format: date-time
+          manufacturer:
+            type: string
+          product:
+            type: string
+          serial:
+            type: string
+          partNumber:
+            type: string
+      product:
+        type: object
+        required:
+        - manufacturer
+        - name
+        - serial
+        - version
+        properties:
+          manufacturer:
+            type: string
+          name:
+            type: string
+          serial:
+            type: string
+          version:
+            type: string
+  msg:
+    type: string
+  status:
+    type: string

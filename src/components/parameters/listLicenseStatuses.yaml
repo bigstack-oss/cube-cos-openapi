@@ -1,0 +1,9 @@
+in: query
+name: statuses
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../schemas/ListLicenseCurrentStatus.yaml
+description: The status of the host
+example: valid

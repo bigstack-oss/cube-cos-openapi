@@ -1,0 +1,57 @@
+get:
+  operationId: getGrafanaHosts
+  tags:
+  - Grafana
+  summary: Get Grafana hosts dashboard
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/hostname.yaml
+  responses:
+    '200':
+      description: Get Grafana hosts dashboard
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetGrafanaDashboardLinkResponse.yaml
+          examples:
+            example:
+              summary: Grafana hosts dashboard link
+              value:
+                code: 200
+                data:
+                  link: http://example-data-center/grafana/d/i-R2q81iz/host?refresh=5m&kiosk=tv&orgId=1&var-HOST=example-node-0
+                  enabled: true
+                msg: fetch top host link successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to get Grafana hosts dashboard: internal server error'
+              status:
+                type: string
+                example: internal server error

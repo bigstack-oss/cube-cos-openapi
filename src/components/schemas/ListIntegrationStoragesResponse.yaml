@@ -1,0 +1,62 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - type
+      - isDefault
+      - isVerified
+      - vendor
+      - managementIp
+      - updatedAt
+      - status
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        isDefault:
+          type: boolean
+        isVerified:
+          type: boolean
+        vendor:
+          type: string
+        managementIp:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+        status:
+          type: object
+          required:
+          - current
+          - isProcessing
+          properties:
+            current:
+              type: string
+              enum:
+              - ok
+              - verifying
+              - creating
+              - updating
+              - deleting
+              - setting to default
+            isProcessing:
+              type: boolean
+  msg:
+    type: string
+    example: fetch integrated applications successfully
+  status:
+    type: string
+    example: ok

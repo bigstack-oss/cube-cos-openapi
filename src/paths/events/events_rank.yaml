@@ -1,0 +1,213 @@
+get:
+  operationId: getRankedEvents
+  tags:
+  - Events
+  summary: Retrieve the ranked events
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: query
+    name: type
+    required: true
+    schema:
+      type: string
+      enum:
+      - system
+      - host
+      - instance
+    description: The type of event to query, the value can be only 'system', 'host',
+      and 'instance'.
+    example: system
+  - in: query
+    name: category
+    required: false
+    schema:
+      type: string
+    description: The category of the event to query.
+    example: NET
+  - in: query
+    name: categories
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+    description: The categories of the event to query.
+    example: CPU
+  - in: query
+    name: severity
+    required: false
+    schema:
+      type: string
+    description: The severity of the event to query, the value can be only 'Info',
+      'Warning', and 'Error'.
+    example: Info
+  - in: query
+    name: severities
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+    description: The severities of the event to query.
+    example: Info
+  - in: query
+    name: host
+    required: false
+    schema:
+      type: string
+    description: The host of the event to query.
+    example: example-data-center
+  - in: query
+    name: hosts
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+    description: The hosts of the event to query.
+    example: example-node-0
+  - in: query
+    name: instance
+    required: false
+    schema:
+      type: string
+    description: The instance of the event to query.
+    example: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
+  - in: query
+    name: instances
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+    description: The instances of the event to query.
+    example: ccc449e4-a26c-47ac-afc1-c792ab1ed20a
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+      enum:
+      - 1h
+      - 24h
+      - 7d
+      - 14d
+    description: The past time of the event rank to query, click 'try it out' to see
+      a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+      and 'd'(day) suffix for other time ranges.
+    example: 1d
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  - in: query
+    name: limit
+    required: false
+    schema:
+      type: integer
+    description: The limit of the rank of event to return (default is 10).
+    example: 10
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the rank of event successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetRankedEventsResponse.yaml
+          examples:
+            example1:
+              summary: Ranked system events
+              value:
+                code: 200
+                data:
+                  events:
+                  - id: NET00003I
+                    category: NET
+                    severity: Info
+                    percent: 98.2142
+                    number: 440
+                  - id: NET00001I
+                    category: NET
+                    severity: Info
+                    percent: 1.7857
+                    number: 8
+                  limit:
+                    number: 25
+                    description: The top 2 event IDs with the highest proportion
+                msg: fetch event rank successfully
+                status: ok
+            example2:
+              summary: Ranked host events
+              value:
+                code: 200
+                data:
+                  events:
+                  - id: CPU00002W
+                    category: CPU
+                    host: example-host-0
+                    percent: 75
+                    number: 3
+                  - id: CPU00002W
+                    category: CPU
+                    host: example-host-1
+                    percent: 25
+                    number: 1
+                  limit:
+                    number: 25
+                    description: The top 2 event IDs with the highest proportion
+                msg: fetch event rank successfully
+                status: ok
+            example3:
+              summary: Ranked instance events
+              value:
+                code: 200
+                data:
+                  events:
+                  - id: CPU00007I
+                    category: CPU
+                    instanceId: 74ac7cb9-800a-430f-809e-d96f0ce3e9a2
+                    instanceName: example-vm-0
+                    percent: 75
+                    number: 3
+                  - id: CPU00007I
+                    category: CPU
+                    instanceId: e8a44a60-b79f-42f8-bab6-761b1734299a
+                    instanceName: example-vm-1
+                    percent: 25
+                    number: 1
+                  limit:
+                    number: 25
+                    description: The top 2 event IDs with the highest proportion
+                msg: fetch event rank successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid ''start'' time: 2021-09-01T111:00:00+00:00'
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch events: internal server error'
+              status:
+                type: string
+                example: internal server error

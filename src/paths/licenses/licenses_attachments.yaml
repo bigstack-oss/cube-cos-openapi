@@ -1,0 +1,73 @@
+get:
+  operationId: getLicenseAttachments
+  tags:
+  - Licenses
+  summary: Retrieve the list of license attachments
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/product.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  - $ref: ../../components/parameters/roles.yaml
+  - $ref: ../../components/parameters/listLicenseAttachmentStatuses.yaml
+  responses:
+    '200':
+      description: Retrieve the list of license attachments successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetLicenseAttachmentsResponse.yaml
+          examples:
+            example1:
+              summary: License attachment list
+              value:
+                code: 200
+                data:
+                - serialNumber: To Be Filled By O.E.M.
+                  hostname: example-node-0
+                  role: control-converged
+                  product: CubeCOS
+                  status: valid
+                - serialNumber: To Be Filled By O.E.M.
+                  hostname: example-node-1
+                  role: control-converged
+                  product: CubeCOS
+                  status: valid
+                - serialNumber: To Be Filled By O.E.M.
+                  hostname: example-node-2
+                  role: control-converged
+                  product: CubeCOS
+                  status: unlicense
+                msg: fetch license attachments successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch license attachments: internal server error'
+              status:
+                type: string
+                example: internal server error

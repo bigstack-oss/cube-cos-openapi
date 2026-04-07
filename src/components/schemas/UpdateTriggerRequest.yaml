@@ -1,0 +1,57 @@
+type: object
+required:
+- attribute
+- response
+properties:
+  attribute:
+    type: object
+    required:
+    - alertTypes
+    - severities
+    - categories
+    - eventIds
+    properties:
+      alertTypes:
+        type: array
+        items:
+          type: string
+      severities:
+        type: array
+        items:
+          type: string
+      categories:
+        type: array
+        items:
+          type: string
+      eventIds:
+        type: array
+        items:
+          type: string
+  response:
+    type: object
+    required:
+    - script
+    - slacks
+    - emails
+    properties:
+      script:
+        type: object
+        required:
+        - name
+        - content
+        properties:
+          name:
+            type: string
+          content:
+            type: string
+            description: Base64 encoded script content
+      slacks:
+        type: array
+        items:
+          type: string
+      emails:
+        type: array
+        items:
+          type: string
+  description:
+    type: string

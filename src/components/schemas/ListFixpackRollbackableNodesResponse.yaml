@@ -1,0 +1,26 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - updatedAt
+      properties:
+        name:
+          type: string
+        updatedAt:
+          type: string
+          format: date-time
+  msg:
+    type: string
+  status:
+    type: string

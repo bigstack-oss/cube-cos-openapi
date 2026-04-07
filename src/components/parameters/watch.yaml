@@ -1,0 +1,7 @@
+in: query
+name: watch
+required: false
+schema:
+  type: boolean
+description: The toggle to enable http chunked transfer for continuous server push.
+example: true

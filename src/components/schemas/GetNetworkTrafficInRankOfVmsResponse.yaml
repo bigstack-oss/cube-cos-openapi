@@ -1,0 +1,17 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    $ref: ./MetricRank.yaml
+  msg:
+    type: string
+    example: fetch metrics successfully
+  status:
+    type: string
+    example: ok

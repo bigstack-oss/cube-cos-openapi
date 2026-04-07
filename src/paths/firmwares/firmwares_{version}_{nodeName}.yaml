@@ -1,0 +1,46 @@
+patch:
+  operationId: retryNodeFirmwareUpdate
+  tags:
+  - Firmwares
+  summary: Retry firmware update on a specific node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/version.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  responses:
+    '202':
+      description: Firmware update retried successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: Firmware update retried successfully
+              status:
+                type: string
+                example: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to retry firmware update: internal server error'
+              status:
+                type: string
+                example: internal server error

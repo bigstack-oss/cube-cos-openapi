@@ -1,0 +1,28 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - triggers
+    - page
+    properties:
+      triggers:
+        type: array
+        items:
+          $ref: ./Trigger.yaml
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: triggers retrieved successfully
+  status:
+    type: string
+    example: ok

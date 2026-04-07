@@ -1,0 +1,51 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - titlePrefix
+    - email
+    - slack
+    properties:
+      titlePrefix:
+        type: object
+        required:
+        - value
+        - status
+        properties:
+          value:
+            type: string
+          status:
+            $ref: ./SettingStatus.yaml
+      email:
+        type: object
+        required:
+        - senders
+        - recipients
+        properties:
+          senders:
+            type: array
+            items:
+              $ref: ./EmailSenderResponse.yaml
+          recipients:
+            type: array
+            items:
+              $ref: ./EmailRecipientResponse.yaml
+      slack:
+        type: object
+        properties:
+          channels:
+            type: array
+            items:
+              $ref: ./SlackChannelGetResponse.yaml
+  msg:
+    type: string
+  status:
+    type: string

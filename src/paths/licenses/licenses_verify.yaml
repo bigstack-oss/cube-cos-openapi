@@ -1,0 +1,104 @@
+post:
+  operationId: verifyLicense
+  tags:
+  - Licenses
+  summary: Verify the license
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          $ref: ../../components/schemas/PostLicenseRequest.yaml
+  responses:
+    '200':
+      description: Verify license successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/VerifyLicenseResponse.yaml
+          examples:
+            example1:
+              summary: License verification result
+              value:
+                code: 200
+                data:
+                  license:
+                    name: example-license
+                    type: trial
+                    product:
+                      name: CubeCOS
+                      feature: virtualization
+                    issue:
+                      by: Bigstack Ltd.
+                      to: '*'
+                      hardware: '*'
+                      date: '2025-04-09T19:16:13+08:00'
+                    quantity: some of string about cpu capacity
+                    supportPlan: FMA
+                    expiry:
+                      date: '2025-05-09T19:16:13+08:00'
+                      days: 29
+                    status:
+                      current: valid
+                      isExpiring: false
+                  effectNodes:
+                  - name: example-node-1
+                    role: control-converged
+                    expiry:
+                      date: '2025-05-09T19:16:13+08:00'
+                      days: 30
+                    status:
+                      current: valid
+                      isExpiring: false
+                  - name: example-node-2
+                    role: control-converged
+                    expiry:
+                      date: '2025-05-09T19:16:13+08:00'
+                      days: 30
+                    status:
+                      current: valid
+                      isExpiring: false
+                  - name: example-node-3
+                    role: control-converged
+                    expiry:
+                      date: '2025-05-09T19:16:13+08:00'
+                      days: 30
+                    status:
+                      current: valid
+                      isExpiring: false
+                msg: verify license successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to verify license: internal server error'
+              status:
+                type: string
+                example: internal server error

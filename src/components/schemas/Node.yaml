@@ -1,0 +1,204 @@
+type: object
+required:
+- id
+- serialNumber
+- dataCenter
+- hostname
+- role
+- address
+- ip
+- managementIP
+- storageIP
+- isVirtualIpOwner
+- license
+- status
+- cpuSpec
+- networkInterfaces
+- ipmi
+- vcpu
+- memory
+- storage
+- uptimeSeconds
+- labels
+properties:
+  id:
+    type: string
+  serialNumber:
+    type: string
+  dataCenter:
+    type: string
+  hostname:
+    type: string
+  role:
+    $ref: ./NodeRole.yaml
+  address:
+    type: string
+  ip:
+    type: string
+  managementIP:
+    type: string
+  storageIP:
+    type: string
+  isVirtualIpOwner:
+    type: boolean
+  license:
+    type: object
+    required:
+    - name
+    - type
+    - hostname
+    - serial
+    - product
+    - issue
+    - quantity
+    - supportPlan
+    - expiry
+    - status
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+      hostname:
+        type: string
+      serial:
+        type: string
+      product:
+        type: object
+        required:
+        - name
+        - feature
+        properties:
+          name:
+            type: string
+          feature:
+            $ref: ./LicenseFeature.yaml
+      issue:
+        $ref: ./LicenseIssue.yaml
+      quantity:
+        type: string
+      supportPlan:
+        $ref: ./LicenseSupportPlan.yaml
+      expiry:
+        type: object
+        required:
+        - date
+        - days
+        properties:
+          date:
+            type: string
+            format: date-time
+          days:
+            type: integer
+      status:
+        $ref: ./NodeLicenseStatus.yaml
+  status:
+    type: string
+    enum:
+    - up
+    - down
+    - powering on
+    - powering off
+    - powering cycle
+    - syncing
+    - unknown
+  cpuSpec:
+    type: string
+  networkInterfaces:
+    type: array
+    items:
+      type: object
+      required:
+      - interface
+      - label
+      - busIdSlaves
+      - driver
+      - state
+      - speed
+      properties:
+        interface:
+          type: string
+        label:
+          type: string
+        busIdSlaves:
+          type: string
+        driver:
+          type: string
+        state:
+          type: string
+        speed:
+          type: string
+  ipmi:
+    type: object
+    required:
+    - isSupported
+    - isConnected
+    - ip
+    properties:
+      isSupported:
+        type: boolean
+      isConnected:
+        type: boolean
+      ip:
+        type: string
+  vcpu:
+    type: object
+    required:
+    - totalCores
+    - usedCores
+    - usedPercent
+    - freeCores
+    - freePercent
+    properties:
+      totalCores:
+        type: integer
+      usedCores:
+        type: integer
+      usedPercent:
+        type: number
+      freeCores:
+        type: integer
+      freePercent:
+        type: number
+  memory:
+    type: object
+    required:
+    - totalMiB
+    - usedMiB
+    - usedPercent
+    - freeMiB
+    - freePercent
+    properties:
+      totalMiB:
+        type: number
+      usedMiB:
+        type: number
+      usedPercent:
+        type: number
+      freeMiB:
+        type: number
+      freePercent:
+        type: number
+  storage:
+    type: object
+    required:
+    - totalMiB
+    - usedMiB
+    - usedPercent
+    - freeMiB
+    - freePercent
+    properties:
+      totalMiB:
+        type: number
+      usedMiB:
+        type: number
+      usedPercent:
+        type: number
+      freeMiB:
+        type: number
+      freePercent:
+        type: number
+  uptimeSeconds:
+    type: number
+  labels:
+    type: object

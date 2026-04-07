@@ -1,0 +1,15 @@
+type: object
+required:
+- code
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 202
+  msg:
+    type: string
+    example: node is being operated successfully
+  status:
+    type: string
+    example: ok

@@ -1,0 +1,90 @@
+post:
+  operationId: createEmailRecipient
+  tags:
+  - Settings
+  summary: Create an email recipient
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EmailRecipientPostRequest.yaml
+        examples:
+          example:
+            summary: Email Recipient
+            value:
+              address: example.user.1@example.com
+              note: example email recipient
+  responses:
+    '201':
+      description: Email recipient created successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PostEmailRecipientResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to create email recipients: internal server error'
+              status:
+                type: string
+                example: internal server error
+get:
+  operationId: getEmailRecipients
+  tags:
+  - Settings
+  summary: Retrieve email recipients
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Email recipients retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetEmailRecipientsResponse.yaml
+          examples:
+            example:
+              summary: Email recipients list
+              value:
+                code: 200
+                data:
+                - address: example.user.1@example.com
+                  note: example email recipient 1
+                  status:
+                    current: ok
+                    isUpdating: false
+                - address: example.user.2@example.com
+                  note: example email recipient 2
+                  status:
+                    current: ok
+                    isUpdating: false
+                msg: email recipients retrieved successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch email recipients: internal server error'
+              status:
+                type: string
+                example: internal server error

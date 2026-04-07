@@ -1,0 +1,70 @@
+delete:
+  operationId: DeleteSupportFiles
+  tags:
+  - Support Files
+  summary: Delete support file set
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/supportFileSet.yaml
+  responses:
+    '200':
+      description: Delete support files successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteSupportFileSetResponse.yaml
+          examples:
+            example:
+              summary: Delete support file set
+              value:
+                code: 200
+                msg: support file set deleted successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: support file set not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete support files: internal server error'
+              status:
+                type: string
+                example: internal server error

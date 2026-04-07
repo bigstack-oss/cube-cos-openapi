@@ -1,0 +1,137 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - images
+    - page
+    properties:
+      images:
+        type: array
+        items:
+          type: object
+          required:
+          - id
+          - name
+          - os
+          - destination
+          - domain
+          - project
+          - visibility
+          - sizeMiB
+          - diskType
+          - metadata
+          - createdAt
+          - status
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            os:
+              type: string
+            destination:
+              type: string
+            domain:
+              type: string
+            project:
+              type: string
+            visibility:
+              type: string
+              enum:
+              - public
+              - private
+              - shared
+              - community
+              - unknown
+            diskType:
+              type: string
+              enum:
+              - raw
+              - qcow2
+              - vhd
+              - vmdk
+              - iso
+              - unknown
+            createdAt:
+              type: string
+            sizeMiB:
+              type: number
+            metadata:
+              type: object
+              description: Free-form metadata; may be empty {}
+              properties:
+                cubeDefinedDestination:
+                  type: string
+                cubeDefinedOs:
+                  type: string
+                direct_url:
+                  type: string
+                hw_disk_bus:
+                  type: string
+                hw_input_bus:
+                  type: string
+                hw_machine_type:
+                  type: string
+                hw_qemu_guest_agent:
+                  type: string
+                  enum:
+                  - 'yes'
+                  - 'no'
+                hw_scsi_model:
+                  type: string
+                hw_video_model:
+                  type: string
+                os_admin_user:
+                  type: string
+                os_distro:
+                  type: string
+                os_hash_algo:
+                  type: string
+                os_hash_value:
+                  type: string
+                os_require_quiesce:
+                  type: string
+                  enum:
+                  - 'yes'
+                  - 'no'
+                os_vers:
+                  type: string
+            status:
+              type: object
+              required:
+              - current
+              - isProcessing
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - queued
+                  - saving
+                  - uploading
+                  - importing
+                  - active
+                  - deactivated
+                  - killed
+                  - deleted
+                  - pending_delete
+                isProcessing:
+                  type: boolean
+                processPercent:
+                  type: number
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: images retrieved successfully
+  status:
+    type: string
+    example: ok

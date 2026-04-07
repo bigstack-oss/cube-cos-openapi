@@ -1,0 +1,13 @@
+type: object
+required:
+- current
+- isUpdating
+properties:
+  current:
+    type: string
+    enum:
+    - ok
+    - updating
+    - error
+  isUpdating:
+    type: boolean

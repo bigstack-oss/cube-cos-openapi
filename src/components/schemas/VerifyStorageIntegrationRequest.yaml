@@ -1,0 +1,82 @@
+type: object
+required:
+- name
+- device
+- storage
+properties:
+  name:
+    type: string
+  device:
+    type: object
+    required:
+    - vendor
+    - product
+    properties:
+      vendor:
+        type: string
+      product:
+        type: string
+  storage:
+    type: object
+    required:
+    - service
+    - volumeType
+    - image
+    properties:
+      service:
+        type: object
+        required:
+        - driverSection
+        - extraSettings
+        - extraConfigFiles
+        properties:
+          driverSection:
+            type: array
+            items:
+              $ref: ./StorageKeyValuePair.yaml
+          extraSettings:
+            type: array
+            items:
+              type: object
+              required:
+              - sectionHeader
+              - settings
+              properties:
+                sectionHeader:
+                  type: string
+                settings:
+                  type: array
+                  items:
+                    $ref: ./StorageKeyValuePair.yaml
+          extraConfigFiles:
+            type: array
+            items:
+              type: object
+              required:
+              - name
+              - content
+              properties:
+                name:
+                  type: string
+                content:
+                  type: string
+                  description: Base64 encoded content of the config file
+      volumeType:
+        type: object
+        required:
+        - settings
+        properties:
+          settings:
+            type: array
+            items:
+              $ref: ./StorageKeyValuePair.yaml
+      image:
+        type: object
+        required:
+        - useMultipath
+        - forceMultipath
+        properties:
+          useMultipath:
+            type: boolean
+          forceMultipath:
+            type: boolean

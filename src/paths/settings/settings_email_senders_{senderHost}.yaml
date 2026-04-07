@@ -1,0 +1,137 @@
+post:
+  operationId: tryEmailSender
+  tags:
+  - Settings
+  summary: Try an email sender
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: senderHost
+    required: true
+    schema:
+      type: string
+    description: The host of the email sender to operate
+    example: email-smtp.example.mailserver.com
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/TryEmailSender.yaml
+        examples:
+          example:
+            summary: Try Email Sender
+            value:
+              email: example.user.1@example.com
+  responses:
+    '200':
+      description: Email sender tried successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/TryEmailSenderResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to try email sender: internal server error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: updateEmailSender
+  tags:
+  - Settings
+  summary: Update an email sender
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: senderHost
+    required: true
+    schema:
+      type: string
+    description: The host of the email sender to operate
+    example: email-smtp.example.mailserver.com
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/EmailSenderPatchRequest.yaml
+        examples:
+          example:
+            summary: Email Sender
+            value:
+              host: email-smtp.example.mailserver.com
+              port: 587
+              username: example-user
+              password: example-password
+              from: noreply@bigstack.co
+  responses:
+    '200':
+      description: Email sender updated successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PutEmailSenderResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch email sender: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteEmailSender
+  tags:
+  - Settings
+  summary: Delete an email sender
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: path
+    name: senderHost
+    required: true
+    schema:
+      type: string
+    description: The host of the email sender to operate
+    example: email-smtp.example.mailserver.com
+  responses:
+    '200':
+      description: Email sender deleted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/DeleteEmailSenderResponse.yaml
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch email sender: internal server error'
+              status:
+                type: string
+                example: internal server error

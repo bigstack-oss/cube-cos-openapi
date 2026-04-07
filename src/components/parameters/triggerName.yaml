@@ -1,0 +1,7 @@
+in: path
+name: triggerName
+required: true
+schema:
+  type: string
+description: The name of the trigger to operate
+example: Administrative Level Notification

@@ -1,0 +1,46 @@
+type: object
+required:
+- count
+- cpu
+- memory
+properties:
+  count:
+    type: integer
+  cpu:
+    type: object
+    required:
+    - totalCores
+    - usedCores
+    - freeCores
+    - usedPercent
+    - freePercent
+    properties:
+      totalCores:
+        type: number
+      usedCores:
+        type: number
+      freeCores:
+        type: number
+      usedPercent:
+        type: number
+      freePercent:
+        type: number
+  memory:
+    type: object
+    required:
+    - totalMiB
+    - usedMiB
+    - freeMiB
+    - usedPercent
+    - freePercent
+    properties:
+      totalMiB:
+        type: number
+      usedMiB:
+        type: number
+      freeMiB:
+        type: number
+      usedPercent:
+        type: number
+      freePercent:
+        type: number

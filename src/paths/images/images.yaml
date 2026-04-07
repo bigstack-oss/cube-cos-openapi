@@ -1,0 +1,173 @@
+get:
+  operationId: listImages
+  tags:
+  - Images
+  summary: List images
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - $ref: ../../components/parameters/projectNotRequired.yaml
+  - in: query
+    name: visibility
+    required: false
+    schema:
+      type: string
+    description: The visibility to filter
+    example: public
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  responses:
+    '200':
+      description: List images successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListImagesResponse.yaml
+          examples:
+            example:
+              summary: Image list
+              value:
+                code: 200
+                data:
+                  images:
+                  - id: 763655de-1cfc-45d4-b67c-5579ea43a6e1
+                    name: example image 0
+                    os: Ubuntu
+                    destination: CubeStorage
+                    domainName: default
+                    projectName: admin
+                    visibility: public
+                    diskType: raw
+                    createdAt: '2025-07-27T13:08:53+08:00'
+                    metadata:
+                      cubeDefinedDestination: CubeStorage
+                      cubeDefinedOs: Ubuntu
+                      direct_url: rbd://c6e64c49-09cf-463b-9d1c-b6645b4b3b85/glance-images/59be046d-0199-407d-88d4-a833dbbd2420/snap
+                      hw_disk_bus: scsi
+                      hw_input_bus: virtio
+                      hw_machine_type: q35
+                      hw_qemu_guest_agent: 'yes'
+                      hw_scsi_model: virtio-scsi
+                      hw_video_model: vga
+                      os_admin_user: other
+                      os_distro: Ubuntu
+                      os_hash_algo: sha512
+                      os_hash_value: 7f6b1fcdca809920b3bbba6fdec139d9e47484548c4188fe4efa0bf2434a9f15f836e74100848e0e6f678400ca1e2f174f93826a0effcf16044e17d0bf7d7d66
+                      os_require_quiesce: 'yes'
+                      os_vers: example image 0
+                    status:
+                      current: active
+                      isProcessing: false
+                  - id: a5218f3c-47df-4ba2-ad41-5e9a50816e6c
+                    name: example image 1
+                    os: Ubuntu
+                    destination: CubeStorage
+                    domainName: default
+                    projectName: admin
+                    visibility: private
+                    createdAt: '2025-07-29T13:08:53+08:00'
+                    metadata:
+                      cubeDefinedDestination: CubeStorage
+                      cubeDefinedOs: Ubuntu
+                      direct_url: rbd://c6e64c49-09cf-463b-9d1c-b6645b4b3b85/glance-images/59be046d-0199-407d-88d4-a833dbbd2420/snap
+                      hw_disk_bus: scsi
+                      hw_input_bus: virtio
+                      hw_machine_type: q35
+                      hw_qemu_guest_agent: 'yes'
+                      hw_scsi_model: virtio-scsi
+                      hw_video_model: vga
+                      os_admin_user: other
+                      os_distro: Ubuntu
+                      os_hash_algo: sha512
+                      os_hash_value: 9f6b1fcdca809920b3bbba6fdec139d9e47484548c4188fe4efa0bf2434a9f15f836e74100848e0e6f678400ca1e2f174f93826a0effcf16044e17d0bf7d7d66
+                      os_require_quiesce: 'yes'
+                      os_vers: example image 1
+                    status:
+                      current: importing
+                      isProcessing: true
+                      processPercent: 50.98
+                  page:
+                    total: 1
+                    number: 1
+                    size: 2
+                    totalItemCount: 2
+                msg: fetch image list successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list images: internal server error'
+              status:
+                type: string
+                example: internal server error
+post:
+  operationId: importImage
+  tags:
+  - Images
+  summary: Import an image
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/file.yaml
+  - $ref: ../../components/parameters/name.yaml
+  - $ref: ../../components/parameters/os.yaml
+  - $ref: ../../components/parameters/destination.yaml
+  - $ref: ../../components/parameters/domain.yaml
+  - $ref: ../../components/parameters/project.yaml
+  - $ref: ../../components/parameters/sourceFromAnotherHypervisor.yaml
+  - $ref: ../../components/parameters/visibility.yaml
+  requestBody:
+    description: for example, in the CURL, the image binary should be set by the '--data-binary'
+      option like '--data-binary @/path/to/small-image' or '-T /path/to/large-image'.
+    required: true
+    content:
+      application/octet-stream:
+        schema:
+          type: string
+          format: binary
+  responses:
+    '202':
+      description: Image import accepted and under processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: image import accepted and under processing
+              status:
+                type: string
+                example: accepted
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to import image: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,192 @@
+get:
+  operationId: listTunings
+  tags:
+  - Tunings
+  summary: Retrieve the list of tunings from a host or data center
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: query
+    name: host
+    required: false
+    schema:
+      type: array
+      items:
+        type: string
+    description: 'The name of the host to retrieve the tunings, can specify multiple
+      hosts to retrieve the tunings, for example: host=example-node-0&host=example-node-1'
+    example: example-node-0
+  - $ref: ../../components/parameters/keyword.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  - in: query
+    name: modified
+    required: false
+    schema:
+      type: array
+      items:
+        type: boolean
+    description: The flag to filter the modified or unmodified tunings
+    example: true
+  responses:
+    '200':
+      description: Retrieve the list of tunings from a host or data center successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListTuningResponse.yaml
+          examples:
+            example:
+              summary: Tuning list
+              value:
+                code: 200
+                data:
+                  tunings:
+                  - name: neutron.debug.enabled
+                    value: false
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    description: Set to true to enable neutron verbose log.
+                    enabled: true
+                    isModified: false
+                    limitation:
+                      type: bool
+                      default: false
+                    status:
+                      current: updating
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: true
+                  - name: cubesys.provider.extra
+                    value: ''
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    description: Set extra provider interfaces ('pvd-' prefix and
+                      <= 15 chars) [IF.2:pvd-xxx,eth2:pvd-yyy,...].
+                    enabled: true
+                    isModified: false
+                    limitation:
+                      type: str
+                      default: ''
+                      regex: ''
+                    status:
+                      current: ok
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: false
+                  - name: barbican.debug.enabled
+                    value: false
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    description: Set to true to enable barbican verbose log.
+                    enabled: true
+                    isModified: false
+                    limitation:
+                      type: bool
+                      default: false
+                    status:
+                      current: ok
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: false
+                  - name: cinder.backup.endpoint
+                    value: ''
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    description: Set cinder backup storage endpoint.
+                    enabled: true
+                    isModified: false
+                    limitation:
+                      type: str
+                      default: ''
+                      regex: ''
+                    status:
+                      current: ok
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: false
+                  - name: influxdb.curator.rp
+                    value: 7
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    - name: example-node-1
+                      role: control-converged
+                      ip: 10.10.10.11
+                    description: influxdb curator retention policy in days.
+                    enabled: true
+                    isModified: false
+                    limitation:
+                      type: int
+                      default: 7
+                      min: 0
+                      max: 365
+                    status:
+                      current: ok
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: false
+                  - name: influxdb.curator.rp
+                    value: 23
+                    hosts:
+                    - name: example-node-0
+                      role: control-converged
+                      ip: 10.10.10.10
+                    - name: example-node-1
+                      role: control-converged
+                      ip: 10.10.10.11
+                    description: influxdb curator retention policy in days.
+                    enabled: false
+                    isModified: true
+                    limitation:
+                      type: int
+                      default: 7
+                      min: 0
+                      max: 365
+                    status:
+                      current: ok
+                      updatedAt: '2025-03-12T19:22:00+08:00'
+                      isUpdating: false
+                  page:
+                    total: 15
+                    number: 1
+                    size: 5
+                    'totalItemCount:': 75
+                msg: fetch tuning list successfully
+                status: ok
+    '401':
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 401
+              msg:
+                type: string
+                example: 'invalid_grant: Invalid user credentials'
+              status:
+                type: string
+                example: unauthorized
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list tuning: internal server error'
+              status:
+                type: string
+                example: internal server error

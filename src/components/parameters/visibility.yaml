@@ -1,0 +1,10 @@
+name: visibility
+in: query
+required: false
+schema:
+  type: string
+  enum:
+  - private
+  - public
+description: Visibility setting for the image(only required when sourceFromAnotherHypervisor
+  is false).

@@ -1,0 +1,197 @@
+get:
+  operationId: getMetricsOverview
+  tags:
+  - Metrics
+  summary: Retrieve the metrics of data center
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/watch.yaml
+  responses:
+    '200':
+      description: Retrieve the summary of data center successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetMetricsResponse.yaml
+          examples:
+            example1:
+              summary: Overview of data center metrics
+              value:
+                code: 200
+                data:
+                  dataCenter:
+                    usage:
+                      cpu:
+                        totalCores: 96
+                        usedCores: 5.3846
+                        usedPercent: 6.6012
+                        freeCores: 90.6152
+                        freePercent: 93.3986
+                      memory:
+                        totalMiB: 515645.789
+                        usedMiB: 269875.7773
+                        usedPercent: 52.3374
+                        freeMiB: 245770.0117
+                        freePercent: 47.6625
+                  host:
+                    role:
+                      controlConverged:
+                        count: 2
+                        cpu:
+                          totalCores: 96
+                          usedCores: 5.3846
+                          usedPercent: 6.6012
+                          freeCores: 90.6152
+                          freePercent: 93.3986
+                        memory:
+                          totalMiB: 515645.789
+                          usedMiB: 269875.7773
+                          usedPercent: 52.3374
+                          freeMiB: 245770.0117
+                          freePercent: 47.6625
+                      control:
+                        count: 0
+                        cpu:
+                          totalCores: 0
+                          usedCores: 0
+                          usedPercent: 0
+                          freeCores: 0
+                          freePercent: 0
+                        memory:
+                          totalMiB: 0
+                          usedMiB: 0
+                          usedPercent: 0
+                          freeMiB: 0
+                          freePercent: 0
+                      compute:
+                        count: 0
+                        cpu:
+                          totalCores: 0
+                          usedCores: 0
+                          usedPercent: 0
+                          freeCores: 0
+                          freePercent: 0
+                        memory:
+                          totalMiB: 0
+                          usedMiB: 0
+                          usedPercent: 0
+                          freeMiB: 0
+                          freePercent: 0
+                      storage:
+                        count: 0
+                        cpu:
+                          totalCores: 0
+                          usedCores: 0
+                          usedPercent: 0
+                          freeCores: 0
+                          freePercent: 0
+                        memory:
+                          totalMiB: 0
+                          usedMiB: 0
+                          usedPercent: 0
+                          freeMiB: 0
+                          freePercent: 0
+                      edgeCore:
+                        count: 0
+                        cpu:
+                          totalCores: 0
+                          usedCores: 0
+                          usedPercent: 0
+                          freeCores: 0
+                          freePercent: 0
+                        memory:
+                          totalMiB: 0
+                          usedMiB: 0
+                          usedPercent: 0
+                          freeMiB: 0
+                          freePercent: 0
+                      moderator:
+                        count: 0
+                        cpu:
+                          totalCores: 0
+                          usedCores: 0
+                          usedPercent: 0
+                          freeCores: 0
+                          freePercent: 0
+                        memory:
+                          totalMiB: 0
+                          usedMiB: 0
+                          usedPercent: 0
+                          freeMiB: 0
+                          freePercent: 0
+                    usages:
+                    - role: control-converged
+                      name: example-node-0
+                      address: 10.10.10.10
+                      cpu:
+                        totalCores: 48
+                        usedCores: 2.7194
+                        usedPercent: 5.3006
+                        freeCores: 45.2805
+                        freePercent: 94.6993
+                      memory:
+                        totalMiB: 257822.8945
+                        usedMiB: 134933.4531
+                        usedPercent: 52.3357
+                        freeMiB: 122889.4414
+                        freePercent: 47.6642
+                    - role: control-converged
+                      name: example-node-1
+                      address: 10.10.10.11
+                      cpu:
+                        totalCores: 48
+                        usedCores: 2.6652
+                        usedPercent: 7.9019
+                        freeCores: 45.3347
+                        freePercent: 92.098
+                      memory:
+                        totalMiB: 257822.8945
+                        usedMiB: 134942.3242
+                        usedPercent: 52.3391
+                        freeMiB: 122880.5703
+                        freePercent: 47.6608
+                  vm:
+                    status:
+                      total: 15
+                      running: 15
+                      stopped: 0
+                      suspend: 0
+                      paused: 0
+                      error: 0
+                    usage:
+                      vcpu:
+                        totalCores: 48
+                        usedCores: 40
+                        usedPercent: 0.8333
+                        freeCores: 8
+                        freePercent: 0.1666
+                      memory:
+                        totalMiB: 257822
+                        usedMiB: 100520
+                        usedPercent: 0.3898
+                        freeMiB: 157302
+                        freePercent: 0.6101
+                      storage:
+                        totalMiB: 12571648
+                        usedMiB: 1126400
+                        usedPercent: 0.0895
+                        freeMiB: 11445248
+                        freePercent: 0.9104
+                msg: fetch summary successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch metrics: internal server error'
+              status:
+                type: string
+                example: internal server error

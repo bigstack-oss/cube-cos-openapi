@@ -1,0 +1,342 @@
+get:
+  operationId: getIntegrationStorage
+  tags:
+  - Integrations
+  summary: Retrieve the details of an integration storage
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/storageName.yaml
+  responses:
+    '200':
+      description: Retrieve the details of an integration storage successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetIntegrationStorageResponse.yaml
+          examples:
+            example1:
+              summary: Integrated storage details
+              value:
+                code: 200
+                data:
+                  driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+                  name: dell-emc-sc-fc
+                  vendor: Dell EMC
+                  isDefault: true
+                  storage:
+                    service:
+                      driverSection:
+                      - key: san_ip
+                        value: 10.32.10.250
+                      - key: san_login
+                        value: Admin
+                      - key: san_password
+                        value: bigstackcoltd
+                      - key: san_thin_provision
+                        value: 'true'
+                      - key: dell_sc_ssn
+                        value: '364940'
+                      - key: dell_sc_api_port
+                        value: '3033'
+                      - key: dell_sc_verify_cert
+                        value: 'false'
+                      - key: dell_sc_server_folder
+                        value: dev-servers/glance-cluster
+                      - key: dell_sc_volume_folder
+                        value: dev-vols
+                      - key: use_multipath_for_image_xfer
+                        value: 'true'
+                      - key: enforce_multipath_for_image_xfer
+                        value: 'true'
+                      - key: image_upload_use_cinder_backend
+                        value: 'true'
+                      extraSettings:
+                      - sectionHeader: DEFAULT
+                        settings:
+                        - key: allowed_direct_url_schemes
+                          value: cinder
+                        - key: glance_request_timeout
+                          value: '1200'
+                      extraConfigFiles:
+                      - name: test.conf
+                        content: YWFhCg==
+                    volumeType:
+                      settings:
+                      - key: storagetype:storageprofile
+                        value: ''
+                      - key: replication_enabled
+                        value: ''
+                      - key: replication_type
+                        value: ''
+                      - key: replication:activereplay
+                        value: ''
+                      - key: replication:livevolume
+                        value: ''
+                      - key: storagetype:volumeqos
+                        value: ''
+                      - key: storagetype:groupqos
+                        value: ''
+                      - key: storagetype:datareductionprofile
+                        value: ''
+                      - key: multiattach
+                        value: ''
+                    image:
+                      useMultipath: true
+                      forceMultipath: true
+                msg: fetch integration storage details successfully
+                status: ok
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: storage example-storage not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch integration storage details: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error
+patch:
+  operationId: updateIntegrationStorage
+  tags:
+  - Integrations
+  summary: Update an integration storage
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/storageName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/ApplyIntegrationStorageRequest.yaml
+        examples:
+          example1:
+            summary: Update integration storage request
+            value:
+              name: dell-emc-sc-fc
+              driver: cinder.volume.drivers.dell_emc.sc.storagecenter_fc.SCFCDriver
+              storage:
+                service:
+                  driverSection:
+                  - key: san_ip
+                    value: 10.32.10.250
+                  - key: san_login
+                    value: Admin
+                  - key: san_password
+                    value: bigstackcoltd
+                  - key: san_thin_provision
+                    value: 'true'
+                  - key: dell_sc_ssn
+                    value: '364940'
+                  - key: dell_sc_api_port
+                    value: '3033'
+                  - key: dell_sc_verify_cert
+                    value: 'false'
+                  - key: dell_sc_server_folder
+                    value: dev-servers/glance-cluster
+                  - key: dell_sc_volume_folder
+                    value: dev-vols
+                  - key: use_multipath_for_image_xfer
+                    value: 'true'
+                  - key: enforce_multipath_for_image_xfer
+                    value: 'true'
+                  - key: image_upload_use_cinder_backend
+                    value: 'true'
+                  extraSettings:
+                  - sectionHeader: DEFAULT
+                    settings:
+                    - key: allowed_direct_url_schemes
+                      value: cinder
+                    - key: glance_request_timeout
+                      value: '1200'
+                  extraConfigFiles:
+                  - name: test.conf
+                    content: YWFhCg==
+                volumeType:
+                  settings:
+                  - key: storagetype:storageprofile
+                    value: ''
+                  - key: replication_enabled
+                    value: ''
+                  - key: replication_type
+                    value: ''
+                  - key: replication:activereplay
+                    value: ''
+                  - key: replication:livevolume
+                    value: ''
+                  - key: storagetype:volumeqos
+                    value: ''
+                  - key: storagetype:groupqos
+                    value: ''
+                  - key: storagetype:datareductionprofile
+                    value: ''
+                  - key: multiattach
+                    value: ''
+                image:
+                  useMultipath: true
+                  forceMultipath: true
+  responses:
+    '202':
+      description: Receive the request to update an integration storage successfully,
+        processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: receive the request to update an integration storage successfully,
+                  processing
+              status:
+                type: string
+                example: accepted
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: storage example-storage not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to update integration storage: internal server error'
+              status:
+                type: string
+                example: internal server error
+delete:
+  operationId: deleteIntegrationStorage
+  tags:
+  - Integrations
+  summary: Delete an integration storage
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/storageName.yaml
+  responses:
+    '202':
+      description: Receive the request to delete an integration storage successfully,
+        processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: receive the request to delete an integration storage successfully,
+                  processing
+              status:
+                type: string
+                example: accepted
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: storage example-storage not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete integration storage: internal server error'
+              status:
+                type: string
+                example: internal server error

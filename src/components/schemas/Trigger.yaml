@@ -1,0 +1,110 @@
+type: object
+required:
+- name
+- isBuiltIn
+- description
+- attribute
+- response
+- enabled
+properties:
+  name:
+    type: string
+  isBuiltIn:
+    type: boolean
+  description:
+    type: string
+  attribute:
+    type: object
+    required:
+    - alertTypes
+    - severities
+    - categories
+    - eventIds
+    properties:
+      alertTypes:
+        type: array
+        items:
+          type: string
+      severities:
+        type: array
+        items:
+          type: string
+      categories:
+        type: array
+        items:
+          type: string
+      eventIds:
+        type: array
+        items:
+          type: string
+  response:
+    type: object
+    required:
+    - types
+    - script
+    - slacks
+    - emails
+    properties:
+      types:
+        type: array
+        items:
+          type: string
+          enum:
+          - script
+          - email
+          - slack
+      script:
+        type: object
+        required:
+        - name
+        - content
+        properties:
+          name:
+            type: string
+          content:
+            type: string
+            description: require the Base64 encoded string
+      slacks:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - url
+          - description
+          properties:
+            name:
+              type: string
+            url:
+              type: string
+            description:
+              type: string
+      emails:
+        type: array
+        items:
+          type: object
+          required:
+          - address
+          - note
+          properties:
+            address:
+              type: string
+            note:
+              type: string
+  status:
+    type: object
+    required:
+    - current
+    - isProcessing
+    properties:
+      current:
+        type: string
+        enum:
+        - ok
+        - creating
+        - updating
+        - deleting
+      isProcessing:
+        type: boolean
+  enabled:
+    type: boolean

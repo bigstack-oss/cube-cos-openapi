@@ -1,0 +1,48 @@
+post:
+  operationId: restartNodeOsd
+  tags:
+  - Nodes
+  summary: Restart an OSD on the node
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  - $ref: ../../components/parameters/osdId.yaml
+  responses:
+    '202':
+      description: the request to restart node OSD is accepted successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/RestartNodeOsdResponse.yaml
+    '404':
+      description: Node or OSD not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node or osd not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to restart osd: internal server error'
+              status:
+                type: string
+                example: internal server error

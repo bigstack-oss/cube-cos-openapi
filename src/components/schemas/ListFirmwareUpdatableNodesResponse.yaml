@@ -1,0 +1,33 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - firmware
+      properties:
+        name:
+          type: string
+        firmware:
+          type: object
+          required:
+          - active
+          - inactive
+          properties:
+            active:
+              type: string
+            inactive:
+              type: string
+  msg:
+    type: string
+  status:
+    type: string

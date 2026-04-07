@@ -1,0 +1,675 @@
+openapi: 3.0.0
+info:
+  description: ''
+  title: Cube COS API
+  contact: {}
+  version: 1.0.0
+paths:
+  /api/v1/logout:
+    $ref: ./paths/logout/logout.yaml
+  /api/v1/datacenters/{dataCenter}/me:
+    $ref: ./paths/me/me.yaml
+  /api/v1/datacenters:
+    $ref: ./paths/datacenters/datacenters.yaml
+  /api/v1/datacenters/{dataCenter}:
+    $ref: ./paths/datacenters/datacenters_{dataCenter}.yaml
+  /api/v1/datacenters/{dataCenter}/rollingReboot:
+    $ref: ./paths/datacenters/datacenters_{dataCenter}_rollingReboot.yaml
+  /api/v1/datacenters/{dataCenter}/services:
+    $ref: ./paths/services/services.yaml
+  /api/v1/datacenters/{dataCenter}/events:
+    $ref: ./paths/events/events.yaml
+  /api/v1/datacenters/{dataCenter}/events/predefined:
+    $ref: ./paths/events/events_predefined.yaml
+  /api/v1/datacenters/{dataCenter}/events/filterConditions:
+    $ref: ./paths/events/events_filterConditions.yaml
+  /api/v1/datacenters/{dataCenter}/events/abstract:
+    $ref: ./paths/events/events_abstract.yaml
+  /api/v1/datacenters/{dataCenter}/events/rank:
+    $ref: ./paths/events/events_rank.yaml
+  /api/v1/datacenters/{dataCenter}/notifications:
+    $ref: ./paths/notifications/notifications.yaml
+  /api/v1/datacenters/{dataCenter}/notifications/last:
+    $ref: ./paths/notifications/notifications_last.yaml
+  /api/v1/datacenters/{dataCenter}/healths:
+    $ref: ./paths/healths/healths.yaml
+  /api/v1/datacenters/{dataCenter}/healths/services/{serviceType}:
+    $ref: ./paths/healths/healths_services_{serviceType}.yaml
+  /api/v1/datacenters/{dataCenter}/healths/services/{serviceType}/modules/{moduleType}:
+    $ref: ./paths/healths/healths_services_{serviceType}_modules_{moduleType}.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/applications:
+    $ref: ./paths/integrations/integrations_applications.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages:
+    $ref: ./paths/integrations/integrations_storages.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}/asDefault:
+    $ref: ./paths/integrations/integrations_storages_{storageName}_asDefault.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}/verify:
+    $ref: ./paths/integrations/integrations_storages_{storageName}_verify.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/{storageName}:
+    $ref: ./paths/integrations/integrations_storages_{storageName}.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/models:
+    $ref: ./paths/integrations/integrations_storages_models.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/models/{driverName}:
+    $ref: ./paths/integrations/integrations_storages_models_{driverName}.yaml
+  /api/v1/datacenters/{dataCenter}/integrations/storages/vendors:
+    $ref: ./paths/integrations/integrations_storages_vendors.yaml
+  /api/v1/datacenters/{dataCenter}/licenses:
+    $ref: ./paths/licenses/licenses.yaml
+  /api/v1/datacenters/{dataCenter}/licenses/verify:
+    $ref: ./paths/licenses/licenses_verify.yaml
+  /api/v1/datacenters/{dataCenter}/licenses/hosts/{hostname}:
+    $ref: ./paths/licenses/licenses_hosts_{hostname}.yaml
+  /api/v1/datacenters/{dataCenter}/licenses/attachments:
+    $ref: ./paths/licenses/licenses_attachments.yaml
+  /api/v1/datacenters/{dataCenter}/metrics:
+    $ref: ./paths/metrics/metrics.yaml
+  /api/v1/datacenters/{dataCenter}/metrics/{metricType}/{viewType}/{entityType}:
+    $ref: ./paths/metrics/metrics_{metricType}_{viewType}_{entityType}.yaml
+  /api/v1/datacenters/{dataCenter}/metrics/{metricType}/{viewType}/{entityType}/{entityId or Name}:
+    $ref: ./paths/metrics/metrics_{metricType}_{viewType}_{entityType}_{entityId or
+      Name}.yaml
+  /api/v1/datacenters/{dataCenter}/nodes:
+    $ref: ./paths/nodes/nodes.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}:
+    $ref: ./paths/nodes/nodes_{nodeName}.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/softReboot:
+    $ref: ./paths/nodes/nodes_{nodeName}_softReboot.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi:
+    $ref: ./paths/nodes/nodes_{nodeName}_ipmi.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/disconnect:
+    $ref: ./paths/nodes/nodes_{nodeName}_ipmi_disconnect.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/verify:
+    $ref: ./paths/nodes/nodes_{nodeName}_ipmi_verify.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/ipmi/{operation}:
+    $ref: ./paths/nodes/nodes_{nodeName}_ipmi_{operation}.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/devices:
+    $ref: ./paths/nodes/nodes_{nodeName}_devices.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/devices/{deviceName}:
+    $ref: ./paths/nodes/nodes_{nodeName}_devices_{deviceName}.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/osds/{osdId}:
+    $ref: ./paths/nodes/nodes_{nodeName}_osds_{osdId}.yaml
+  /api/v1/datacenters/{dataCenter}/nodes/{nodeName}/osds/{osdId}/restart:
+    $ref: ./paths/nodes/nodes_{nodeName}_osds_{osdId}_restart.yaml
+  /api/v1/datacenters/{dataCenter}/settings:
+    $ref: ./paths/settings/settings.yaml
+  /api/v1/datacenters/{dataCenter}/settings/titlePrefix:
+    $ref: ./paths/settings/settings_titlePrefix.yaml
+  /api/v1/datacenters/{dataCenter}/settings/email/senders:
+    $ref: ./paths/settings/settings_email_senders.yaml
+  /api/v1/datacenters/{dataCenter}/settings/email/senders/{senderHost}:
+    $ref: ./paths/settings/settings_email_senders_{senderHost}.yaml
+  /api/v1/datacenters/{dataCenter}/settings/email/recipients:
+    $ref: ./paths/settings/settings_email_recipients.yaml
+  /api/v1/datacenters/{dataCenter}/settings/email/recipients/{recipientEmail}:
+    $ref: ./paths/settings/settings_email_recipients_{recipientEmail}.yaml
+  /api/v1/datacenters/{dataCenter}/settings/slack/channels:
+    $ref: ./paths/settings/settings_slack_channels.yaml
+  /api/v1/datacenters/{dataCenter}/settings/slack/channels/{channelName}:
+    $ref: ./paths/settings/settings_slack_channels_{channelName}.yaml
+  /api/v1/datacenters/{dataCenter}/tokens:
+    $ref: ./paths/tokens/tokens.yaml
+  /api/v1/datacenters/{dataCenter}/tunings/parameters:
+    $ref: ./paths/tunings/tunings_parameters.yaml
+  /api/v1/datacenters/{dataCenter}/tunings/specs:
+    $ref: ./paths/tunings/tunings_specs.yaml
+  /api/v1/datacenters/{dataCenter}/tunings/parameters/{parameterName}:
+    $ref: ./paths/tunings/tunings_parameters_{parameterName}.yaml
+  /api/v1/datacenters/{dataCenter}/tunings/parameters/{parameterName}/enable:
+    $ref: ./paths/tunings/tunings_parameters_{parameterName}_enable.yaml
+  /api/v1/datacenters/{dataCenter}/tunings/parameters/{parameterName}/reset:
+    $ref: ./paths/tunings/tunings_parameters_{parameterName}_reset.yaml
+  /api/v1/datacenters/{dataCenter}/triggers/materials:
+    $ref: ./paths/triggers/triggers_materials.yaml
+  /api/v1/datacenters/{dataCenter}/triggers/materials/script/verify:
+    $ref: ./paths/triggers/triggers_materials_script_verify.yaml
+  /api/v1/datacenters/{dataCenter}/triggers:
+    $ref: ./paths/triggers/triggers.yaml
+  /api/v1/datacenters/{dataCenter}/triggers/{triggerName}:
+    $ref: ./paths/triggers/triggers_{triggerName}.yaml
+  /api/v1/datacenters/{dataCenter}/triggers/{triggerName}/enable:
+    $ref: ./paths/triggers/triggers_{triggerName}_enable.yaml
+  /api/v1/datacenters/{dataCenter}/supportFiles:
+    $ref: ./paths/supportFiles/supportFiles.yaml
+  /api/v1/datacenters/{dataCenter}/supportFiles/{supportFileSet}:
+    $ref: ./paths/supportFiles/supportFiles_{supportFileSet}.yaml
+  /api/v1/datacenters/{dataCenter}/supportFiles/hosts/{hostname}:
+    $ref: ./paths/supportFiles/supportFiles_hosts_{hostname}.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/hosts/{hostname}:
+    $ref: ./paths/grafana/grafana_hosts_{hostname}.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/instances/{instanceId}:
+    $ref: ./paths/grafana/grafana_instances_{instanceId}.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/topHosts:
+    $ref: ./paths/grafana/grafana_topHosts.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/topInstances:
+    $ref: ./paths/grafana/grafana_topInstances.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/networks:
+    $ref: ./paths/grafana/grafana_networks.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/networkDevices:
+    $ref: ./paths/grafana/grafana_networkDevices.yaml
+  /api/v1/datacenters/{dataCenter}/grafana/storages:
+    $ref: ./paths/grafana/grafana_storages.yaml
+  /api/v1/datacenters/{dataCenter}/opensearch/requests/{requestId}:
+    $ref: ./paths/opensearch/opensearch_requests_{requestId}.yaml
+  /api/v1/datacenters/{dataCenter}/images/materials:
+    $ref: ./paths/images/images_materials.yaml
+  /api/v1/datacenters/{dataCenter}/images:
+    $ref: ./paths/images/images.yaml
+  /api/v1/datacenters/{dataCenter}/images/{imageId}:
+    $ref: ./paths/images/images_{imageId}.yaml
+  /api/v1/datacenters/{dataCenter}/images.csv:
+    $ref: ./paths/images/images.csv.yaml
+  /api/v1/datacenters/{dataCenter}/volumes:
+    $ref: ./paths/volumes/volumes.yaml
+  /api/v1/datacenters/{dataCenter}/volumes.csv:
+    $ref: ./paths/volumes/volumes.csv.yaml
+  /api/v1/datacenters/{dataCenter}/volumes/images:
+    $ref: ./paths/volumes/volumes_images.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares:
+    $ref: ./paths/firmwares/firmwares.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/continueAnyway/{nodeName}:
+    $ref: ./paths/firmwares/firmwares_continueAnyway_{nodeName}.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/md5sum:
+    $ref: ./paths/firmwares/firmwares_md5sum.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/md5sum/verify:
+    $ref: ./paths/firmwares/firmwares_md5sum_verify.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/upgradeProgress:
+    $ref: ./paths/firmwares/firmwares_upgradeProgress.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/abort:
+    $ref: ./paths/firmwares/firmwares_abort.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/{version}:
+    $ref: ./paths/firmwares/firmwares_{version}.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/{version}/{nodeName}:
+    $ref: ./paths/firmwares/firmwares_{version}_{nodeName}.yaml
+  /api/v1/datacenters/{dataCenter}/firmwares/{version}/updatableNodes:
+    $ref: ./paths/firmwares/firmwares_{version}_updatableNodes.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks:
+    $ref: ./paths/fixpacks/fixpacks.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/continueAnyway/{nodeName}:
+    $ref: ./paths/fixpacks/fixpacks_continueAnyway_{nodeName}.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/md5sum:
+    $ref: ./paths/fixpacks/fixpacks_md5sum.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/md5sum/verify:
+    $ref: ./paths/fixpacks/fixpacks_md5sum_verify.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/updateProgress/{version}:
+    $ref: ./paths/fixpacks/fixpacks_updateProgress_{version}.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/{version}/rollbackableNodes:
+    $ref: ./paths/fixpacks/fixpacks_{version}_rollbackableNodes.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/{version}/rollback:
+    $ref: ./paths/fixpacks/fixpacks_{version}_rollback.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/{version}/updatableNodes:
+    $ref: ./paths/fixpacks/fixpacks_{version}_updatableNodes.yaml
+  /api/v1/datacenters/{dataCenter}/fixpacks/{version}:
+    $ref: ./paths/fixpacks/fixpacks_{version}.yaml
+components:
+  securitySchemes:
+    BearerAuth:
+      $ref: ./components/securitySchemes/BearerAuth.yaml
+  parameters:
+    dataCenter:
+      $ref: ./components/parameters/dataCenter.yaml
+    version:
+      $ref: ./components/parameters/version.yaml
+    nodeName:
+      $ref: ./components/parameters/nodeName.yaml
+    project:
+      $ref: ./components/parameters/project.yaml
+    projectNotRequired:
+      $ref: ./components/parameters/projectNotRequired.yaml
+    deviceName:
+      $ref: ./components/parameters/deviceName.yaml
+    osdId:
+      $ref: ./components/parameters/osdId.yaml
+    instanceId:
+      $ref: ./components/parameters/instanceId.yaml
+    requestId:
+      $ref: ./components/parameters/requestId.yaml
+    hostname:
+      $ref: ./components/parameters/hostname.yaml
+    watch:
+      $ref: ./components/parameters/watch.yaml
+    pageSize:
+      $ref: ./components/parameters/pageSize.yaml
+    pageNum:
+      $ref: ./components/parameters/pageNum.yaml
+    keyword:
+      $ref: ./components/parameters/keyword.yaml
+    roles:
+      $ref: ./components/parameters/roles.yaml
+    listLicenseStatuses:
+      $ref: ./components/parameters/listLicenseStatuses.yaml
+    listLicenseAttachmentStatuses:
+      $ref: ./components/parameters/listLicenseAttachmentStatuses.yaml
+    types:
+      $ref: ./components/parameters/types.yaml
+    nodeLicenseStatuses:
+      $ref: ./components/parameters/nodeLicenseStatuses.yaml
+    product:
+      $ref: ./components/parameters/product.yaml
+    products:
+      $ref: ./components/parameters/products.yaml
+    metricType:
+      $ref: ./components/parameters/metricType.yaml
+    viewType:
+      $ref: ./components/parameters/viewType.yaml
+    entityType:
+      $ref: ./components/parameters/entityType.yaml
+    start:
+      $ref: ./components/parameters/start.yaml
+    stop:
+      $ref: ./components/parameters/stop.yaml
+    supportFileSet:
+      $ref: ./components/parameters/supportFileSet.yaml
+    triggerName:
+      $ref: ./components/parameters/triggerName.yaml
+    file:
+      $ref: ./components/parameters/file.yaml
+    name:
+      $ref: ./components/parameters/name.yaml
+    os:
+      $ref: ./components/parameters/os.yaml
+    destination:
+      $ref: ./components/parameters/destination.yaml
+    domain:
+      $ref: ./components/parameters/domain.yaml
+    sourceFromAnotherHypervisor:
+      $ref: ./components/parameters/sourceFromAnotherHypervisor.yaml
+    visibility:
+      $ref: ./components/parameters/visibility.yaml
+    storageName:
+      $ref: ./components/parameters/storageName.yaml
+    driverName:
+      $ref: ./components/parameters/driverName.yaml
+    vendorName:
+      $ref: ./components/parameters/vendorName.yaml
+    productName:
+      $ref: ./components/parameters/productName.yaml
+  schemas:
+    GetMeResponse:
+      $ref: ./components/schemas/GetMeResponse.yaml
+    GetDataCentersResponse:
+      $ref: ./components/schemas/GetDataCentersResponse.yaml
+    GetDataCenterResponse:
+      $ref: ./components/schemas/GetDataCenterResponse.yaml
+    GetServicesResponse:
+      $ref: ./components/schemas/GetServicesResponse.yaml
+    GetEventsResponse:
+      $ref: ./components/schemas/GetEventsResponse.yaml
+    GetPredefinedEventFilterResponse:
+      $ref: ./components/schemas/GetPredefinedEventFilterResponse.yaml
+    GetAbstractedEventsResponse:
+      $ref: ./components/schemas/GetAbstractedEventsResponse.yaml
+    GetRankedEventsResponse:
+      $ref: ./components/schemas/GetRankedEventsResponse.yaml
+    GetEventFilterConditionResponse:
+      $ref: ./components/schemas/GetEventFilterConditionResponse.yaml
+    ListNotificationsResponse:
+      $ref: ./components/schemas/ListNotificationsResponse.yaml
+    GetNotificationResponse:
+      $ref: ./components/schemas/GetNotificationResponse.yaml
+    GetHealthsResponse:
+      $ref: ./components/schemas/GetHealthsResponse.yaml
+    GetServiceHealthHistoryResponse:
+      $ref: ./components/schemas/GetServiceHealthHistoryResponse.yaml
+    PatchRepairResponse:
+      $ref: ./components/schemas/PatchRepairResponse.yaml
+    PatchModuleRepairResponse:
+      $ref: ./components/schemas/PatchModuleRepairResponse.yaml
+    GetModuleHealthHistoryResponse:
+      $ref: ./components/schemas/GetModuleHealthHistoryResponse.yaml
+    GetIntegratedApplicationsResponse:
+      $ref: ./components/schemas/GetIntegratedApplicationsResponse.yaml
+    ListIntegrationStoragesResponse:
+      $ref: ./components/schemas/ListIntegrationStoragesResponse.yaml
+    ApplyIntegrationStorageRequest:
+      $ref: ./components/schemas/ApplyIntegrationStorageRequest.yaml
+    VerifyStorageIntegrationRequest:
+      $ref: ./components/schemas/VerifyStorageIntegrationRequest.yaml
+    GetIntegrationStorageResponse:
+      $ref: ./components/schemas/GetIntegrationStorageResponse.yaml
+    ListIntegrationStorageModelsResponse:
+      $ref: ./components/schemas/ListIntegrationStorageModelsResponse.yaml
+    UpdateIntegreationStorageModelsRequest:
+      $ref: ./components/schemas/UpdateIntegreationStorageModelsRequest.yaml
+    ApplyIntegreationStorageModelsRequest:
+      $ref: ./components/schemas/ApplyIntegreationStorageModelsRequest.yaml
+    GetLicensesResponse:
+      $ref: ./components/schemas/GetLicensesResponse.yaml
+    PostLicenseRequest:
+      $ref: ./components/schemas/PostLicenseRequest.yaml
+    VerifyLicenseResponse:
+      $ref: ./components/schemas/VerifyLicenseResponse.yaml
+    PostLicenseResponse:
+      $ref: ./components/schemas/PostLicenseResponse.yaml
+    GetLicenseAttachmentsResponse:
+      $ref: ./components/schemas/GetLicenseAttachmentsResponse.yaml
+    GetMetricsResponse:
+      $ref: ./components/schemas/GetMetricsResponse.yaml
+    GetCpuUsageSummaryOfHostsResponse:
+      $ref: ./components/schemas/GetCpuUsageSummaryOfHostsResponse.yaml
+    HostMetricHistoryResponse:
+      $ref: ./components/schemas/HostMetricHistoryResponse.yaml
+    GetCpuUsageRankOfHostsResponse:
+      $ref: ./components/schemas/GetCpuUsageRankOfHostsResponse.yaml
+    GetMemoryUsageSummaryOfHostsResponse:
+      $ref: ./components/schemas/GetMemoryUsageSummaryOfHostsResponse.yaml
+    GetMemoryUsageRankOfHostsResponse:
+      $ref: ./components/schemas/GetMemoryUsageRankOfHostsResponse.yaml
+    GetDiskUsageRankOfHostsResponse:
+      $ref: ./components/schemas/GetDiskUsageRankOfHostsResponse.yaml
+    GetDiskBandwidthHistoryOfHostsResponse:
+      $ref: ./components/schemas/GetDiskBandwidthHistoryOfHostsResponse.yaml
+    GetDiskIopsHistoryOfHostsResponse:
+      $ref: ./components/schemas/GetDiskIopsHistoryOfHostsResponse.yaml
+    GetDiskLatencyHistoryOfHostsResponse:
+      $ref: ./components/schemas/GetDiskLatencyHistoryOfHostsResponse.yaml
+    GetNetworkTrafficInRankOfHostsResponse:
+      $ref: ./components/schemas/GetNetworkTrafficInRankOfHostsResponse.yaml
+    GetNetworkTrafficOutRankOfHostsResponse:
+      $ref: ./components/schemas/GetNetworkTrafficOutRankOfHostsResponse.yaml
+    GetCpuUsageRankOfVmsResponse:
+      $ref: ./components/schemas/GetCpuUsageRankOfVmsResponse.yaml
+    GetMemoryUsageSummaryOfVmsResponse:
+      $ref: ./components/schemas/GetMemoryUsageSummaryOfVmsResponse.yaml
+    GetMemoryUsageRankOfVmsResponse:
+      $ref: ./components/schemas/GetMemoryUsageRankOfVmsResponse.yaml
+    GetDiskReadIopsRankOfVmsResponse:
+      $ref: ./components/schemas/GetDiskReadIopsRankOfVmsResponse.yaml
+    GetDiskWriteIopsRankOfVmsResponse:
+      $ref: ./components/schemas/GetDiskWriteIopsRankOfVmsResponse.yaml
+    GetNetworkTrafficInRankOfVmsResponse:
+      $ref: ./components/schemas/GetNetworkTrafficInRankOfVmsResponse.yaml
+    GetNetworkTrafficOutRankOfVmsResponse:
+      $ref: ./components/schemas/GetNetworkTrafficOutRankOfVmsResponse.yaml
+    GetNodesResponse:
+      $ref: ./components/schemas/GetNodesResponse.yaml
+    GetNodeResponse:
+      $ref: ./components/schemas/GetNodeResponse.yaml
+    GetNodeIpmiSettingResponse:
+      $ref: ./components/schemas/GetNodeIpmiSettingResponse.yaml
+    VerifyNodeIpmiResponse:
+      $ref: ./components/schemas/VerifyNodeIpmiResponse.yaml
+    NodeIpmiSettingRequest:
+      $ref: ./components/schemas/NodeIpmiSettingRequest.yaml
+    AddNodeDeviceRequest:
+      $ref: ./components/schemas/AddNodeDeviceRequest.yaml
+    SetNodeIpmiSettingResponse:
+      $ref: ./components/schemas/SetNodeIpmiSettingResponse.yaml
+    OperateNodeIpmiResponse:
+      $ref: ./components/schemas/OperateNodeIpmiResponse.yaml
+    ListNodeDevicesResponse:
+      $ref: ./components/schemas/ListNodeDevicesResponse.yaml
+    AddNodeDeviceResponse:
+      $ref: ./components/schemas/AddNodeDeviceResponse.yaml
+    UpdateNodeDeviceResponse:
+      $ref: ./components/schemas/UpdateNodeDeviceResponse.yaml
+    RemoveNodeDeviceResponse:
+      $ref: ./components/schemas/RemoveNodeDeviceResponse.yaml
+    UpdateNodeOsdResponse:
+      $ref: ./components/schemas/UpdateNodeOsdResponse.yaml
+    RestartNodeOsdResponse:
+      $ref: ./components/schemas/RestartNodeOsdResponse.yaml
+    DeleteNodeOsdResponse:
+      $ref: ./components/schemas/DeleteNodeOsdResponse.yaml
+    UpdateNodeDeviceRequest:
+      $ref: ./components/schemas/UpdateNodeDeviceRequest.yaml
+    UpdateNodeOsdRequest:
+      $ref: ./components/schemas/UpdateNodeOsdRequest.yaml
+    DisconnectNodeIpmiResponse:
+      $ref: ./components/schemas/DisconnectNodeIpmiResponse.yaml
+    GetTokensRequest:
+      $ref: ./components/schemas/GetTokensRequest.yaml
+    GetTokensResponse:
+      $ref: ./components/schemas/GetTokensResponse.yaml
+    GetSupportFilesResponse:
+      $ref: ./components/schemas/GetSupportFilesResponse.yaml
+    DeleteSupportFileSetResponse:
+      $ref: ./components/schemas/DeleteSupportFileSetResponse.yaml
+    TitlePrefix:
+      $ref: ./components/schemas/TitlePrefix.yaml
+    GetHostSupportFilesResponse:
+      $ref: ./components/schemas/GetHostSupportFilesResponse.yaml
+    EmailSenderResponse:
+      $ref: ./components/schemas/EmailSenderResponse.yaml
+    EmailSenderPostRequest:
+      $ref: ./components/schemas/EmailSenderPostRequest.yaml
+    EmailSenderPatchRequest:
+      $ref: ./components/schemas/EmailSenderPatchRequest.yaml
+    TryEmailSender:
+      $ref: ./components/schemas/TryEmailSender.yaml
+    EmailRecipientResponse:
+      $ref: ./components/schemas/EmailRecipientResponse.yaml
+    EmailRecipientPostRequest:
+      $ref: ./components/schemas/EmailRecipientPostRequest.yaml
+    EmailRecipientPutRequest:
+      $ref: ./components/schemas/EmailRecipientPutRequest.yaml
+    SlackChannelGetResponse:
+      $ref: ./components/schemas/SlackChannelGetResponse.yaml
+    SlackChannelPostRequest:
+      $ref: ./components/schemas/SlackChannelPostRequest.yaml
+    SlackChannelPutRequest:
+      $ref: ./components/schemas/SlackChannelPutRequest.yaml
+    GetSettingResponse:
+      $ref: ./components/schemas/GetSettingResponse.yaml
+    UpdateTitlePrefixResponse:
+      $ref: ./components/schemas/UpdateTitlePrefixResponse.yaml
+    PostEmailSenderResponse:
+      $ref: ./components/schemas/PostEmailSenderResponse.yaml
+    TryEmailSenderResponse:
+      $ref: ./components/schemas/TryEmailSenderResponse.yaml
+    GetEmailSendersResponse:
+      $ref: ./components/schemas/GetEmailSendersResponse.yaml
+    PutEmailSenderResponse:
+      $ref: ./components/schemas/PutEmailSenderResponse.yaml
+    DeleteEmailSenderResponse:
+      $ref: ./components/schemas/DeleteEmailSenderResponse.yaml
+    PostEmailRecipientResponse:
+      $ref: ./components/schemas/PostEmailRecipientResponse.yaml
+    GetEmailRecipientsResponse:
+      $ref: ./components/schemas/GetEmailRecipientsResponse.yaml
+    TryEmailRecipientResponse:
+      $ref: ./components/schemas/TryEmailRecipientResponse.yaml
+    PutEmailRecipientResponse:
+      $ref: ./components/schemas/PutEmailRecipientResponse.yaml
+    DeleteEmailRecipientResponse:
+      $ref: ./components/schemas/DeleteEmailRecipientResponse.yaml
+    PostSlackChannelResponse:
+      $ref: ./components/schemas/PostSlackChannelResponse.yaml
+    GetSlackChannelsResponse:
+      $ref: ./components/schemas/GetSlackChannelsResponse.yaml
+    TrySlackChannelResponse:
+      $ref: ./components/schemas/TrySlackChannelResponse.yaml
+    PutSlackChannelResponse:
+      $ref: ./components/schemas/PutSlackChannelResponse.yaml
+    DeleteSlackChannelResponse:
+      $ref: ./components/schemas/DeleteSlackChannelResponse.yaml
+    ListTuningResponse:
+      $ref: ./components/schemas/ListTuningResponse.yaml
+    ListTuningSpecResponse:
+      $ref: ./components/schemas/ListTuningSpecResponse.yaml
+    UpdateTuningRequest:
+      $ref: ./components/schemas/UpdateTuningRequest.yaml
+    EnableOrDisableTuningRequest:
+      $ref: ./components/schemas/EnableOrDisableTuningRequest.yaml
+    ResetTuningRequest:
+      $ref: ./components/schemas/ResetTuningRequest.yaml
+    UpdateTuningResponse:
+      $ref: ./components/schemas/UpdateTuningResponse.yaml
+    ResetTuningResponse:
+      $ref: ./components/schemas/ResetTuningResponse.yaml
+    GetTriggerMaterialsResponse:
+      $ref: ./components/schemas/GetTriggerMaterialsResponse.yaml
+    VerifyMaterialScriptResponse:
+      $ref: ./components/schemas/VerifyMaterialScriptResponse.yaml
+    VerifyMaterialScriptRequest:
+      $ref: ./components/schemas/VerifyMaterialScriptRequest.yaml
+    GetTriggersResponse:
+      $ref: ./components/schemas/GetTriggersResponse.yaml
+    GetTriggerResponse:
+      $ref: ./components/schemas/GetTriggerResponse.yaml
+    CreateTriggerRequest:
+      $ref: ./components/schemas/CreateTriggerRequest.yaml
+    CreateTriggerResponse:
+      $ref: ./components/schemas/CreateTriggerResponse.yaml
+    UpdateTriggerRequest:
+      $ref: ./components/schemas/UpdateTriggerRequest.yaml
+    EnableOrDisableTriggerRequest:
+      $ref: ./components/schemas/EnableOrDisableTriggerRequest.yaml
+    UpdateTriggerResponse:
+      $ref: ./components/schemas/UpdateTriggerResponse.yaml
+    DeleteTriggerResponse:
+      $ref: ./components/schemas/DeleteTriggerResponse.yaml
+    CreateSupportFilesRequest:
+      $ref: ./components/schemas/CreateSupportFilesRequest.yaml
+    CreateSupportFilesResponse:
+      $ref: ./components/schemas/CreateSupportFilesResponse.yaml
+    GetGrafanaDashboardLinkResponse:
+      $ref: ./components/schemas/GetGrafanaDashboardLinkResponse.yaml
+    GetOpenSearchDashboardLinkResponse:
+      $ref: ./components/schemas/GetOpenSearchDashboardLinkResponse.yaml
+    ListImageMaterialsResponse:
+      $ref: ./components/schemas/ListImageMaterialsResponse.yaml
+    ListImagesResponse:
+      $ref: ./components/schemas/ListImagesResponse.yaml
+    ListVolumesResponse:
+      $ref: ./components/schemas/ListVolumesResponse.yaml
+    ListFirmwaresResponse:
+      $ref: ./components/schemas/ListFirmwaresResponse.yaml
+    ListFirmwareUpdatableNodesResponse:
+      $ref: ./components/schemas/ListFirmwareUpdatableNodesResponse.yaml
+    GetFirmwareUpgradeProgressResponse:
+      $ref: ./components/schemas/GetFirmwareUpgradeProgressResponse.yaml
+    AbortFirmwareUpdateResponse:
+      $ref: ./components/schemas/AbortFirmwareUpdateResponse.yaml
+    ListFixpacksResponse:
+      $ref: ./components/schemas/ListFixpacksResponse.yaml
+    ListFixpackUpdatableNodesResponse:
+      $ref: ./components/schemas/ListFixpackUpdatableNodesResponse.yaml
+    ListFixpackRollbackableNodesResponse:
+      $ref: ./components/schemas/ListFixpackRollbackableNodesResponse.yaml
+    InstallFixpackRequest:
+      $ref: ./components/schemas/InstallFixpackRequest.yaml
+    GetFixpackUpdateProgressResponse:
+      $ref: ./components/schemas/GetFixpackUpdateProgressResponse.yaml
+    MetricRank:
+      $ref: ./components/schemas/MetricRank.yaml
+    DiskReadWriteHistory:
+      $ref: ./components/schemas/DiskReadWriteHistory.yaml
+    RoleUsage:
+      $ref: ./components/schemas/RoleUsage.yaml
+    Page:
+      $ref: ./components/schemas/Page.yaml
+    DataCenter:
+      $ref: ./components/schemas/DataCenter.yaml
+    FirmwareVersionDetails:
+      $ref: ./components/schemas/FirmwareVersionDetails.yaml
+    FixpackVersionDetails:
+      $ref: ./components/schemas/FixpackVersionDetails.yaml
+    NodeRole:
+      $ref: ./components/schemas/NodeRole.yaml
+    Node:
+      $ref: ./components/schemas/Node.yaml
+    SupportFileSet:
+      $ref: ./components/schemas/SupportFileSet.yaml
+    Trigger:
+      $ref: ./components/schemas/Trigger.yaml
+    SupportFile:
+      $ref: ./components/schemas/SupportFile.yaml
+    TimeValuePair:
+      $ref: ./components/schemas/TimeValuePair.yaml
+    TuningLimitationType:
+      $ref: ./components/schemas/TuningLimitationType.yaml
+    LicenseIssue:
+      $ref: ./components/schemas/LicenseIssue.yaml
+    LicenseFeature:
+      $ref: ./components/schemas/LicenseFeature.yaml
+    LicenseSupportPlan:
+      $ref: ./components/schemas/LicenseSupportPlan.yaml
+    ListLicenseCurrentStatus:
+      $ref: ./components/schemas/ListLicenseCurrentStatus.yaml
+    ListLicenseStatus:
+      $ref: ./components/schemas/ListLicenseStatus.yaml
+    NodeLicenseStatus:
+      $ref: ./components/schemas/NodeLicenseStatus.yaml
+    NodeLicenseCurrentStatus:
+      $ref: ./components/schemas/NodeLicenseCurrentStatus.yaml
+    VerifyLicenseStatus:
+      $ref: ./components/schemas/VerifyLicenseStatus.yaml
+    SettingStatus:
+      $ref: ./components/schemas/SettingStatus.yaml
+    DeviceType:
+      $ref: ./components/schemas/DeviceType.yaml
+    Notification:
+      $ref: ./components/schemas/Notification.yaml
+    StorageModel:
+      $ref: ./components/schemas/StorageModel.yaml
+    StorageModelVenderSetting:
+      $ref: ./components/schemas/StorageModelVenderSetting.yaml
+    StorageKeyValuePair:
+      $ref: ./components/schemas/StorageKeyValuePair.yaml
+    DEV00001I:
+      $ref: ./components/schemas/DEV00001I.yaml
+    DEV00001E:
+      $ref: ./components/schemas/DEV00001E.yaml
+    DEV00002I:
+      $ref: ./components/schemas/DEV00002I.yaml
+    DEV00002E:
+      $ref: ./components/schemas/DEV00002E.yaml
+    DEV00003I:
+      $ref: ./components/schemas/DEV00003I.yaml
+    DEV00003E:
+      $ref: ./components/schemas/DEV00003E.yaml
+    DEV00004I:
+      $ref: ./components/schemas/DEV00004I.yaml
+    DEV00004E:
+      $ref: ./components/schemas/DEV00004E.yaml
+    OSD00001I:
+      $ref: ./components/schemas/OSD00001I.yaml
+    OSD00001E:
+      $ref: ./components/schemas/OSD00001E.yaml
+    OSD00002I:
+      $ref: ./components/schemas/OSD00002I.yaml
+    OSD00002E:
+      $ref: ./components/schemas/OSD00002E.yaml
+    OSD00003I:
+      $ref: ./components/schemas/OSD00003I.yaml
+    OSD00003E:
+      $ref: ./components/schemas/OSD00003E.yaml
+    MDL00001I:
+      $ref: ./components/schemas/MDL00001I.yaml
+    MDL00001E:
+      $ref: ./components/schemas/MDL00001E.yaml
+    MDL00002I:
+      $ref: ./components/schemas/MDL00002I.yaml
+    MDL00002E:
+      $ref: ./components/schemas/MDL00002E.yaml
+    MDL00003I:
+      $ref: ./components/schemas/MDL00003I.yaml
+    MDL00003E:
+      $ref: ./components/schemas/MDL00003E.yaml
+    STG00001I:
+      $ref: ./components/schemas/STG00001I.yaml
+    STG00001E:
+      $ref: ./components/schemas/STG00001E.yaml
+    STG00002I:
+      $ref: ./components/schemas/STG00002I.yaml
+    STG00002E:
+      $ref: ./components/schemas/STG00002E.yaml
+    STG00003I:
+      $ref: ./components/schemas/STG00003I.yaml
+    STG00003E:
+      $ref: ./components/schemas/STG00003E.yaml
+    STG00004I:
+      $ref: ./components/schemas/STG00004I.yaml
+    STG00004E:
+      $ref: ./components/schemas/STG00004E.yaml
+    STG00005I:
+      $ref: ./components/schemas/STG00005I.yaml
+    STG00005E:
+      $ref: ./components/schemas/STG00005E.yaml
+  requestBodies:
+    applicationOctetStream:
+      $ref: ./components/requestBodies/applicationOctetStream.yaml
+    upgradeFirmwareRequest:
+      $ref: ./components/requestBodies/upgradeFirmwareRequest.yaml
+security:
+- BearerAuth: []

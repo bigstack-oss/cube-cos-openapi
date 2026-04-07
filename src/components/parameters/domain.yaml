@@ -1,0 +1,6 @@
+name: domain
+in: query
+required: true
+schema:
+  type: string
+description: Domain name for the project

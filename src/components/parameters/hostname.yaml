@@ -1,0 +1,7 @@
+in: path
+name: hostname
+required: true
+schema:
+  type: string
+description: The hostname of the host to operate
+example: example-node-0

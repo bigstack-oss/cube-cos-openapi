@@ -1,0 +1,23 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - link
+    - enabled
+    properties:
+      link:
+        type: string
+      enabled:
+        type: boolean
+  msg:
+    type: string
+  status:
+    type: string

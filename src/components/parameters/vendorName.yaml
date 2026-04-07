@@ -1,0 +1,7 @@
+in: path
+name: vendorName
+required: true
+schema:
+  type: string
+description: The vendor name to filter models
+example: example-vendor

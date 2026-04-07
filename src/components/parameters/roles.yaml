@@ -1,0 +1,9 @@
+in: query
+name: roles
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../schemas/NodeRole.yaml
+description: The role of the host
+example: control-converged

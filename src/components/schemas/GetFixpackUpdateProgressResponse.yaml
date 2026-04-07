@@ -1,0 +1,63 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - version
+    - operation
+    - progresses
+    properties:
+      version:
+        type: string
+      operation:
+        type: string
+        enum:
+        - install
+        - rollback
+      progresses:
+        type: array
+        items:
+          type: object
+          required:
+          - host
+          - status
+          properties:
+            host:
+              type: string
+            status:
+              type: object
+              required:
+              - current
+              - isProcessing
+              - processPercent
+              - description
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - available
+                  - installing
+                  - waiting reboot
+                  - rebooting
+                  - installed
+                  - rolling back
+                  - install failed
+                  - rollback failed
+                  - resolved
+                isProcessing:
+                  type: boolean
+                processPercent:
+                  type: number
+                description:
+                  type: string
+  msg:
+    type: string
+  status:
+    type: string

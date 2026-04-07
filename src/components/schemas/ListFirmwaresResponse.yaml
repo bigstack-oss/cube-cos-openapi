@@ -1,0 +1,61 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - firmwares
+    - page
+    properties:
+      firmwares:
+        type: array
+        items:
+          type: object
+          required:
+          - version
+          - releaseNotes
+          - updatedAt
+          - status
+          properties:
+            version:
+              type: string
+            releaseNotes:
+              type: string
+            updatedAt:
+              type: string
+              format: date-time
+            status:
+              type: object
+              required:
+              - current
+              - isUpdatable
+              - isProcessing
+              - isRemovable
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - available
+                  - installing
+                  - waiting reboot
+                  - rebooting
+                  - failed
+                  - succeeded
+                isUpdatable:
+                  type: boolean
+                isProcessing:
+                  type: boolean
+                isRemovable:
+                  type: boolean
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+  status:
+    type: string

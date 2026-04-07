@@ -1,0 +1,42 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - name
+      - isHeaderShortcutEnabled
+      - description
+      - isBuiltIn
+      - url
+      properties:
+        name:
+          type: string
+          example: openstack
+        isHeaderShortcutEnabled:
+          type: boolean
+          example: true
+        description:
+          type: string
+          example: openstack dashboard
+        isBuiltIn:
+          type: boolean
+          example: true
+        url:
+          type: string
+          example: https://10.10.10.10/skyline
+  msg:
+    type: string
+    example: fetch integrated applications successfully
+  status:
+    type: string
+    example: ok

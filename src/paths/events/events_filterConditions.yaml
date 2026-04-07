@@ -1,0 +1,96 @@
+get:
+  operationId: getEventFilterConditions
+  tags:
+  - Events
+  summary: Retrieve the event filter conditions
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - in: query
+    name: past
+    required: false
+    schema:
+      type: string
+      enum:
+      - 1h
+      - 24h
+      - 7d
+      - 14d
+    description: The past time of the filter conditions to query, click 'try it out'
+      to see a few options, but can specify with the 's'(second), 'm'(minute), 'h'(hour),
+      and 'd'(day) suffix for other time ranges.
+    example: 1d
+  - $ref: ../../components/parameters/start.yaml
+  - $ref: ../../components/parameters/stop.yaml
+  responses:
+    '200':
+      description: Retrieve the event filter conditions successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetEventFilterConditionResponse.yaml
+          examples:
+            example1:
+              summary: Event filter conditions
+              value:
+                code: 200
+                data:
+                  system:
+                    severities:
+                    - CRITICAL
+                    - INFO
+                    - WARNING
+                    categories:
+                    - KSN
+                    - NET
+                    - SDN
+                    - SRV
+                  instance:
+                    ids:
+                    - 028952d3-c0ba-4494-96c0-2bf1bab407e5
+                    - 02ecd121-c19b-41c7-8ed7-390745b01af4
+                    - 12893f22-a353-4dce-a164-f889e0f39951
+                    - fbd5d7c2-38c8-436b-97f4-d9e5b322d02b
+                    categories:
+                    - CPU
+                    - MEM
+                  host:
+                    names:
+                    - example-node-0
+                    categories:
+                    - DSK
+                    - MEM
+                msg: fetch event filter conditions successfully
+                status: ok
+    '400':
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: 'invalid ''start'' time: 2021-09-01T111:00:00+00:00'
+              status:
+                type: string
+                example: bad request
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch event filter conditions: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

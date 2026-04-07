@@ -1,0 +1,80 @@
+post:
+  operationId: verifyNodeIpmi
+  tags:
+  - Nodes
+  summary: Verify the node IPMI setting
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/nodeName.yaml
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/NodeIpmiSettingRequest.yaml
+        examples:
+          example:
+            summary: Verify node IPMI setting
+            value:
+              ip: 10.10.10.10
+              port: 623
+              username: admin
+              password: example-password
+  responses:
+    '200':
+      description: Node IPMI setting verified successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/VerifyNodeIpmiResponse.yaml
+          examples:
+            example:
+              summary: Node IPMI setting
+              value:
+                code: 200
+                data:
+                  board:
+                    manufacturingDate: '2025-01-01T01:00:00+00:00'
+                    manufacturer: DELL
+                    product: PowerEdge R630
+                    serial: CN747516CK0286
+                    partNumber: 02C2CPA04
+                  product:
+                    name: PowerEdge R630
+                    manufacturer: DELL
+                    serial: 1MXXZH2
+                    version: '01'
+                msg: node IPMI setting verified successfully
+                status: ok
+    '404':
+      description: Node not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: node not found
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to verify node IPMI setting: internal server error'
+              status:
+                type: string
+                example: internal server error

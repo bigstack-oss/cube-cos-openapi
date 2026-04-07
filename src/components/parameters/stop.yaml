@@ -1,0 +1,8 @@
+in: query
+name: stop
+required: false
+schema:
+  type: string
+description: The end time of the event to query, the value should be in RFC3339 format
+  (default is now).
+example: '2025-01-01T01:00:00+00:00'

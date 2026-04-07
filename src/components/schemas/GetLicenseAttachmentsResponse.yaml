@@ -1,0 +1,34 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - serialNumber
+      - hostname
+      - role
+      - product
+      - status
+      properties:
+        serialNumber:
+          type: string
+        hostname:
+          type: string
+        role:
+          $ref: ./NodeRole.yaml
+        product:
+          type: string
+        status:
+          $ref: ./NodeLicenseCurrentStatus.yaml
+  msg:
+    type: string
+  status:
+    type: string

@@ -1,0 +1,14 @@
+type: object
+required:
+- value
+- hosts
+properties:
+  value:
+    oneOf:
+    - type: string
+    - type: integer
+    - type: boolean
+  hosts:
+    type: array
+    items:
+      type: string

@@ -1,0 +1,85 @@
+delete:
+  operationId: deleteFixpack
+  tags:
+  - Fixpacks
+  summary: Delete a fixpack
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/version.yaml
+  responses:
+    '200':
+      description: Fixpack deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 200
+              msg:
+                type: string
+                example: Fixpack deleted successfully
+              status:
+                type: string
+                example: ok
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: '''FIX_001'' not found'
+              status:
+                type: string
+                example: not found
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: fixpack version 'FIX_001' is not removable
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to delete fixpack: internal server error'
+              status:
+                type: string
+                example: internal server error

@@ -1,0 +1,71 @@
+post:
+  operationId: rolloutDataCenterBySoftReboot
+  tags:
+  - Data Centers
+  summary: Rollout the data center by soft reboot on each node one by one
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '202':
+      description: Accepted to rollout the data center by soft reboot, processing
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 202
+              msg:
+                type: string
+                example: accepted to rollout data center by soft reboot successfully,
+                  processing
+              status:
+                type: string
+                example: accepted
+    '409':
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: 'failed to rollout data center by soft reboot: another rollout
+                  operation is in progress'
+              status:
+                type: string
+                example: conflict
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to rollout data center by soft reboot: internal server
+                  error'
+              status:
+                type: string
+                example: internal server error

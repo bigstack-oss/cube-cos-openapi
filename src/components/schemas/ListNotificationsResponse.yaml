@@ -1,0 +1,28 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: object
+    required:
+    - notifications
+    - page
+    properties:
+      notifications:
+        type: array
+        items:
+          $ref: ./Notification.yaml
+      page:
+        $ref: ./Page.yaml
+  msg:
+    type: string
+    example: fetch notifications successfully
+  status:
+    type: string
+    example: ok

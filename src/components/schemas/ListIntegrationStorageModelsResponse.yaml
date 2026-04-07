@@ -1,0 +1,165 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+    example: 200
+  data:
+    type: array
+    items:
+      type: object
+      required:
+      - driver
+      - vendor
+      - type
+      - multipath
+      - storage
+      properties:
+        driver:
+          type: string
+        vendor:
+          type: string
+        type:
+          type: string
+        multipath:
+          type: array
+          items:
+            type: object
+            required:
+            - section
+            - attributes
+            - subSections
+            properties:
+              section:
+                type: string
+              attributes:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - key
+                  - value
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+              subSections:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - section
+                  - attributes
+                  properties:
+                    section:
+                      type: string
+                    attributes:
+                      type: array
+                      items:
+                        type: object
+                        required:
+                        - key
+                        - value
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+        storage:
+          type: object
+          required:
+          - service
+          - volumeType
+          - image
+          properties:
+            service:
+              type: object
+              required:
+              - driverSection
+              - extraSettings
+              - extraConfigFiles
+              properties:
+                driverSection:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - key
+                    - value
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                extraSettings:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - sectionHeader
+                    - settings
+                    properties:
+                      sectionHeader:
+                        type: string
+                      settings:
+                        type: array
+                        items:
+                          type: object
+                          required:
+                          - key
+                          - value
+                          properties:
+                            key:
+                              type: string
+                            value:
+                              type: string
+                extraConfigFiles:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - name
+                    - content
+                    properties:
+                      name:
+                        type: string
+                      content:
+                        type: string
+            volumeType:
+              type: object
+              required:
+              - settings
+              properties:
+                settings:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - key
+                    - value
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+            image:
+              type: object
+              required:
+              - useMultipath
+              - forceMultipath
+              properties:
+                useMultipath:
+                  type: boolean
+                forceMultipath:
+                  type: boolean
+  msg:
+    type: string
+    example: fetch integration storage models successfully
+  status:
+    type: string
+    example: ok

@@ -1,0 +1,101 @@
+type: object
+required:
+- code
+- data
+- msg
+- status
+properties:
+  code:
+    type: integer
+  data:
+    type: object
+    required:
+    - license
+    - effectNodes
+    properties:
+      license:
+        type: object
+        required:
+        - name
+        - type
+        - product
+        - issue
+        - quantity
+        - supportPlan
+        - expiry
+        - status
+        properties:
+          name:
+            type: string
+          type:
+            type: string
+          product:
+            type: object
+            required:
+            - name
+            - feature
+            properties:
+              name:
+                type: string
+              feature:
+                $ref: ./LicenseFeature.yaml
+          issue:
+            $ref: ./LicenseIssue.yaml
+          quantity:
+            type: string
+          supportPlan:
+            $ref: ./LicenseSupportPlan.yaml
+          expiry:
+            type: object
+            required:
+            - date
+            - days
+            properties:
+              date:
+                type: string
+              days:
+                type: integer
+          status:
+            $ref: ./VerifyLicenseStatus.yaml
+      effectNodes:
+        type: array
+        items:
+          type: object
+          required:
+          - name
+          - role
+          - expiry
+          - status
+          properties:
+            name:
+              type: string
+            role:
+              $ref: ./NodeRole.yaml
+            expiry:
+              type: object
+              required:
+              - date
+              - days
+              properties:
+                date:
+                  type: string
+                days:
+                  type: integer
+            status:
+              type: object
+              required:
+              - current
+              - isExpiring
+              properties:
+                current:
+                  type: string
+                  enum:
+                  - ok
+                  - expiring
+                  - expired
+                isExpiring:
+                  type: boolean
+  msg:
+    type: string
+  status:
+    type: string

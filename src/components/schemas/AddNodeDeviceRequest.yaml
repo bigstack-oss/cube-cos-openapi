@@ -1,0 +1,7 @@
+type: object
+required:
+- device
+properties:
+  device:
+    type: string
+    description: The device path, e.g., sdc

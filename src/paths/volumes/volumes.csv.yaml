@@ -1,0 +1,35 @@
+get:
+  operationId: listVolumesAsCsv
+  tags:
+  - Volumes
+  summary: List volumes as CSV
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/project.yaml
+  - $ref: ../../components/parameters/pageSize.yaml
+  - $ref: ../../components/parameters/pageNum.yaml
+  - $ref: ../../components/parameters/keyword.yaml
+  responses:
+    '200':
+      description: List volume as CSV format successfully
+      content:
+        text/csv:
+          schema:
+            type: string
+            format: binary
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list volumes as CSV: internal server error'
+              status:
+                type: string
+                example: internal server error

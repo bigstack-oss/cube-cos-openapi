@@ -1,0 +1,27 @@
+type: object
+required:
+- id
+- nodeName
+- time
+- additionalInfo
+properties:
+  id:
+    type: string
+    pattern: ^DEV
+  nodeName:
+    type: string
+  time:
+    type: string
+    format: date-time
+  additionalInfo:
+    type: object
+    required:
+    - device
+    - class
+    properties:
+      device:
+        type: string
+      class:
+        type: string
+      description:
+        type: string

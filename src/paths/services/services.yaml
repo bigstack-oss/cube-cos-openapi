@@ -1,0 +1,173 @@
+get:
+  operationId: getServices
+  tags:
+  - Services
+  summary: Retrieve the list of services
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  responses:
+    '200':
+      description: Retrieve the list of services successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/GetServicesResponse.yaml
+          examples:
+            example:
+              summary: Services
+              value:
+                code: 200
+                data:
+                - name: clusterLink
+                  category: core
+                  modules:
+                  - name: link
+                  - name: clock
+                  - name: dns
+                - name: clusterSys
+                  category: core
+                  modules:
+                  - name: bootstrap
+                  - name: license
+                - name: clusterSettings
+                  category: core
+                  modules:
+                  - name: etcd
+                  - name: nodelist
+                - name: haCluster
+                  category: core
+                  modules:
+                  - name: hacluster
+                - name: msgQueue
+                  category: core
+                  modules:
+                  - name: rabbitmq
+                - name: iaasDb
+                  category: core
+                  modules:
+                  - name: mysql
+                  - name: mongodb
+                - name: virtualIp
+                  category: core
+                  modules:
+                  - name: vip
+                  - name: haproxy_ha
+                - name: storage
+                  category: storage
+                  modules:
+                  - name: ceph
+                  - name: ceph_mon
+                  - name: ceph_mgr
+                  - name: ceph_mds
+                  - name: ceph_osd
+                  - name: ceph_rgw
+                  - name: rbd_target
+                - name: apiService
+                  category: core
+                  modules:
+                  - name: haproxy
+                  - name: httpd
+                  - name: skyline
+                  - name: lmi
+                  - name: memcache
+                - name: singleSignOn
+                  category: core
+                  modules:
+                  - name: k3s
+                  - name: keycloak
+                - name: network
+                  category: cloud computing
+                  modules:
+                  - name: neutron
+                - name: compute
+                  category: cloud computing
+                  modules:
+                  - name: nova
+                  - name: cyborg
+                - name: bareMetal
+                  category: cloud computing
+                  modules:
+                  - name: ironic
+                - name: image
+                  category: cloud computing
+                  modules:
+                  - name: glance
+                - name: blockStor
+                  category: cloud computing
+                  modules:
+                  - name: cinder
+                - name: fileStor
+                  category: cloud computing
+                  modules:
+                  - name: manila
+                - name: objectStor
+                  category: cloud computing
+                  modules:
+                  - name: swift
+                - name: orchestration
+                  category: cloud computing
+                  modules:
+                  - name: heat
+                - name: lbaas
+                  category: cloud computing
+                  modules:
+                  - name: octavia
+                - name: dnsaas
+                  category: cloud computing
+                  modules:
+                  - name: designate
+                - name: k8saas
+                  category: cloud computing
+                  modules:
+                  - name: rancher
+                - name: instanceHa
+                  category: cloud computing
+                  modules:
+                  - name: masakari
+                - name: businessLogic
+                  category: cloud computing
+                  modules:
+                  - name: senlin
+                  - name: watcher
+                - name: dataPipe
+                  category: infrascope
+                  modules:
+                  - name: zookeeper
+                  - name: kafka
+                - name: metrics
+                  category: infrascope
+                  modules:
+                  - name: monasca
+                  - name: telegraf
+                  - name: grafana
+                - name: logAnalytics
+                  category: infrascope
+                  modules:
+                  - name: filebeat
+                  - name: auditbeat
+                  - name: logstash
+                  - name: opensearch
+                  - name: opensearch-dashboards
+                - name: notifications
+                  category: infrascope
+                  modules:
+                  - name: influxdb
+                  - name: kapacitor
+                msg: fetch service details successfully
+                status: ok
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to fetch services: internal server error'
+              status:
+                type: string
+                example: internal server error

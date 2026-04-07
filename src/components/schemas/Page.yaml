@@ -1,0 +1,19 @@
+type: object
+required:
+- total
+- number
+- size
+- totalItemCount
+properties:
+  total:
+    type: integer
+    example: 10
+  number:
+    type: integer
+    example: 1
+  size:
+    type: integer
+    example: 1
+  totalItemCount:
+    type: integer
+    example: 1

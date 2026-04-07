@@ -1,0 +1,75 @@
+get:
+  operationId: listFirmwareUpdatableNodes
+  tags:
+  - Firmwares
+  summary: List nodes that can be updated to the specified firmware version
+  parameters:
+  - $ref: ../../components/parameters/dataCenter.yaml
+  - $ref: ../../components/parameters/version.yaml
+  responses:
+    '200':
+      description: List of updatable nodes successfully retrieved
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ListFirmwareUpdatableNodesResponse.yaml
+          examples:
+            example1:
+              summary: Updatable node list
+              value:
+                code: 200
+                data:
+                - name: example-node-0
+                  firmware:
+                    active: Cube Appliance 3.1.0
+                    inactive: Cube Appliance 3.1.0
+                - name: example-node-1
+                  firmware:
+                    active: Cube Appliance 3.1.0
+                    inactive: Cube Appliance 3.1.0
+                - name: example-node-2
+                  firmware:
+                    active: Cube Appliance 3.1.0
+                    inactive: Cube Appliance 3.1.0
+                msg: fetch updatable nodes successfully
+                status: ok
+    '404':
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 404
+              msg:
+                type: string
+                example: '''CUBE Appliance 3.1.0'' not found'
+              status:
+                type: string
+                example: not found
+    '500':
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 500
+              msg:
+                type: string
+                example: 'failed to list updatable nodes: internal server error'
+              status:
+                type: string
+                example: internal server error
