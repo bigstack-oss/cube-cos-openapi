@@ -5760,6 +5760,139 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/gpuCards":
+    get:
+      operationId: listNodeGPUCards
+      tags:
+        - Nodes
+      summary: Retrieve the GPU cards of a node
+      parameters:
+        - "$ref": "#/components/parameters/dataCenter"
+        - "$ref": "#/components/parameters/nodeName"
+      responses:
+        '200':
+          description: Retrieve the node GPU cards successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListNodeGPUCardsResponse"
+              examples:
+                example:
+                  summary: GPU cards list
+                  value:
+                    code: 200
+                    data:
+                      - id: gpu-001
+                        name: NVIDIA A100 80GB
+                        pciAddress: 0000:01:00.0
+                        resourceType: migBackedVgpu
+                        supportResourceTypes: ["pgpu", "sriovVgpu", "migBackedVgpu"]
+                        status:
+                          current: inUse
+                          isProcessing: false
+                        vram:
+                          allocatedMiB: 80000
+                          totalMiB: 100000
+                          utilizationPercent: 40
+                        gpu:
+                          utilizationPercent: 24
+                        allocationSummary:
+                          current: 2
+                          total: 6
+                        profiles:
+                          - id: a100-1-5c
+                            name: A100-1-5c
+                            vramMiB: 5120
+                            count: 16
+                            remaining: 14
+                            aliasName: Inference_Small
+                          - id: a100-2-10c
+                            name: A100-2-10c
+                            vramMiB: 10240
+                            count: 8
+                            remaining: 7
+                            aliasName: Training_Medium
+                        attachedInstances:
+                          - id: vm-99
+                            name: AI-Worker-01
+                            profileAlias: A100-1-5C
+                            utilizationPercent: 20.35
+                            memoryUsage:
+                              allocatedMiB: 4200
+                              totalMiB: 5000
+                            links:
+                              grafana: https://example.grafana/vm-99
+                              console: https://example.console/vm-99
+                      - id: gpu-002
+                        name: NVIDIA A100 80GB
+                        pciAddress: 0000:01:00.1
+                        resourceType: pgpu
+                        supportResourceTypes: ["pgpu", "sriovVgpu"]
+                        status:
+                          current: inUse
+                          isProcessing: false
+                        vram:
+                          allocatedMiB: 81920
+                          totalMb: 81920
+                          utilizationPercent: 85
+                        gpu:
+                          utilizationPercent: 92
+                        allocationSummary:
+                          current: 1
+                          total: 1
+                        attachedInstances:
+                          - id: vm-102
+                            name: Deep-Learning-Main
+                            profileAlias: null
+                            utilizationPercent: 91.5
+                            memoryUsage:
+                              allocatedMiB: 78000
+                              totalMiB: 81920
+                            links:
+                              grafana: https://example.grafana/vm-99
+                              console: https://example.console/vm-99
+                      - id: gpu-003
+                        name: NVIDIA A100 80GB
+                        pciAddress: 0000:01:00.2
+                        resourceType: unset
+                        supportResourceTypes: ["pgpu"]
+                        status:
+                          current: unassigned
+                          isProcessing: false
+                    msg: fetch node GPU cards successfully
+                    status: ok
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node not found
+                  status:
+                    type: string
+                    example: not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to fetch node GPU cards: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/settings":
     get:
       operationId: getSettings
@@ -15328,6 +15461,156 @@ components:
         status:
           type: string
           example: ok
+    ListNodeGPUCardsResponse:
+      type: object
+      required:
+        - code
+        - data
+        - msg
+        - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - pciAddress
+              - resourceType
+              - supportResourceTypes
+              - status
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              pciAddress:
+                type: string
+              resourceType:
+                $ref: "#/components/schemas/GPUResourceType"
+              supportResourceTypes:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GPUSupportResourceType"
+              status:
+                type: object
+                required:
+                  - current
+                  - isProcessing
+                properties:
+                  current:
+                    $ref: "#/components/schemas/GPUCardStatus"
+                  isProcessing:
+                    type: boolean
+              vram:
+                type: object
+                required:
+                  - allocatedMiB
+                  - totalMiB
+                  - utilizationPercent
+                properties:
+                  allocatedMiB:
+                    type: integer
+                  totalMiB:
+                    type: integer
+                  utilizationPercent:
+                    type: number
+                    description: Floating-point number
+              gpu:
+                type: object
+                required:
+                  - utilizationPercent
+                properties:
+                  utilizationPercent:
+                    type: number
+                    description: Floating-point number
+              allocationSummary:
+                type: object
+                required:
+                  - current
+                  - total
+                properties:
+                  current:
+                    type: integer
+                  total:
+                    type: integer
+              profiles:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - vramMiB
+                    - count
+                    - remaining
+                    - aliasName
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    vramMiB:
+                      type: integer
+                    count:
+                      type: integer
+                    remaining:
+                      type: integer
+                    aliasName:
+                      type: string
+                      nullable: true
+              attachedInstances:
+                type: array
+                items:
+                  type: object
+                  required:
+                    - id
+                    - name
+                    - profileAlias
+                    - utilizationPercent
+                    - memoryUsage
+                    - links
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    profileAlias:
+                      type: string
+                      nullable: true
+                    utilizationPercent:
+                      type: number
+                      description: Floating-point number
+                    memoryUsage:
+                      type: object
+                      required:
+                        - allocatedMiB
+                        - totalMiB
+                      properties:
+                        allocatedMiB:
+                          type: integer
+                        totalMiB:
+                          type: integer
+                    links:
+                      type: object
+                      required:
+                        - grafana
+                        - console
+                      properties:
+                        grafana:
+                          type: string
+                        console:
+                          type: string
+        msg:
+          type: string
+          example: node GPU cards retrieved successfully
+        status:
+          type: string
+          example: ok
     ListTuningResponse:
       type: object
       required:
@@ -16973,6 +17256,25 @@ components:
         updatedAt:
           type: string
           format: date-time
+    GPUResourceType:
+      type: string
+      enum:
+        - unset
+        - pgpu
+        - sriovVgpu
+        - migBackedVgpu
+    GPUSupportResourceType:
+      type: string
+      enum:
+        - pgpu
+        - sriovVgpu
+        - migBackedVgpu
+    GPUCardStatus:
+      type: string
+      enum:
+        - unassigned
+        - idle
+        - inUse
     NodeRole:
       type: string
       enum:
