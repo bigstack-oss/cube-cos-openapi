@@ -5787,9 +5787,6 @@ paths:
                         pciAddress: 0000:01:00.0
                         resourceType: migBackedVgpu
                         supportResourceTypes: ["pgpu", "sriovVgpu", "migBackedVgpu"]
-                        status:
-                          current: inUse
-                          isProcessing: false
                         vram:
                           allocatedMiB: 80000
                           totalMiB: 100000
@@ -5823,14 +5820,14 @@ paths:
                             links:
                               grafana: https://example.grafana/vm-99
                               console: https://example.console/vm-99
+                        status:
+                          current: inUse
+                          isProcessing: false
                       - id: gpu-002
                         name: NVIDIA A100 80GB
                         pciAddress: 0000:01:00.1
                         resourceType: pgpu
                         supportResourceTypes: ["pgpu", "sriovVgpu"]
-                        status:
-                          current: inUse
-                          isProcessing: false
                         vram:
                           allocatedMiB: 81920
                           totalMb: 81920
@@ -5840,6 +5837,7 @@ paths:
                         allocationSummary:
                           current: 1
                           total: 1
+                        profiles: null
                         attachedInstances:
                           - id: vm-102
                             name: Deep-Learning-Main
@@ -5851,11 +5849,19 @@ paths:
                             links:
                               grafana: https://example.grafana/vm-99
                               console: https://example.console/vm-99
+                        status:
+                          current: inUse
+                          isProcessing: false
                       - id: gpu-003
                         name: NVIDIA A100 80GB
                         pciAddress: 0000:01:00.2
                         resourceType: unset
                         supportResourceTypes: ["pgpu"]
+                        vram: null
+                        gpu: null
+                        allocationSummary: null
+                        profiles: null
+                        attachedInstances: null
                         status:
                           current: unassigned
                           isProcessing: false
@@ -15482,6 +15488,11 @@ components:
               - pciAddress
               - resourceType
               - supportResourceTypes
+              - vram
+              - gpu
+              - allocationSummary
+              - profiles
+              - attachedInstances
               - status
             properties:
               id:
@@ -15496,16 +15507,6 @@ components:
                 type: array
                 items:
                   $ref: "#/components/schemas/GPUSupportResourceType"
-              status:
-                type: object
-                required:
-                  - current
-                  - isProcessing
-                properties:
-                  current:
-                    $ref: "#/components/schemas/GPUCardStatus"
-                  isProcessing:
-                    type: boolean
               vram:
                 type: object
                 required:
@@ -15605,6 +15606,16 @@ components:
                           type: string
                         console:
                           type: string
+              status:
+                type: object
+                required:
+                  - current
+                  - isProcessing
+                properties:
+                  current:
+                    $ref: "#/components/schemas/GPUCardStatus"
+                  isProcessing:
+                    type: boolean
         msg:
           type: string
           example: node GPU cards retrieved successfully
