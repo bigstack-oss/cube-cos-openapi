@@ -12758,9 +12758,6 @@ components:
                         type: string
                   modules:
                     type: array
-                    required:
-                    - name
-                    - status
                     items:
                       type: object
                       required:
@@ -13092,89 +13089,6 @@ components:
           type: string
         driver:
           type: string
-        storage:
-          type: object
-          required:
-          - service
-          - volumeType
-          - image
-          properties:
-            service:
-              type: object
-              required:
-              - driverSection
-              - extraSettings
-              - extraConfigFiles
-              properties:
-                driverSection:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageKeyValuePair"
-                extraSettings:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - sectionHeader
-                    - settings
-                    properties:
-                      sectionHeader:
-                        type: string
-                      settings:
-                        type: array
-                        items:
-                          "$ref": "#/components/schemas/StorageKeyValuePair"
-                extraConfigFiles:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - name
-                    - content
-                    properties:
-                      name:
-                        type: string
-                      content:
-                        type: string
-                        description: Base64 encoded content of the config file
-            volumeType:
-              type: object
-              required:
-              - settings
-              properties:
-                settings:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageKeyValuePair"
-            image:
-              type: object
-              required:
-              - useMultipath
-              - forceMultipath
-              properties:
-                useMultipath:
-                  type: boolean
-                forceMultipath:
-                  type: boolean
-    VerifyStorageIntegrationRequest:
-      type: object
-      required:
-      - name
-      - device
-      - storage
-      properties:
-        name:
-          type: string
-        device:
-          type: object
-          required:
-          - vendor
-          - product
-          properties:
-            vendor:
-              type: string
-            product:
-              type: string
         storage:
           type: object
           required:
@@ -14471,36 +14385,6 @@ components:
         status:
           type: string
           example: ok
-    GetNodeIpmiSettingResponse:
-      type: object
-      required:
-      - code
-      - data
-      - msg
-      - status
-      properties:
-        code:
-          type: integer
-        data:
-          type: object
-          required:
-          - ip
-          - port
-          - username
-          - password
-          properties:
-            ip:
-              type: string
-            port:
-              type: integer
-            username:
-              type: string
-            password:
-              type: string
-        msg:
-          type: string
-        status:
-          type: string
     VerifyNodeIpmiResponse:
       type: object
       required:
@@ -14942,16 +14826,6 @@ components:
           type: string
         status:
           type: string
-    TitlePrefix:
-      type: object
-      required:
-      - value
-      - status
-      properties:
-        value:
-          type: string
-        status:
-          "$ref": "#/components/schemas/SettingStatus"
     GetHostSupportFilesResponse:
       type: object
       required:
@@ -15509,6 +15383,7 @@ components:
                   $ref: "#/components/schemas/GPUSupportResourceType"
               vram:
                 type: object
+                nullable: true
                 required:
                   - allocatedMiB
                   - totalMiB
@@ -15523,6 +15398,7 @@ components:
                     description: Floating-point number
               gpu:
                 type: object
+                nullable: true
                 required:
                   - utilizationPercent
                 properties:
@@ -15531,6 +15407,7 @@ components:
                     description: Floating-point number
               allocationSummary:
                 type: object
+                nullable: true
                 required:
                   - current
                   - total
@@ -15541,6 +15418,7 @@ components:
                     type: integer
               profiles:
                 type: array
+                nullable: true
                 items:
                   type: object
                   required:
@@ -15566,6 +15444,7 @@ components:
                       nullable: true
               attachedInstances:
                 type: array
+                nullable: true
                 items:
                   type: object
                   required:
@@ -17516,7 +17395,6 @@ components:
         files:
           type: array
           items:
-            type: object
             "$ref": "#/components/schemas/SupportFile"
         sizeMiB:
           type: number
@@ -17876,161 +17754,6 @@ components:
           STG00004E: "#/components/schemas/STG00004E"
           STG00005I: "#/components/schemas/STG00005I"
           STG00005E: "#/components/schemas/STG00005E"
-    StorageModel:
-      type: object
-      required:
-      - vendor
-      - product
-      - multipath
-      - storage
-      properties:
-        vendor:
-          type: string
-        product:
-          type: string
-        multipath:
-          type: object
-          required:
-          - defaults
-          - blacklist
-          - blacklistExceptions
-          - devices
-          - overrides
-          - multipaths
-          properties:
-            defaults:
-              type: array
-              items:
-                "$ref": "#/components/schemas/StorageKeyValuePair"
-            blacklist:
-              type: object
-              required:
-              - devnode
-              - devices
-              properties:
-                devnode:
-                  type: string
-                devices:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageModelVenderSetting"
-            blacklistExceptions:
-              type: object
-              required:
-              - devnode
-              - devices
-              properties:
-                devnode:
-                  type: string
-                devices:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageModelVenderSetting"
-            devices:
-              type: array
-              items:
-                "$ref": "#/components/schemas/StorageModelVenderSetting"
-            overrides:
-              type: array
-              items:
-                "$ref": "#/components/schemas/StorageKeyValuePair"
-            multipaths:
-              type: array
-              items:
-                type: object
-                required:
-                - wwid
-                - settings
-                properties:
-                  wwid:
-                    type: string
-                  settings:
-                    type: array
-                    items:
-                      "$ref": "#/components/schemas/StorageKeyValuePair"
-        storage:
-          type: object
-          required:
-          - service
-          - volumeType
-          - image
-          - updateTime
-          properties:
-            service:
-              type: object
-              required:
-              - driverSection
-              - extraSettings
-              - extraConfigFiles
-              properties:
-                driverSection:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageKeyValuePair"
-                extraSettings:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - sectionHeader
-                    - settings
-                    properties:
-                      sectionHeader:
-                        type: string
-                      settings:
-                        type: array
-                        items:
-                          "$ref": "#/components/schemas/StorageKeyValuePair"
-                extraConfigFiles:
-                  type: array
-                  items:
-                    type: object
-                    required:
-                    - name
-                    - content
-                    properties:
-                      name:
-                        type: string
-                      content:
-                        type: string
-                        description: Base64 encoded content of the config file
-            volumeType:
-              type: object
-              required:
-              - settings
-              properties:
-                settings:
-                  type: array
-                  items:
-                    "$ref": "#/components/schemas/StorageKeyValuePair"
-            image:
-              type: object
-              required:
-              - useMultipath
-              - forceMultipath
-              properties:
-                useMultipath:
-                  type: boolean
-                forceMultipath:
-                  type: boolean
-            updateTime:
-              type: string
-              format: date-time
-    StorageModelVenderSetting:
-      type: object
-      required:
-      - vendor
-      - product
-      - settings
-      properties:
-        vendor:
-          type: string
-        product:
-          type: string
-        settings:
-          type: array
-          items:
-            "$ref": "#/components/schemas/StorageKeyValuePair"
     StorageKeyValuePair:
       type: object
       required:
