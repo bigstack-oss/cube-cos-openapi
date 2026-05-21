@@ -5809,6 +5809,8 @@ paths:
                             count: 8
                             remaining: 7
                             aliasName: Training_Medium
+                        profileCountLimit: 10
+                        vramLimitMiB: 10240
                         attachedInstances:
                           - id: vm-99
                             name: AI-Worker-01
@@ -5838,6 +5840,8 @@ paths:
                           current: 1
                           total: 1
                         profiles: null
+                        profileCountLimit: null
+                        vramLimitMiB: null
                         attachedInstances:
                           - id: vm-102
                             name: Deep-Learning-Main
@@ -5861,6 +5865,8 @@ paths:
                         gpu: null
                         allocationSummary: null
                         profiles: null
+                        profileCountLimit: null
+                        vramLimitMiB: null
                         attachedInstances: null
                         status:
                           current: unassigned
@@ -5896,6 +5902,119 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch node GPU cards: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/gpuCards/{gpuId}":
+    put:
+      operationId: updateNodeGPUCard
+      tags:
+        - Nodes
+      summary: Update node GPU card
+      parameters:
+        - "$ref": "#/components/parameters/dataCenter"
+        - "$ref": "#/components/parameters/nodeName"
+        - "$ref": "#/components/parameters/gpuId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateNodeGPUCardPutRequest"
+            examples:
+              passthrough:
+                summary: Set to passthrough
+                value:
+                  resourceType: "pgpu"
+              sr-iov:
+                summary: Set to SR-IOV
+                value:
+                  resourceType: "sriovVgpu"
+                  profiles:
+                    - id: a100-1-5c
+                      count: 1
+                    - id: a100-2-10c
+                      count: 2
+              mig-backed:
+                summary: Set to MIG-backed
+                value:
+                  resourceType: "migBackedVgpu"
+                  profiles:
+                    - id: a100-1-5c
+                      count: 3
+                    - id: a100-2-10c
+                      count: 4
+      responses:
+        '200':
+          description: Node GPU card updated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateNodeGPUCardResponse"
+        '404':
+          description: Node or GPU card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 404
+                  msg:
+                    type: string
+                    example: node not found
+                  status:
+                    type: string
+                    example: not found
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: GPU card does not support 'sriovVgpu' resource type
+                  status:
+                    type: string
+                    example: confict
+              examples:
+                resourceTypeUnsupported:
+                  summary: Resource type unsupported
+                  value:
+                    code: 409
+                    msg: GPU card does not support 'sriovVgpu' resource type
+                    status: conflict
+                exceedProfileCountLimit:
+                  summary: Exceed profile count limit
+                  value:
+                    code: 409
+                    msg: Exceed GPU profile count limit
+                    status: conflict
+                exceedVRAMLimitMiB:
+                  summary: Exceed VRAM limit MiB
+                  value:
+                    code: 409
+                    msg: Exceed VRAM limit MiB
+                    status: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to update node GPU card: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -12247,6 +12366,14 @@ components:
         type: string
       description: The product name to filter models
       example: example-product
+    gpuId:
+      in: path
+      name: gpuId
+      required: true
+      schema:
+        type: string
+      description: A UUID with a "GPU-" prefix
+      example: GPU-0aa3c43c-1ada-6075-e57a-dccb0793a8b6
   schemas:
     GetMeResponse:
       type: object
@@ -15366,6 +15493,8 @@ components:
               - gpu
               - allocationSummary
               - profiles
+              - profileCountLimit
+              - vramLimitMiB
               - attachedInstances
               - status
             properties:
@@ -15416,6 +15545,12 @@ components:
                     type: integer
                   total:
                     type: integer
+              profileCountLimit:
+                type: integer
+                nullable: true
+              vramLimitMiB:
+                type: integer
+                nullable: true
               profiles:
                 type: array
                 nullable: true
@@ -15498,6 +15633,41 @@ components:
         msg:
           type: string
           example: node GPU cards retrieved successfully
+        status:
+          type: string
+          example: ok
+    UpdateNodeGPUCardPutRequest:
+      type: object
+      required:
+        - resourceType
+      properties:
+        resourceType:
+          $ref: "#/components/schemas/GPUSupportResourceType"
+        profiles:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - count
+            properties:
+              id:
+                type: string
+              count:
+                type: integer
+    UpdateNodeGPUCardResponse:
+      type: object
+      required:
+      - code
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+          example: 200
+        msg:
+          type: string
+          example: node GPU card updated successfully
         status:
           type: string
           example: ok
