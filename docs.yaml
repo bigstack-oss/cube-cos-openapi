@@ -5797,20 +5797,37 @@ paths:
                           current: 2
                           total: 6
                         profiles:
-                          - id: a100-1-5c
-                            name: A100-1-5c
-                            vramMiB: 5120
-                            count: 16
-                            remaining: 14
-                            aliasName: Inference_Small
-                          - id: a100-2-10c
-                            name: A100-2-10c
-                            vramMiB: 10240
-                            count: 8
-                            remaining: 7
-                            aliasName: Training_Medium
-                        profileCountLimit: 10
-                        vramLimitMiB: 10240
+                          sriovVgpu:
+                            - id: 1
+                              name: DC-1B
+                              vramMiB: 2048
+                              count: 0
+                              remaining: null
+                              aliasName: DC-1B
+                              vmCountLimit: null
+                            - id: 2
+                              name: DC-2B
+                              vramMiB: 4096
+                              count: 0
+                              remaining: null
+                              aliasName: DC-2B
+                              vmCountLimit: null
+                          migBackedVgpu:
+                            - id: 14
+                              name: DC-1-24Q
+                              vramMiB: 24576.12
+                              count: 16
+                              remaining: 14
+                              aliasName: Inference_Small
+                              vmCountLimit: 30
+                            - id: 21
+                              name: DC-1-12C
+                              vramMiB: 10240.00
+                              count: 0
+                              remaining: 1
+                              aliasName: Training_Medium
+                              vmCountLimit: 1
+                        profileCountLimit: null
                         attachedInstances:
                           - id: vm-99
                             name: AI-Worker-01
@@ -5839,9 +5856,24 @@ paths:
                         allocationSummary:
                           current: 1
                           total: 1
-                        profiles: null
+                        profiles:
+                          sriovVgpu:
+                            - id: 1
+                              name: DC-1B
+                              vramMiB: 2048
+                              count: 0
+                              remaining: null
+                              aliasName: DC-1B
+                              vmCountLimit: null
+                            - id: 2
+                              name: DC-2B
+                              vramMiB: 4096
+                              count: 0
+                              remaining: null
+                              aliasName: DC-2B
+                              vmCountLimit: null
+                          migBackedVgpu: null
                         profileCountLimit: null
-                        vramLimitMiB: null
                         attachedInstances:
                           - id: vm-102
                             name: Deep-Learning-Main
@@ -5864,9 +5896,10 @@ paths:
                         vram: null
                         gpu: null
                         allocationSummary: null
-                        profiles: null
+                        profiles:
+                          sriovVgpu: null
+                          migBackedVgpu: null
                         profileCountLimit: null
-                        vramLimitMiB: null
                         attachedInstances: null
                         status:
                           current: unassigned
@@ -15494,7 +15527,6 @@ components:
               - allocationSummary
               - profiles
               - profileCountLimit
-              - vramLimitMiB
               - attachedInstances
               - status
             properties:
@@ -15512,7 +15544,6 @@ components:
                   $ref: "#/components/schemas/GPUSupportResourceType"
               vram:
                 type: object
-                nullable: true
                 required:
                   - allocatedMiB
                   - totalMiB
@@ -15523,17 +15554,14 @@ components:
                   totalMiB:
                     type: integer
                   utilizationPercent:
-                    type: number
-                    description: Floating-point number
+                    type: integer
               gpu:
                 type: object
-                nullable: true
                 required:
                   - utilizationPercent
                 properties:
                   utilizationPercent:
-                    type: number
-                    description: Floating-point number
+                    type: integer
               allocationSummary:
                 type: object
                 nullable: true
@@ -15548,35 +15576,22 @@ components:
               profileCountLimit:
                 type: integer
                 nullable: true
-              vramLimitMiB:
-                type: integer
-                nullable: true
               profiles:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  required:
-                    - id
-                    - name
-                    - vramMiB
-                    - count
-                    - remaining
-                    - aliasName
-                  properties:
-                    id:
-                      type: string
-                    name:
-                      type: string
-                    vramMiB:
-                      type: integer
-                    count:
-                      type: integer
-                    remaining:
-                      type: integer
-                    aliasName:
-                      type: string
-                      nullable: true
+                type: object
+                required:
+                  - sriovVgpu
+                  - migBackedVgpu
+                properties:
+                  sriovVgpu:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: "#/components/schemas/GPUProfile"
+                  migBackedVgpu:
+                    type: array
+                    nullable: true
+                    items:
+                      $ref: "#/components/schemas/GPUProfile"
               attachedInstances:
                 type: array
                 nullable: true
@@ -15598,8 +15613,7 @@ components:
                       type: string
                       nullable: true
                     utilizationPercent:
-                      type: number
-                      description: Floating-point number
+                      type: integer
                     memoryUsage:
                       type: object
                       required:
@@ -17335,6 +17349,34 @@ components:
         - unassigned
         - idle
         - inUse
+    GPUProfile:
+      type: object
+      required:
+        - id
+        - name
+        - vramMiB
+        - count
+        - remaining
+        - aliasName
+        - countLimit
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        vramMiB:
+          type: number
+        count:
+          type: integer
+        remaining:
+          type: integer
+          nullable: true
+        aliasName:
+          type: string
+          nullable: true
+        countLimit:
+          type: integer
+          nullable: true
     NodeRole:
       type: string
       enum:
