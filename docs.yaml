@@ -5804,14 +5804,14 @@ paths:
                               count: 0
                               remaining: null
                               aliasName: DC-1B
-                              vmCountLimit: null
+                              countLimit: null
                             - id: 2
                               name: DC-2B
                               vramMiB: 4096
                               count: 0
                               remaining: null
                               aliasName: DC-2B
-                              vmCountLimit: null
+                              countLimit: null
                           migBackedVgpu:
                             - id: 14
                               name: DC-1-24Q
@@ -5819,14 +5819,14 @@ paths:
                               count: 16
                               remaining: 14
                               aliasName: Inference_Small
-                              vmCountLimit: 30
+                              countLimit: 30
                             - id: 21
                               name: DC-1-12C
                               vramMiB: 10240.00
                               count: 0
                               remaining: 1
                               aliasName: Training_Medium
-                              vmCountLimit: 1
+                              countLimit: 1
                         profileCountLimit: null
                         attachedInstances:
                           - id: vm-99
@@ -5864,14 +5864,14 @@ paths:
                               count: 0
                               remaining: null
                               aliasName: DC-1B
-                              vmCountLimit: null
+                              countLimit: null
                             - id: 2
                               name: DC-2B
                               vramMiB: 4096
                               count: 0
                               remaining: null
                               aliasName: DC-2B
-                              vmCountLimit: null
+                              countLimit: null
                           migBackedVgpu: null
                         profileCountLimit: null
                         attachedInstances:
@@ -17366,6 +17366,7 @@ components:
           type: string
         vramMiB:
           type: number
+          description: Floating-point number
         count:
           type: integer
         remaining:
