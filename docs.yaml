@@ -5827,7 +5827,7 @@ paths:
                               remaining: 1
                               aliasName: Training_Medium
                               countLimit: 1
-                        profileCountLimit: null
+                        sriovVgpuProfileCountLimit: null
                         attachedInstances:
                           - id: vm-99
                             name: AI-Worker-01
@@ -5873,7 +5873,7 @@ paths:
                               aliasName: DC-2B
                               countLimit: null
                           migBackedVgpu: null
-                        profileCountLimit: null
+                        sriovVgpuProfileCountLimit: null
                         attachedInstances:
                           - id: vm-102
                             name: Deep-Learning-Main
@@ -5899,7 +5899,7 @@ paths:
                         profiles:
                           sriovVgpu: null
                           migBackedVgpu: null
-                        profileCountLimit: null
+                        sriovVgpuProfileCountLimit: null
                         attachedInstances: null
                         status:
                           current: unassigned
@@ -15526,7 +15526,7 @@ components:
               - gpu
               - allocationSummary
               - profiles
-              - profileCountLimit
+              - sriovVgpuProfileCountLimit
               - attachedInstances
               - status
             properties:
@@ -15573,7 +15573,7 @@ components:
                     type: integer
                   total:
                     type: integer
-              profileCountLimit:
+              sriovVgpuProfileCountLimit:
                 type: integer
                 nullable: true
               profiles:
