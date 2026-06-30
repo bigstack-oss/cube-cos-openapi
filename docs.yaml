@@ -9465,6 +9465,92 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/grafana/devices/{hostname}/gpuUtilization":
+    get:
+      operationId: getGrafanaDeviceGpuUtilization
+      tags:
+      - Grafana
+      summary: Get Grafana device GPU utilization history dashboard link
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/hostname"
+      responses:
+        '200':
+          description: Get Grafana device GPU utilization history dashboard link
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetGrafanaDashboardLinkResponse"
+              examples:
+                example:
+                  summary: Device GPU utilization history dashboard link
+                  value:
+                    code: 200
+                    data:
+                      link: http://example-data-center/grafana/d/i-device/device?orgId=1&var-GPU_HOST=example-node-0&from=now-3h&to=now&viewPanel=50
+                      enabled: true
+                    msg: fetch device gpu utilization link successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to get Grafana device GPU utilization dashboard:
+                      internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/grafana/devices/{hostname}/gpuVram":
+    get:
+      operationId: getGrafanaDeviceGpuVram
+      tags:
+      - Grafana
+      summary: Get Grafana device GPU VRAM usage history dashboard link
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/hostname"
+      responses:
+        '200':
+          description: Get Grafana device GPU VRAM usage history dashboard link
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GetGrafanaDashboardLinkResponse"
+              examples:
+                example:
+                  summary: Device GPU VRAM usage history dashboard link
+                  value:
+                    code: 200
+                    data:
+                      link: http://example-data-center/grafana/d/i-device/device?orgId=1&var-GPU_HOST=example-node-0&from=now-3h&to=now&viewPanel=51
+                      enabled: true
+                    msg: fetch device gpu vram link successfully
+                    status: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to get Grafana device GPU vram dashboard: internal
+                      server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/grafana/instances/{instanceId}":
     get:
       operationId: getGrafanaInstances
