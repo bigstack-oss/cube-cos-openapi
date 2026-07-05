@@ -1866,6 +1866,7 @@ paths:
           - ceph_mds
           - ceph_mgr
           - rbd_target
+          - fc_link
           - haproxy
           - httpd
           - skyline
@@ -2074,6 +2075,7 @@ paths:
           - ceph_mds
           - ceph_mgr
           - rbd_target
+          - fc_link
           - haproxy
           - httpd
           - skyline
