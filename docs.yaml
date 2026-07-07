@@ -5964,18 +5964,18 @@ paths:
                 value:
                   resourceType: "sriovVgpu"
                   profiles:
-                    - id: a100-1-5c
+                    - id: 57
                       count: 1
-                    - id: a100-2-10c
+                    - id: 58
                       count: 2
               mig-backed:
                 summary: Set to MIG-backed
                 value:
                   resourceType: "migBackedVgpu"
                   profiles:
-                    - id: a100-1-5c
+                    - id: 57
                       count: 3
-                    - id: a100-2-10c
+                    - id: 58
                       count: 4
       responses:
         '200':
@@ -5984,6 +5984,22 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/UpdateNodeGPUCardResponse"
+        '400':
+          description: Bad request (malformed body, unknown profile id, or profiles on a non-vGPU type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: 'vgpu profile 999 not found'
+                  status:
+                    type: string
+                    example: bad request
         '404':
           description: Node or GPU card not found
           content:
@@ -6022,6 +6038,12 @@ paths:
                   value:
                     code: 409
                     msg: GPU card does not support 'sriovVgpu' resource type
+                    status: conflict
+                gpuInUse:
+                  summary: GPU card is in use
+                  value:
+                    code: 409
+                    msg: gpu is in use
                     status: conflict
                 exceedProfileCountLimit:
                   summary: Exceed profile count limit
@@ -15666,7 +15688,9 @@ components:
               - count
             properties:
               id:
-                type: string
+                type: integer
+                format: int64
+                minimum: 0
               count:
                 type: integer
     UpdateNodeGPUCardResponse:
