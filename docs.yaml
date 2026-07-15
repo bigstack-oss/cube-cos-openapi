@@ -5840,10 +5840,10 @@ paths:
                               totalMiB: 5000
                             links:
                               grafana: https://example.grafana/vm-99
-                              console: https://example.console/vm-99
                         status:
                           current: inUse
                           isProcessing: false
+                        degraded: false
                       - id: gpu-002
                         name: NVIDIA A100 80GB
                         pciAddress: 0000:01:00.1
@@ -5886,10 +5886,10 @@ paths:
                               totalMiB: 81920
                             links:
                               grafana: https://example.grafana/vm-99
-                              console: https://example.console/vm-99
                         status:
                           current: inUse
                           isProcessing: false
+                        degraded: false
                       - id: gpu-003
                         name: NVIDIA A100 80GB
                         pciAddress: 0000:01:00.2
@@ -5906,6 +5906,7 @@ paths:
                         status:
                           current: unassigned
                           isProcessing: false
+                        degraded: false
                     msg: fetch node GPU cards successfully
                     status: ok
         '404':
@@ -5937,6 +5938,72 @@ paths:
                   msg:
                     type: string
                     example: 'failed to fetch node GPU cards: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/nodes/{nodeName}/gpuCards/instances/{instanceId}/console":
+    get:
+      operationId: getGpuInstanceConsole
+      tags:
+        - Nodes
+      summary: Retrieve the console link for a GPU-attached instance
+      description: >-
+        Mints a Nova noVNC console link for a single attached instance on
+        demand. The GPU cards listing does not include console links, so that
+        polling the listing does not create a console token per instance on
+        every request; clients call this endpoint when a user opens a console.
+      parameters:
+        - "$ref": "#/components/parameters/dataCenter"
+        - "$ref": "#/components/parameters/nodeName"
+        - name: instanceId
+          in: path
+          required: true
+          description: The id of the GPU-attached instance (VM).
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Retrieve the GPU instance console link successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - code
+                  - data
+                  - msg
+                  - status
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  data:
+                    type: object
+                    required:
+                      - console
+                    properties:
+                      console:
+                        type: string
+                        example: https://example.console/vnc?token=abc
+                  msg:
+                    type: string
+                    example: gpu instance console link retrieved successfully
+                  status:
+                    type: string
+                    example: ok
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to create console for instance: internal server error'
                   status:
                     type: string
                     example: internal server error
@@ -15531,6 +15598,7 @@ components:
               - sriovVgpuProfileCountLimit
               - attachedInstances
               - status
+              - degraded
             properties:
               id:
                 type: string
@@ -15630,11 +15698,8 @@ components:
                       type: object
                       required:
                         - grafana
-                        - console
                       properties:
                         grafana:
-                          type: string
-                        console:
                           type: string
               status:
                 type: object
@@ -15646,6 +15711,13 @@ components:
                     $ref: "#/components/schemas/GPUCardStatus"
                   isProcessing:
                     type: boolean
+              degraded:
+                type: boolean
+                description: >-
+                  True when NVML runtime enrichment that this card should have
+                  had (stats, attached instances) could not be obtained, so its
+                  reported capacity is not trustworthy. Consumers such as
+                  schedulers should not allocate off a degraded card.
         msg:
           type: string
           example: node GPU cards retrieved successfully
