@@ -5789,12 +5789,14 @@ paths:
                         pciAddress: 0000:01:00.0
                         resourceType: migBackedVgpu
                         supportResourceTypes: ["pgpu", "sriovVgpu", "migBackedVgpu"]
+                        # MIG is enabled on this card, so the framebuffer is
+                        # reported but utilization does not exist.
                         vram:
                           allocatedMiB: 80000
                           totalMiB: 100000
-                          utilizationPercent: 40
+                          utilizationPercent: null
                         gpu:
-                          utilizationPercent: 24
+                          utilizationPercent: null
                         allocationSummary:
                           current: 2
                           total: 6
@@ -5834,7 +5836,7 @@ paths:
                           - id: vm-99
                             name: AI-Worker-01
                             profileAlias: A100-1-5C
-                            utilizationPercent: 20.35
+                            utilizationPercent: null
                             memoryUsage:
                               allocatedMiB: 4200
                               totalMiB: 5000
@@ -5849,12 +5851,14 @@ paths:
                         pciAddress: 0000:01:00.1
                         resourceType: pgpu
                         supportResourceTypes: ["pgpu", "sriovVgpu"]
+                        # The card is bound to vfio-pci for passthrough, so the
+                        # host cannot see it and has no numbers for it at all.
                         vram:
-                          allocatedMiB: 81920
-                          totalMb: 81920
-                          utilizationPercent: 85
+                          allocatedMiB: null
+                          totalMiB: null
+                          utilizationPercent: null
                         gpu:
-                          utilizationPercent: 92
+                          utilizationPercent: null
                         allocationSummary:
                           current: 1
                           total: 1
@@ -5880,10 +5884,10 @@ paths:
                           - id: vm-102
                             name: Deep-Learning-Main
                             profileAlias: null
-                            utilizationPercent: 91.5
+                            utilizationPercent: null
                             memoryUsage:
-                              allocatedMiB: 78000
-                              totalMiB: 81920
+                              allocatedMiB: null
+                              totalMiB: null
                             links:
                               grafana: https://example.grafana/vm-99
                         status:
@@ -15722,6 +15726,14 @@ components:
                   $ref: "#/components/schemas/GPUSupportResourceType"
               vram:
                 type: object
+                description: >-
+                  A null field means the number does not exist for this card
+                  rather than being zero, and the card is not degraded by it. A
+                  GPU passed through to a VM (pgpu) is bound to vfio-pci and is
+                  invisible to the host, so it has no runtime stats at all; a
+                  card with MIG enabled reports its framebuffer but no
+                  utilization, because NVIDIA provides none once the card is
+                  partitioned.
                 required:
                   - allocatedMiB
                   - totalMiB
@@ -15729,10 +15741,13 @@ components:
                 properties:
                   allocatedMiB:
                     type: integer
+                    nullable: true
                   totalMiB:
                     type: integer
+                    nullable: true
                   utilizationPercent:
                     type: integer
+                    nullable: true
               gpu:
                 type: object
                 required:
@@ -15740,6 +15755,7 @@ components:
                 properties:
                   utilizationPercent:
                     type: integer
+                    nullable: true
               allocationSummary:
                 type: object
                 nullable: true
@@ -15792,6 +15808,12 @@ components:
                       nullable: true
                     utilizationPercent:
                       type: integer
+                      nullable: true
+                      description: >-
+                        Null when the value does not exist for this instance's
+                        GPU resource type: a MIG-backed vGPU reports no
+                        utilization, and a passed-through GPU is invisible to the
+                        host altogether.
                     memoryUsage:
                       type: object
                       required:
@@ -15800,8 +15822,10 @@ components:
                       properties:
                         allocatedMiB:
                           type: integer
+                          nullable: true
                         totalMiB:
                           type: integer
+                          nullable: true
                     links:
                       type: object
                       required:
