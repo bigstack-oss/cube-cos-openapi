@@ -5842,6 +5842,9 @@ paths:
                               totalMiB: 5000
                             links:
                               grafana: https://example.grafana/vm-99
+                        links:
+                          workloadHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=50
+                          vramHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=51
                         status:
                           current: inUse
                           isProcessing: false
@@ -5890,6 +5893,9 @@ paths:
                               totalMiB: null
                             links:
                               grafana: https://example.grafana/vm-99
+                        links:
+                          workloadHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=50
+                          vramHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=51
                         status:
                           current: inUse
                           isProcessing: false
@@ -15709,6 +15715,7 @@ components:
               - profiles
               - sriovVgpuProfileCountLimit
               - attachedInstances
+              - links
               - status
               - degraded
             properties:
@@ -15833,6 +15840,23 @@ components:
                       properties:
                         grafana:
                           type: string
+              links:
+                type: object
+                description: >-
+                  History charts for this one card. They are reported inline with
+                  the card because the UI offers them from its row: a link built
+                  per node would be identical on every row of the same node. Both
+                  are always present -- a card with no series (a passed-through
+                  GPU, or utilization on a MIG-enabled card) still has a chart,
+                  it is simply empty.
+                required:
+                  - workloadHistory
+                  - vramHistory
+                properties:
+                  workloadHistory:
+                    type: string
+                  vramHistory:
+                    type: string
               status:
                 type: object
                 required:
