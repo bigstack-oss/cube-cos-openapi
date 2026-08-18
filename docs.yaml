@@ -5892,7 +5892,7 @@ paths:
                               allocatedMiB: null
                               totalMiB: null
                             links:
-                              grafana: https://example.grafana/vm-99
+                              grafana: null
                         links:
                           workloadHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=50
                           vramHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=51
@@ -15840,6 +15840,16 @@ components:
                       properties:
                         grafana:
                           type: string
+                          nullable: true
+                          description: >-
+                            Null when the dashboard variables cannot be pinned:
+                            without the owning project the dashboard's tenant,
+                            hostname and instance variables all resolve on load
+                            and the page can label this VM's chart with another
+                            VM. A GPU passed through to a VM has no vGPU series
+                            to chart in the first place, so no link is the honest
+                            answer -- the same rule as the stats above, where a
+                            value that cannot be measured is null rather than 0.
               links:
                 type: object
                 description: >-
