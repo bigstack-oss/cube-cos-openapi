@@ -5841,7 +5841,8 @@ paths:
                               allocatedMiB: 4200
                               totalMiB: 5000
                             links:
-                              grafana: https://example.grafana/vm-99
+                              workloadHistory: https://example/grafana/d/PVW6vU7Wz/instance?orgId=1&refresh=5m&var-TID=809049165d4d4266996fa24515006ccd&var-HOSTNAME=AI-Worker-01&var-UUID=vm-99&from=now-3h&to=now&viewPanel=36
+                              vramHistory: https://example/grafana/d/PVW6vU7Wz/instance?orgId=1&refresh=5m&var-TID=809049165d4d4266996fa24515006ccd&var-HOSTNAME=AI-Worker-01&var-UUID=vm-99&from=now-3h&to=now&viewPanel=37
                         links:
                           workloadHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=50
                           vramHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=51
@@ -5892,7 +5893,8 @@ paths:
                               allocatedMiB: null
                               totalMiB: null
                             links:
-                              grafana: null
+                              workloadHistory: null
+                              vramHistory: null
                         links:
                           workloadHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=50
                           vramHistory: https://example/grafana/d/i-device/device?orgId=1&var-GPU_HOST=cn13&var-GPU_PCIID=00000001%3A04%3A00.0&from=now-3h&to=now&viewPanel=51
@@ -15835,21 +15837,33 @@ components:
                           nullable: true
                     links:
                       type: object
+                      description: >-
+                        History charts for this one VM's GPU resource, the
+                        VM-level counterpart of the card's links: workload and
+                        VRAM each open their own panel of the instance
+                        dashboard's vGPU row, which ships collapsed. Both are
+                        null together when the dashboard variables cannot be
+                        pinned: without the owning project the dashboard's
+                        tenant, hostname and instance variables all resolve on
+                        load and the page can label this VM's chart with another
+                        VM. A GPU passed through to a VM has no vGPU series to
+                        chart in the first place, so no link is the honest answer
+                        -- the same rule as the stats above, where a value that
+                        cannot be measured is null rather than 0. An empty chart
+                        is not such a case: a MIG-backed vGPU reports no
+                        utilization, so its workload link opens an empty panel,
+                        exactly as the card-level workloadHistory does on a
+                        MIG-enabled card.
                       required:
-                        - grafana
+                        - workloadHistory
+                        - vramHistory
                       properties:
-                        grafana:
+                        workloadHistory:
                           type: string
                           nullable: true
-                          description: >-
-                            Null when the dashboard variables cannot be pinned:
-                            without the owning project the dashboard's tenant,
-                            hostname and instance variables all resolve on load
-                            and the page can label this VM's chart with another
-                            VM. A GPU passed through to a VM has no vGPU series
-                            to chart in the first place, so no link is the honest
-                            answer -- the same rule as the stats above, where a
-                            value that cannot be measured is null rather than 0.
+                        vramHistory:
+                          type: string
+                          nullable: true
               links:
                 type: object
                 description: >-
