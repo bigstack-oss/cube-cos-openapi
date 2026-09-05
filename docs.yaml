@@ -423,6 +423,11 @@ paths:
                       - name: monasca
                       - name: telegraf
                       - name: grafana
+                    - name: metricsDb
+                      category: infrascope
+                      modules:
+                      - name: prometheus
+                      - name: thanos
                     - name: logAnalytics
                       category: infrascope
                       modules:
@@ -1574,6 +1579,7 @@ paths:
           - businessLogic
           - dataPipe
           - metrics
+          - metricsDb
           - logAnalytics
           - notifications
         description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
@@ -1836,6 +1842,7 @@ paths:
           - businessLogic
           - dataPipe
           - metrics
+          - metricsDb
           - logAnalytics
           - notifications
         description: The name of the service to retrieve health history. use GET /api/v1/datacenters/{dataCenter}/services
@@ -2044,6 +2051,7 @@ paths:
           - businessLogic
           - dataPipe
           - metrics
+          - metricsDb
           - logAnalytics
           - notifications
         description: The name of the service which cover the module you tend to repair.
