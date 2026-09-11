@@ -15725,6 +15725,7 @@ components:
               - profiles
               - sriovVgpuProfileCountLimit
               - attachedInstances
+              - deviceProfile
               - links
               - status
               - degraded
@@ -15872,6 +15873,16 @@ components:
                         vramHistory:
                           type: string
                           nullable: true
+              deviceProfile:
+                type: string
+                nullable: true
+                description: >-
+                  The Cyborg device profile a flavor's accel:device_profile must
+                  name to be scheduled onto this card. Only a pgpu card has one:
+                  sriovVgpu and migBackedVgpu cards are scheduled through the PCI
+                  alias reported on each of their profiles. Null on every other
+                  resource type, and on a pgpu card whose profile has not been
+                  created yet or could not be looked up.
               links:
                 type: object
                 description: >-
