@@ -420,7 +420,6 @@ paths:
                     - name: metrics
                       category: infrascope
                       modules:
-                      - name: monasca
                       - name: telegraf
                       - name: grafana
                     - name: metricsDb
@@ -1896,7 +1895,6 @@ paths:
           - masakari
           - zookeeper
           - kafka
-          - monasca
           - telegraf
           - grafana
           - filebeat
@@ -2106,7 +2104,6 @@ paths:
           - masakari
           - zookeeper
           - kafka
-          - monasca
           - telegraf
           - grafana
           - filebeat
@@ -7716,16 +7713,6 @@ paths:
                         default: 0
                         min: 0
                         max: 99999
-                      roles:
-                      - name: control-converged
-                        hosts:
-                        - name: example-node-0
-                          ip: 10.10.10.10
-                    - name: monasca.debug.enabled
-                      description: Set to true to enable monasca verbose log.
-                      limitation:
-                        type: bool
-                        default: false
                       roles:
                       - name: control-converged
                         hosts:
