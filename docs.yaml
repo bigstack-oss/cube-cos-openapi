@@ -410,7 +410,6 @@ paths:
                     - name: businessLogic
                       category: cloud computing
                       modules:
-                      - name: senlin
                       - name: watcher
                     - name: dataPipe
                       category: infrascope
@@ -420,7 +419,6 @@ paths:
                     - name: metrics
                       category: infrascope
                       modules:
-                      - name: monasca
                       - name: telegraf
                       - name: grafana
                     - name: metricsDb
@@ -1896,7 +1894,6 @@ paths:
           - masakari
           - zookeeper
           - kafka
-          - monasca
           - telegraf
           - grafana
           - filebeat
@@ -2106,7 +2103,6 @@ paths:
           - masakari
           - zookeeper
           - kafka
-          - monasca
           - telegraf
           - grafana
           - filebeat
@@ -7721,16 +7717,6 @@ paths:
                         hosts:
                         - name: example-node-0
                           ip: 10.10.10.10
-                    - name: monasca.debug.enabled
-                      description: Set to true to enable monasca verbose log.
-                      limitation:
-                        type: bool
-                        default: false
-                      roles:
-                      - name: control-converged
-                        hosts:
-                        - name: example-node-0
-                          ip: 10.10.10.10
                     - name: mysql.backup.curator.rp
                       description: mysql backup retention policy in weeks.
                       limitation:
@@ -7916,16 +7902,6 @@ paths:
                         default: 1024
                         min: 256
                         max: 65536
-                      roles:
-                      - name: control-converged
-                        hosts:
-                        - name: example-node-0
-                          ip: 10.10.10.10
-                    - name: senlin.debug.enabled
-                      description: Set to true to enable senlin verbose log.
-                      limitation:
-                        type: bool
-                        default: false
                       roles:
                       - name: control-converged
                         hosts:
