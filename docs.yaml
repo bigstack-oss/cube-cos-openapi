@@ -318,6 +318,7 @@ paths:
                       modules:
                       - name: bootstrap
                       - name: license
+                      - name: advisor
                     - name: clusterSettings
                       category: core
                       modules:
@@ -1863,6 +1864,7 @@ paths:
           - dns
           - bootstrap
           - license
+          - advisor
           - etcd
           - nodelist
           - hacluster
@@ -2073,6 +2075,7 @@ paths:
           - dns
           - bootstrap
           - license
+          - advisor
           - etcd
           - nodelist
           - hacluster
