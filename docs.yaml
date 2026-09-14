@@ -1858,6 +1858,7 @@ paths:
           - dns
           - bootstrap
           - license
+          - advisor
           - etcd
           - nodelist
           - hacluster
@@ -2068,6 +2069,7 @@ paths:
           - dns
           - bootstrap
           - license
+          - advisor
           - etcd
           - nodelist
           - hacluster
