@@ -10560,6 +10560,239 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/volumes/{volumeId}/move-preflight":
+    get:
+      operationId: getVolumeMovePreflight
+      tags:
+      - Volumes
+      summary: Check whether a volume may move to another storage tier
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - in: path
+        name: volumeId
+        required: true
+        schema:
+          type: string
+        description: The id of the volume
+        example: 763655de-1cfc-45d4-b67c-5579ea43a6e1
+      - in: query
+        name: destType
+        required: true
+        schema:
+          type: string
+        description: The name of the destination storage tier
+        example: tier-nvme
+      responses:
+        '200':
+          description: The volume may move to the destination tier
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MovePreflightResponse"
+              examples:
+                example:
+                  summary: Move allowed
+                  value:
+                    code: 200
+                    data:
+                      ok: true
+                      code: OK
+                      reason: ok
+                      blockers: []
+                      srcType: ceph
+                      dstType: tier-nvme
+                      sizeGb: 20
+                      attachedTo: 8f14e45f-ceea-467e-adf8-af95654e60b3
+                    msg: ok
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MovePreflightResponse"
+              examples:
+                example:
+                  summary: Move refused, bad request
+                  value:
+                    code: 400
+                    data:
+                      ok: false
+                      code: E_SAME_TYPE
+                      reason: source and destination are the same storage tier
+                      blockers:
+                      - code: E_SAME_TYPE
+                        reason: source and destination are the same storage tier
+                      srcType: ceph
+                      dstType: ceph
+                      sizeGb: 20
+                      attachedTo: 8f14e45f-ceea-467e-adf8-af95654e60b3
+                    msg: source and destination are the same storage tier
+                    status: bad request
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MovePreflightResponse"
+              examples:
+                example:
+                  summary: Move refused
+                  value:
+                    code: 409
+                    data:
+                      ok: false
+                      code: E_HAS_SNAPSHOTS
+                      reason: volume must not have snapshots
+                      blockers:
+                      - code: E_HAS_SNAPSHOTS
+                        reason: volume must not have snapshots
+                      - code: E_VM_NOT_RUNNING
+                        reason: the attached instance must be running or paused
+                      srcType: ceph
+                      dstType: tier-nvme
+                      sizeGb: 20
+                      attachedTo: 8f14e45f-ceea-467e-adf8-af95654e60b3
+                    msg: volume must not have snapshots
+                    status: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to run move preflight: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
+  "/api/v1/datacenters/{dataCenter}/volumes/{volumeId}/move":
+    post:
+      operationId: moveVolume
+      tags:
+      - Volumes
+      summary: Move a volume to another storage tier
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - in: path
+        name: volumeId
+        required: true
+        schema:
+          type: string
+        description: The id of the volume
+        example: 763655de-1cfc-45d4-b67c-5579ea43a6e1
+      requestBody:
+        description: The move is refused, with every reason listed, unless the
+          preflight passes.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - destType
+              properties:
+                destType:
+                  type: string
+                  description: The name of the destination storage tier
+                  example: tier-nvme
+            examples:
+              example:
+                summary: Move volume request
+                value:
+                  destType: tier-nvme
+      responses:
+        '202':
+          description: The volume move request is accepted and dispatching
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 202
+                  msg:
+                    type: string
+                    example: the volume move request is accepted and dispatching
+                  status:
+                    type: string
+                    example: accepted
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MovePreflightResponse"
+              examples:
+                example:
+                  summary: Move refused, bad request
+                  value:
+                    code: 400
+                    data:
+                      ok: false
+                      code: E_SAME_TYPE
+                      reason: source and destination are the same storage tier
+                      blockers:
+                      - code: E_SAME_TYPE
+                        reason: source and destination are the same storage tier
+                      srcType: ceph
+                      dstType: ceph
+                      sizeGb: 20
+                      attachedTo: 8f14e45f-ceea-467e-adf8-af95654e60b3
+                    msg: source and destination are the same storage tier
+                    status: bad request
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MovePreflightResponse"
+              examples:
+                example:
+                  summary: Move refused
+                  value:
+                    code: 409
+                    data:
+                      ok: false
+                      code: E_HAS_SNAPSHOTS
+                      reason: volume must not have snapshots
+                      blockers:
+                      - code: E_HAS_SNAPSHOTS
+                        reason: volume must not have snapshots
+                      - code: E_VM_NOT_RUNNING
+                        reason: the attached instance must be running or paused
+                      srcType: ceph
+                      dstType: tier-nvme
+                      sizeGb: 20
+                      attachedTo: 8f14e45f-ceea-467e-adf8-af95654e60b3
+                    msg: volume must not have snapshots
+                    status: conflict
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to move volume: internal server error'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/firmwares":
     get:
       operationId: listFirmwares
@@ -16959,6 +17192,58 @@ components:
         status:
           type: string
           example: ok
+    MovePreflightResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          required:
+          - ok
+          - code
+          - reason
+          - blockers
+          - srcType
+          - dstType
+          - sizeGb
+          - attachedTo
+          properties:
+            ok:
+              type: boolean
+            code:
+              type: string
+            reason:
+              type: string
+            blockers:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - reason
+                properties:
+                  code:
+                    type: string
+                  reason:
+                    type: string
+            srcType:
+              type: string
+            dstType:
+              type: string
+            sizeGb:
+              type: integer
+            attachedTo:
+              type: string
+        msg:
+          type: string
+        status:
+          type: string
     ListFirmwaresResponse:
       type: object
       required:
