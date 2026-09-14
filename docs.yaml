@@ -10677,6 +10677,10 @@ paths:
       tags:
       - Volumes
       summary: Move a volume to another storage tier
+      description: Runs the same preflight as GET .../move-preflight and, if it
+        passes, dispatches the retype. The move is refused, with every reason
+        listed, unless the preflight passes; a preflight pass that then fails to
+        dispatch is reported as a 500, not a refusal.
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - in: path
@@ -10778,7 +10782,8 @@ paths:
                     msg: volume must not have snapshots
                     status: conflict
         '500':
-          description: Internal Server Error
+          description: Internal Server Error, including a preflight pass whose
+            retype dispatch then failed (E_DISPATCH_FAILED)
           content:
             application/json:
               schema:
@@ -10789,7 +10794,8 @@ paths:
                     example: 500
                   msg:
                     type: string
-                    example: 'failed to move volume: internal server error'
+                    example: 'failed to dispatch the cinder retype: internal server
+                      error'
                   status:
                     type: string
                     example: internal server error
