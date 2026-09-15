@@ -4591,8 +4591,8 @@ paths:
                   msg:
                     type: string
                     example: metricType should be cpuUsage, memoryUsage, diskUsage,
-                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
-                      networkTrafficIn, or networkTrafficOut
+                      storageUsage, diskBandwidth, diskIops, diskLatency, diskReadIops,
+                      diskWriteIops, networkTrafficIn, or networkTrafficOut
                   status:
                     type: string
                     example: bad request
@@ -4704,8 +4704,8 @@ paths:
                   msg:
                     type: string
                     example: metricType should be cpuUsage, memoryUsage, diskUsage,
-                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
-                      networkTrafficIn, or networkTrafficOut
+                      storageUsage, diskBandwidth, diskIops, diskLatency, diskReadIops,
+                      diskWriteIops, networkTrafficIn, or networkTrafficOut
                   status:
                     type: string
                     example: bad request
@@ -12408,6 +12408,7 @@ components:
         - cpuUsage
         - memoryUsage
         - diskUsage
+        - storageUsage
         - diskBandwidth
         - diskIops
         - diskLatency
@@ -12416,8 +12417,8 @@ components:
         - networkTrafficIn
         - networkTrafficOut
       description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
-        'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops', 'diskWriteIops',
-        'networkTrafficIn', or 'networkTrafficOut'.
+        'diskUsage', 'storageUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops',
+        'diskWriteIops', 'networkTrafficIn', or 'networkTrafficOut'.
     viewType:
       in: path
       name: viewType
