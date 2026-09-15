@@ -10599,6 +10599,7 @@ paths:
                       code: OK
                       reason: ok
                       blockers: []
+                      warnings: []
                       srcType: ceph
                       dstType: tier-nvme
                       sizeGb: 20
@@ -10623,6 +10624,7 @@ paths:
                       blockers:
                       - code: E_SAME_TYPE
                         reason: source and destination are the same storage tier
+                      warnings: []
                       srcType: ceph
                       dstType: ceph
                       sizeGb: 20
@@ -10649,6 +10651,7 @@ paths:
                         reason: volume must not have snapshots
                       - code: E_VM_NOT_RUNNING
                         reason: the attached instance must be running or paused
+                      warnings: []
                       srcType: ceph
                       dstType: tier-nvme
                       sizeGb: 20
@@ -10767,6 +10770,7 @@ paths:
                       blockers:
                       - code: E_SAME_TYPE
                         reason: source and destination are the same storage tier
+                      warnings: []
                       srcType: ceph
                       dstType: ceph
                       sizeGb: 20
@@ -10793,6 +10797,7 @@ paths:
                         reason: volume must not have snapshots
                       - code: E_VM_NOT_RUNNING
                         reason: the attached instance must be running or paused
+                      warnings: []
                       srcType: ceph
                       dstType: tier-nvme
                       sizeGb: 20
@@ -17252,6 +17257,7 @@ components:
           - code
           - reason
           - blockers
+          - warnings
           - srcType
           - dstType
           - sizeGb
@@ -17264,6 +17270,21 @@ components:
             reason:
               type: string
             blockers:
+              type: array
+              items:
+                type: object
+                required:
+                - code
+                - reason
+                properties:
+                  code:
+                    type: string
+                  reason:
+                    type: string
+            warnings:
+              description: >-
+                Advisory notes that never refuse the move. Present on success
+                too, so a caller that only reads "ok" keeps working.
               type: array
               items:
                 type: object
