@@ -10671,6 +10671,24 @@ paths:
                   status:
                     type: string
                     example: internal server error
+        '504':
+          description: The preflight did not complete within the server's bound. It
+            probes the running libvirt domain on the compute node and queries ceph,
+            so a degraded cluster can legitimately be slow; no move is dispatched.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 504
+                  msg:
+                    type: string
+                    example: 'the move preflight did not complete in time: gateway timeout'
+                  status:
+                    type: string
+                    example: gateway timeout
   "/api/v1/datacenters/{dataCenter}/volumes/{volumeId}/move":
     post:
       operationId: moveVolume
@@ -10799,6 +10817,25 @@ paths:
                   status:
                     type: string
                     example: internal server error
+        '504':
+          description: The preflight or the dispatch did not complete within the
+            server's bound. The preflight probes the running libvirt domain on the
+            compute node and queries ceph, so a degraded cluster can legitimately
+            be slow; the move may or may not have been dispatched.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 504
+                  msg:
+                    type: string
+                    example: 'the volume move did not complete in time: gateway timeout'
+                  status:
+                    type: string
+                    example: gateway timeout
   "/api/v1/datacenters/{dataCenter}/firmwares":
     get:
       operationId: listFirmwares
