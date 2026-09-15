@@ -4590,6 +4590,23 @@ paths:
                           value: 111826.9696
                     msg: fetch metrics successfully
                     status: ok
+                example18:
+                  summary: Storage usage rank of vms
+                  value:
+                    code: 200
+                    data:
+                      unit: percentage
+                      rank:
+                      - id: example-vm-0
+                        name: example-vm-0
+                        value: 14.7988
+                        history:
+                        - time: '2025-02-14T00:34:52+00:00'
+                          value: 14.7901
+                        - time: '2025-02-14T00:35:22+00:00'
+                          value: 14.7988
+                    msg: fetch metrics successfully
+                    status: ok
         '400':
           description: Bad Request
           content:
@@ -4603,8 +4620,8 @@ paths:
                   msg:
                     type: string
                     example: metricType should be cpuUsage, memoryUsage, diskUsage,
-                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
-                      networkTrafficIn, or networkTrafficOut
+                      storageUsage, diskBandwidth, diskIops, diskLatency, diskReadIops,
+                      diskWriteIops, networkTrafficIn, or networkTrafficOut
                   status:
                     type: string
                     example: bad request
@@ -4716,8 +4733,8 @@ paths:
                   msg:
                     type: string
                     example: metricType should be cpuUsage, memoryUsage, diskUsage,
-                      diskBandwidth, diskIops, diskLatency, diskReadIops, diskWriteIops,
-                      networkTrafficIn, or networkTrafficOut
+                      storageUsage, diskBandwidth, diskIops, diskLatency, diskReadIops,
+                      diskWriteIops, networkTrafficIn, or networkTrafficOut
                   status:
                     type: string
                     example: bad request
@@ -12420,6 +12437,7 @@ components:
         - cpuUsage
         - memoryUsage
         - diskUsage
+        - storageUsage
         - diskBandwidth
         - diskIops
         - diskLatency
@@ -12428,8 +12446,8 @@ components:
         - networkTrafficIn
         - networkTrafficOut
       description: The type of metric to query, the value can be 'cpuUsage', 'memoryUsage',
-        'diskUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops', 'diskWriteIops',
-        'networkTrafficIn', or 'networkTrafficOut'.
+        'diskUsage', 'storageUsage', 'diskBandwidth', 'diskIops', 'diskLatency', 'diskReadIops',
+        'diskWriteIops', 'networkTrafficIn', or 'networkTrafficOut'.
     viewType:
       in: path
       name: viewType
