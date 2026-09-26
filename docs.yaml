@@ -650,6 +650,7 @@ paths:
             enum:
             - INFO
             - WARNING
+            - ERROR
             - CRITICAL
         description: The severities of the event to query.
         example: Info
@@ -681,6 +682,8 @@ paths:
             - SRV00001I
             - SRV00002W
             - SRV00003C
+            - SRV00004E
+            - SRV00005I
             - SRV01001I
             - SRV01002I
             - SDN00001I
