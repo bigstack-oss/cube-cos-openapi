@@ -81,6 +81,8 @@ paths:
                       - control
                       - compute
                       - storage
+                      registeredRoles:
+                      - control-converged
                       version: Cube Appliance 3.0.0
                       virtualIp: 10.10.10.10
                       isLocal: true
@@ -147,6 +149,8 @@ paths:
                       - control
                       - compute
                       - storage
+                      registeredRoles:
+                      - control-converged
                       version: Cube Appliance 3.0.0
                       virtualIp: 10.10.10.10
                       isLocal: true
@@ -177,6 +181,8 @@ paths:
                       name: example-data-center
                       roles:
                       - moderator
+                      - edge-core
+                      registeredRoles:
                       - edge-core
                       version: Cube Appliance 3.0.0
                       virtualIp: 10.10.10.10
@@ -17495,6 +17501,7 @@ components:
       - type
       - name
       - roles
+      - registeredRoles
       - version
       - virtualIp
       - isHaEnabled
@@ -17513,6 +17520,14 @@ components:
           type: string
         roles:
           type: array
+          description: Roles a node in this data center type may be given.
+          items:
+            "$ref": "#/components/schemas/NodeRole"
+        registeredRoles:
+          type: array
+          description: Roles that have at least one registered node, in the same
+            order as roles. Derived from the node registry, not from metrics, so
+            a role does not disappear while its nodes are missing metrics.
           items:
             "$ref": "#/components/schemas/NodeRole"
         version:
