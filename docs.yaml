@@ -11430,6 +11430,12 @@ paths:
                 summary: Install fixpack request body
                 value:
                   version: FIX_001
+              example2:
+                summary: Install on the given nodes only
+                value:
+                  version: FIX_001
+                  nodes:
+                  - cube452
       responses:
         '202':
           description: Fixpack installation started
@@ -11765,6 +11771,79 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/fixpacks/status":
+    get:
+      operationId: listFixpackNodeStatus
+      tags:
+      - Fixpacks
+      summary: Get each node's fixpack status
+      description: Each node is checked against `version`, or against every fixpack
+        installed on any node when `version` is omitted.
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - name: version
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Fixpack status of each node
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ListFixpackNodeStatusResponse"
+              examples:
+                example:
+                  summary: One node missing a fixpack
+                  value:
+                    code: 200
+                    data:
+                    - name: cube451
+                      installed:
+                      - FIX_001
+                      status: ok
+                    - name: cube452
+                      installed: []
+                      status: missing FIX_001
+                    msg: Fixpack status of each node
+                    status: ok
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 400
+                  msg:
+                    type: string
+                    example: invalid fixpack version FIX 001
+                  status:
+                    type: string
+                    example: bad request
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 500
+                  msg:
+                    type: string
+                    example: 'failed to run hex_sdk fixpack_status'
+                  status:
+                    type: string
+                    example: internal server error
   "/api/v1/datacenters/{dataCenter}/fixpacks/updateProgress/{version}":
     get:
       operationId: getFixpackProgress
@@ -11905,6 +11984,13 @@ paths:
       parameters:
       - "$ref": "#/components/parameters/dataCenter"
       - "$ref": "#/components/parameters/version"
+      requestBody:
+        description: Optional nodes to roll back
+        required: false
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RollbackFixpackRequest"
       responses:
         '202':
           description: Fixpack rollback started successfully
@@ -12027,12 +12113,15 @@ paths:
                     - name: cube451
                       version: Cube Appliance 3.1.0
                       updatedAt: '2025-08-08T19:51:40+08:00'
+                      installed: true
                     - name: cube452
                       version: Cube Appliance 3.1.0
                       updatedAt: '2025-08-08T19:51:40+08:00'
+                      installed: false
                     - name: cube453
                       version: Cube Appliance 3.1.0
                       updatedAt: '2025-08-08T19:51:40+08:00'
+                      installed: false
                     msg: Fetched updatable nodes successfully
                     status: ok
         '404':
@@ -17076,6 +17165,9 @@ components:
                     properties:
                       current:
                         type: string
+                        description: The rolling-update states (pending ... finalizing)
+                          come from hex_sdk power_roll_status_json; the rest from a
+                          non-rolling update.
                         enum:
                         - installing
                         - waiting reboot
@@ -17083,6 +17175,11 @@ components:
                         - failed
                         - resolved
                         - succeeded
+                        - pending
+                        - staging
+                        - draining
+                        - bootstrapping
+                        - finalizing
                       isProcessing:
                         type: boolean
                       processPercent:
@@ -17202,6 +17299,7 @@ components:
             - name
             - version
             - updatedAt
+            - installed
             properties:
               name:
                 type: string
@@ -17210,6 +17308,9 @@ components:
               updatedAt:
                 type: string
                 format: date-time
+              installed:
+                type: boolean
+                description: Whether the node's own history has this fixpack installed
         msg:
           type: string
         status:
@@ -17247,6 +17348,54 @@ components:
       - version
       properties:
         version:
+          type: string
+        nodes:
+          type: array
+          description: Nodes to install on, one at a time. Defaults to the nodes
+            that don't have the fixpack yet.
+          items:
+            type: string
+    RollbackFixpackRequest:
+      type: object
+      properties:
+        nodes:
+          type: array
+          description: Nodes to roll back. Defaults to the nodes whose latest
+            fixpack is this version.
+          items:
+            type: string
+    ListFixpackNodeStatusResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            required:
+            - name
+            - installed
+            - status
+            properties:
+              name:
+                type: string
+              installed:
+                type: array
+                description: Fixpacks installed on the node, from its own history
+                items:
+                  type: string
+              status:
+                type: string
+                description: "`ok`, `missing <versions>` or `unreachable`"
+        msg:
+          type: string
+        status:
           type: string
     GetFixpackUpdateProgressResponse:
       type: object
