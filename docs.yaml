@@ -421,6 +421,7 @@ paths:
                       modules:
                       - name: telegraf
                       - name: grafana
+                      - name: lachesis
                     - name: metricsDb
                       category: infrascope
                       modules:
@@ -1896,6 +1897,7 @@ paths:
           - kafka
           - telegraf
           - grafana
+          - lachesis
           - filebeat
           - auditbeat
           - logstash
@@ -2105,6 +2107,7 @@ paths:
           - kafka
           - telegraf
           - grafana
+          - lachesis
           - filebeat
           - auditbeat
           - logstash
