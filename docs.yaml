@@ -4253,7 +4253,7 @@ paths:
                   value:
                     code: 200
                     data:
-                      unit: packets
+                      unit: bps
                       rank:
                       - id: example-node-0
                         name: example-node-0
@@ -4286,7 +4286,7 @@ paths:
                   value:
                     code: 200
                     data:
-                      unit: packets
+                      unit: bps
                       rank:
                       - id: example-node-0
                         name: example-node-0
@@ -4459,7 +4459,7 @@ paths:
                   value:
                     code: 200
                     data:
-                      unit: packets
+                      unit: bps
                       rank:
                       - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
                         name: example-vm-0
@@ -4494,7 +4494,7 @@ paths:
                   value:
                     code: 200
                     data:
-                      unit: packets
+                      unit: bps
                       rank:
                       - id: 9d56d601-85f0-4bfe-992d-ba72ab174552
                         name: example-vm-0
