@@ -6267,8 +6267,18 @@ paths:
                 value:
                   host: email-smtp.example.mailserver.com
                   port: 587
+                  auth: true
                   username: example-user
                   password: example-password
+                  tls: mandatory
+                  from: noreply@example.com
+              anonymousRelay:
+                summary: Anonymous relay without TLS
+                value:
+                  host: relay.example.internal
+                  port: 25
+                  auth: false
+                  tls: none
                   from: noreply@example.com
       responses:
         '201':
@@ -6315,7 +6325,9 @@ paths:
                     data:
                     - host: email-smtp.example.mailserver.com
                       port: 587
+                      auth: true
                       username: example-user
+                      tls: mandatory
                       from: noreply@bigstack.co
                       accessVerified: true
                       status:
@@ -6414,9 +6426,16 @@ paths:
                 value:
                   host: email-smtp.example.mailserver.com
                   port: 587
+                  auth: true
                   username: example-user
                   password: example-password
+                  tls: mandatory
                   from: noreply@bigstack.co
+              anonymousRelay:
+                summary: Switch to an anonymous relay without TLS
+                value:
+                  auth: false
+                  tls: none
       responses:
         '200':
           description: Email sender updated successfully
@@ -15276,12 +15295,20 @@ components:
           type: string
         status:
           type: string
+    EmailSenderTls:
+      type: string
+      enum:
+      - none
+      - opportunistic
+      - mandatory
+      description: "Transport encryption policy, matching bigstack-dependency-go pkg/email/v2: none stays plaintext even if the relay advertises STARTTLS, opportunistic upgrades to STARTTLS when advertised, mandatory fails unless the upgrade succeeds. A request that leaves it unset is treated as mandatory. Alert mail is sent by Kapacitor, which always upgrades to STARTTLS when the relay advertises it, so for alert mail the policy only decides whether the relay certificate is verified (mandatory) or not (none, opportunistic)."
     EmailSenderResponse:
       type: object
       required:
       - host
       - port
-      - username
+      - auth
+      - tls
       - from
       - accessVerified
       - status
@@ -15290,8 +15317,13 @@ components:
           type: string
         port:
           type: integer
+        auth:
+          type: boolean
+          description: Whether to authenticate to the relay with username and password. When false, SMTP AUTH is never attempted and username and password are ignored.
         username:
           type: string
+        tls:
+          "$ref": "#/components/schemas/EmailSenderTls"
         from:
           type: string
         accessVerified:
@@ -15310,10 +15342,15 @@ components:
           type: string
         port:
           type: integer
+        auth:
+          type: boolean
+          description: Whether to authenticate to the relay with username and password. When unset, it is true if a username is given. When false, SMTP AUTH is never attempted and username and password are ignored.
         username:
           type: string
         password:
           type: string
+        tls:
+          "$ref": "#/components/schemas/EmailSenderTls"
         from:
           type: string
     EmailSenderPatchRequest:
@@ -15323,10 +15360,15 @@ components:
           type: string
         port:
           type: integer
+        auth:
+          type: boolean
+          description: Whether to authenticate to the relay with username and password. When unset, the current value is kept. When false, SMTP AUTH is never attempted and username and password are ignored.
         username:
           type: string
         password:
           type: string
+        tls:
+          "$ref": "#/components/schemas/EmailSenderTls"
         from:
           type: string
     TryEmailSender:
