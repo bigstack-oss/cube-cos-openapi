@@ -17390,6 +17390,12 @@ components:
               type: string
             isRollingApplied:
               type: boolean
+            kind:
+              type: string
+              description: Kind of the running roll; absent when no roll is running
+              enum:
+              - upgrade
+              - restart
             progresses:
               type: array
               items:
@@ -17416,6 +17422,14 @@ components:
                     - reset and booted non-active server
                     - cluster check and repair skipped as not all nodes are bootstrapped
                       and synced
+                    - pending
+                    - staging
+                    - stage_failed
+                    - draining
+                    - rebooting
+                    - bootstrapping
+                    - finalizing
+                    - done
                   status:
                     type: object
                     required:
