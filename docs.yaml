@@ -3365,6 +3365,143 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/integrations/storages/tiers":
+    get:
+      operationId: listIntegrationStorageTiers
+      tags:
+      - Integrations
+      summary: Retrieve the list of storage (device) tiers
+      description: Every device tier this node sees, with its storage tier registry
+        state. `unmanaged` is a device class, CRUSH rule and pool of one name that
+        the registry does not list, so it was not created by CubeCOS.
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: Retrieve the list of storage tiers successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - data
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/StorageTier"
+                  msg:
+                    type: string
+                  status:
+                    type: string
+              examples:
+                example1:
+                  summary: Storage tiers
+                  value:
+                    code: 200
+                    data:
+                    - name: gold
+                      state: registered
+                    - name: computehdd
+                      state: unmanaged
+                    msg: fetch storage tiers successfully
+                    status: ok
+        '500':
+          "$ref": "#/components/responses/StorageTierError"
+    post:
+      operationId: createIntegrationStorageTier
+      tags:
+      - Integrations
+      summary: Create a storage (device) tier
+      description: Synchronous. The node handling the request builds the tier on
+        the Ceph side (device class on the OSDs, CRUSH rule, pool, volume type)
+        and registers it as a Cinder backend; it then registers the tier on every
+        other control and restarts cinder-volume once. The pool's replication size
+        is not an input; it is the smaller of the base pool's size and the number
+        of hosts the OSDs are on. Creating an existing tier again completes what
+        is missing.
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateStorageTierRequest"
+            examples:
+              example1:
+                summary: A tier on two OSDs
+                value:
+                  name: gold
+                  osdIds:
+                  - '0'
+                  - osd.1
+      responses:
+        '200':
+          description: The storage tier was created on every control
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StorageTierResultResponse"
+              examples:
+                example1:
+                  summary: Created
+                  value:
+                    code: 200
+                    data:
+                      name: gold
+                      output: device tier gold created on osd.0 osd.1 (pool size 2)
+                    msg: storage tier gold created
+                    status: ok
+        '400':
+          "$ref": "#/components/responses/StorageTierError"
+        '409':
+          "$ref": "#/components/responses/StorageTierError"
+        '500':
+          "$ref": "#/components/responses/StorageTierError"
+  "/api/v1/datacenters/{dataCenter}/integrations/storages/tiers/{tierName}":
+    delete:
+      operationId: deleteIntegrationStorageTier
+      tags:
+      - Integrations
+      summary: Delete a storage (device) tier
+      description: Synchronous. Refused while volumes use the tier's volume type.
+        The tier is taken out of every control's registry and cinder-volume is
+        restarted before the volume type, pool and CRUSH rule are deleted once; its
+        OSDs are left with no device class. If the delete fails while the tier's
+        objects are still there, the registry entries are put back. A tier that is
+        only a registry entry has just that removed.
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      - "$ref": "#/components/parameters/tierName"
+      responses:
+        '200':
+          description: The storage tier was deleted
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StorageTierResultResponse"
+              examples:
+                example1:
+                  summary: Deleted
+                  value:
+                    code: 200
+                    data:
+                      name: gold
+                      output: device tier gold deleted; osd.0.1 left with no device class
+                    msg: storage tier gold deleted
+                    status: ok
+        '404':
+          "$ref": "#/components/responses/StorageTierError"
+        '409':
+          "$ref": "#/components/responses/StorageTierError"
+        '500':
+          "$ref": "#/components/responses/StorageTierError"
   "/api/v1/datacenters/{dataCenter}/integrations/storages/vendors":
     get:
       operationId: listIntegrationStorageVendors
@@ -12270,6 +12407,29 @@ paths:
                     type: string
                     example: internal server error
 components:
+  responses:
+    StorageTierError:
+      description: The request was refused or failed; msg carries the reason, including
+        which control failed
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 409
+              msg:
+                type: string
+                example: volume type gold is still in use, or the volume list could
+                  not be read; nothing was deleted
+              status:
+                type: string
+                example: status conflict
   securitySchemes:
     BearerAuth:
       type: http
@@ -12620,6 +12780,13 @@ components:
       schema:
         type: string
       description: The name of the integration storage.
+    tierName:
+      in: path
+      name: tierName
+      required: true
+      schema:
+        type: string
+      description: The name of the storage (device) tier.
     driverName:
       in: path
       name: driverName
@@ -12653,6 +12820,58 @@ components:
       description: A UUID with a "GPU-" prefix
       example: GPU-0aa3c43c-1ada-6075-e57a-dccb0793a8b6
   schemas:
+    StorageTier:
+      type: object
+      required:
+      - name
+      - state
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+          enum:
+          - registered
+          - registry-partial
+          - registry-only
+          - unmanaged
+    CreateStorageTierRequest:
+      type: object
+      required:
+      - name
+      - osdIds
+      properties:
+        name:
+          type: string
+          description: Becomes the device class, CRUSH rule, pool and volume type
+            name. Letters, digits, '-' and '_'; must not contain '-pool' or '-ssd'.
+        osdIds:
+          type: array
+          description: OSD ids, as "0" or "osd.0".
+          items:
+            type: string
+    StorageTierResultResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            output:
+              type: string
+              description: What hex_sdk printed on the node handling the request.
+        msg:
+          type: string
+        status:
+          type: string
     GetMeResponse:
       type: object
       required:
@@ -17171,6 +17390,12 @@ components:
               type: string
             isRollingApplied:
               type: boolean
+            kind:
+              type: string
+              description: Kind of the running roll; absent when no roll is running
+              enum:
+              - upgrade
+              - restart
             progresses:
               type: array
               items:
@@ -17197,6 +17422,14 @@ components:
                     - reset and booted non-active server
                     - cluster check and repair skipped as not all nodes are bootstrapped
                       and synced
+                    - pending
+                    - staging
+                    - stage_failed
+                    - draining
+                    - rebooting
+                    - bootstrapping
+                    - finalizing
+                    - done
                   status:
                     type: object
                     required:
