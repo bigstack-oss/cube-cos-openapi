@@ -10148,6 +10148,22 @@ paths:
                       - private
                     msg: fetch image materials successfully
                     status: ok
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  msg:
+                    type: string
+                    example: 'cannot resolve the openstack token'
+                  status:
+                    type: string
+                    example: forbidden
         '500':
           description: Internal Server Error
           content:
@@ -10261,6 +10277,22 @@ paths:
                         totalItemCount: 2
                     msg: fetch image list successfully
                     status: ok
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  msg:
+                    type: string
+                    example: 'listing images of project example-project is not allowed'
+                  status:
+                    type: string
+                    example: forbidden
         '500':
           description: Internal Server Error
           content:
@@ -10323,6 +10355,22 @@ paths:
                   status:
                     type: string
                     example: accepted
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  msg:
+                    type: string
+                    example: 'importing images needs the member role in a project'
+                  status:
+                    type: string
+                    example: forbidden
         '500':
           description: Internal Server Error
           content:
@@ -10454,6 +10502,22 @@ paths:
                   status:
                     type: string
                     example: conflict
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  msg:
+                    type: string
+                    example: 'updating image 59be046d-0199-407d-88d4-a833dbbd2420 is not allowed'
+                  status:
+                    type: string
+                    example: forbidden
         '500':
           description: Internal Server Error
           content:
@@ -10489,6 +10553,22 @@ paths:
               schema:
                 type: string
                 format: binary
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 403
+                  msg:
+                    type: string
+                    example: 'listing images of project example-project is not allowed'
+                  status:
+                    type: string
+                    example: forbidden
         '500':
           description: Internal Server Error
           content:
