@@ -9521,6 +9521,239 @@ paths:
                   status:
                     type: string
                     example: internal server error
+  "/api/v1/datacenters/{dataCenter}/fqdn":
+    get:
+      operationId: getFqdn
+      tags:
+      - FQDN
+      summary: Retrieve the FQDN the web UIs are served on
+      description: The FQDN (cubesys.fqdn) and the certificate installed for it, as
+        this node sees them, with every other node's view. A node that cannot be
+        asked carries an error instead. Only node-token requests are taken, as from
+        the CLI on a control node (cluster> fqdn show).
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: Retrieve the FQDN successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - data
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                  data:
+                    "$ref": "#/components/schemas/FqdnStatus"
+                  msg:
+                    type: string
+                  status:
+                    type: string
+              examples:
+                example1:
+                  summary: Served on an FQDN
+                  value:
+                    code: 200
+                    data:
+                      fqdn: cos.example.com
+                      publicHost: cos.example.com
+                      certificate:
+                        subject: CN=cos.example.com
+                        issuer: CN=Example Issuing CA,O=Example
+                        dnsNames:
+                        - cos.example.com
+                        notBefore: '2026-11-06T05:35:47Z'
+                        notAfter: '2027-02-04T05:35:47Z'
+                        fingerprint: 77:1B:B1:8B:61:56:35:2F:B6:EB:5C:AA:51:1F:CA:AE:2D:5F:21:DD:81:A3:14:A9:B3:A2:49:E8:6A:4F:50:73
+                      nodes:
+                      - hostname: cc1
+                        role: control-converged
+                        fqdn: cos.example.com
+                        publicHost: cos.example.com
+                        servedFrom: "/etc/cube/certs"
+                      - hostname: cc2
+                        role: control-converged
+                        fqdn: cos.example.com
+                        publicHost: cos.example.com
+                        servedFrom: "/etc/cube/certs"
+                    msg: fetch fqdn successfully
+                    status: ok
+        '403':
+          "$ref": "#/components/responses/FqdnError"
+        '500':
+          "$ref": "#/components/responses/FqdnError"
+    put:
+      operationId: setFqdn
+      tags:
+      - FQDN
+      summary: Serve the web UIs on an FQDN
+      description: Synchronous, and takes minutes. Refused unless the installed
+        certificate covers the name, and while any node is down, since every node
+        takes the FQDN. The control handling the request commits cubesys.fqdn on
+        itself, then on every other node in turn (controls first), then moves the
+        cluster-wide part once (Keycloak's hostname, the SAML clients of keystone,
+        cube-cos-api, the ceph dashboard and Rancher, Rancher's server URL, the
+        ingress and dashboard certificates), and restarts cube-cos-api on every
+        node. A request that stopped part way names the node or the step and
+        carries the step log in data.output; sending it again finishes it. Only
+        node-token requests are taken, on a control node (cluster> fqdn set).
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SetFqdnRequest"
+            examples:
+              example1:
+                summary: An FQDN
+                value:
+                  fqdn: cos.example.com
+      responses:
+        '200':
+          description: Every node and the cluster serve the web UIs on the FQDN
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FqdnResultResponse"
+              examples:
+                example1:
+                  summary: Switched
+                  value:
+                    code: 200
+                    data:
+                      fqdn: cos.example.com
+                      output: |-
+                        fqdn: cc1 committed
+                        fqdn: cc2 committed
+                        fqdn: cc3 committed
+                        fqdn: ingress certificate
+                        fqdn: keycloak on cos.example.com
+                        fqdn: keystone identity provider
+                        fqdn: keystone SAML SP
+                        fqdn: cube-cos-api SAML client
+                        fqdn: ceph dashboard SSO
+                        fqdn: rancher
+                        fqdn: cube-cos-api restarts on every node
+                    msg: the web UIs are served on cos.example.com
+                    status: ok
+        '400':
+          "$ref": "#/components/responses/FqdnError"
+        '403':
+          "$ref": "#/components/responses/FqdnError"
+        '409':
+          "$ref": "#/components/responses/FqdnError"
+        '500':
+          "$ref": "#/components/responses/FqdnError"
+    delete:
+      operationId: resetFqdn
+      tags:
+      - FQDN
+      summary: Reset the FQDN and serve the web UIs on the control VIP
+      description: Synchronous, and takes minutes. The same path as setting an FQDN,
+        back to the control VIP and the appliance's own certificate; the installed
+        certificate stays for a later set. Only node-token requests are taken, on a
+        control node (cluster> fqdn reset).
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      responses:
+        '200':
+          description: Every node and the cluster serve the web UIs on the control VIP
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FqdnResultResponse"
+              examples:
+                example1:
+                  summary: Reset
+                  value:
+                    code: 200
+                    data:
+                      fqdn: ''
+                      output: |-
+                        fqdn: cc1 committed
+                        fqdn: keycloak on 10.1.0.100
+                        fqdn: cube-cos-api restarts on every node
+                    msg: the FQDN is reset; the web UIs are served on the control VIP
+                    status: ok
+        '403':
+          "$ref": "#/components/responses/FqdnError"
+        '409':
+          "$ref": "#/components/responses/FqdnError"
+        '500':
+          "$ref": "#/components/responses/FqdnError"
+  "/api/v1/datacenters/{dataCenter}/fqdn/certificate":
+    put:
+      operationId: installFqdnCertificate
+      tags:
+      - FQDN
+      summary: Install the certificate the web UIs are served with on an FQDN
+      description: The prerequisite of setting an FQDN. The certificate set is checked
+        before anything serves it (the key belongs to the certificate and is not
+        encrypted, the certificate is valid now and chains to the given root CA,
+        intermediates may come in either PEM, and it covers the FQDN while one is
+        set), then installed on every control, apart from the appliance's own
+        certificate. While an FQDN is set it goes in front of browsers at once.
+        Only node-token requests are taken, on a control node (cluster> fqdn
+        certificate).
+      parameters:
+      - "$ref": "#/components/parameters/dataCenter"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InstallFqdnCertificateRequest"
+      responses:
+        '200':
+          description: The certificate is installed on every control
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - data
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                  data:
+                    "$ref": "#/components/schemas/FqdnCertificate"
+                  msg:
+                    type: string
+                  status:
+                    type: string
+              examples:
+                example1:
+                  summary: Installed
+                  value:
+                    code: 200
+                    data:
+                      subject: CN=cos.example.com
+                      issuer: CN=Example Issuing CA,O=Example
+                      dnsNames:
+                      - cos.example.com
+                      notBefore: '2026-11-06T05:35:47Z'
+                      notAfter: '2027-02-04T05:35:47Z'
+                      fingerprint: 77:1B:B1:8B:61:56:35:2F:B6:EB:5C:AA:51:1F:CA:AE:2D:5F:21:DD:81:A3:14:A9:B3:A2:49:E8:6A:4F:50:73
+                    msg: the certificate is installed
+                    status: ok
+        '400':
+          "$ref": "#/components/responses/FqdnError"
+        '403':
+          "$ref": "#/components/responses/FqdnError"
+        '409':
+          "$ref": "#/components/responses/FqdnError"
+        '500':
+          "$ref": "#/components/responses/FqdnError"
   "/api/v1/datacenters/{dataCenter}/grafana/hosts/{hostname}":
     get:
       operationId: getGrafanaHosts
@@ -12408,6 +12641,30 @@ paths:
                     example: internal server error
 components:
   responses:
+    FqdnError:
+      description: The request was refused or failed. msg carries the reason, naming
+        the node or the step; a set or reset that stopped part way also carries the
+        step log in data.output.
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - code
+            - msg
+            - status
+            properties:
+              code:
+                type: integer
+                example: 400
+              msg:
+                type: string
+                example: the certificate does not cover cos.example.com
+              status:
+                type: string
+                example: bad request
+              data:
+                "$ref": "#/components/schemas/FqdnResult"
     StorageTierError:
       description: The request was refused or failed; msg carries the reason, including
         which control failed
@@ -12820,6 +13077,128 @@ components:
       description: A UUID with a "GPU-" prefix
       example: GPU-0aa3c43c-1ada-6075-e57a-dccb0793a8b6
   schemas:
+    FqdnCertificate:
+      type: object
+      description: The certificate installed for the FQDN
+      required:
+      - subject
+      - issuer
+      - dnsNames
+      - notBefore
+      - notAfter
+      - fingerprint
+      properties:
+        subject:
+          type: string
+        issuer:
+          type: string
+        dnsNames:
+          type: array
+          items:
+            type: string
+        notBefore:
+          type: string
+          format: date-time
+        notAfter:
+          type: string
+          format: date-time
+        fingerprint:
+          type: string
+          description: SHA-256 fingerprint
+    FqdnNode:
+      type: object
+      description: One node's view of the FQDN
+      required:
+      - hostname
+      properties:
+        hostname:
+          type: string
+        role:
+          type: string
+        fqdn:
+          type: string
+          description: cubesys.fqdn in the node's settings; empty when none is set
+        publicHost:
+          type: string
+          description: The host the node sends browsers to, the FQDN or the control VIP
+        servedFrom:
+          type: string
+          description: Where its browser-facing listeners take their certificate from,
+            /etc/cube/certs for the installed one, /var/www/certs for the appliance's
+        certificate:
+          "$ref": "#/components/schemas/FqdnCertificate"
+        error:
+          type: string
+          description: Why the node could not be asked
+    FqdnStatus:
+      type: object
+      required:
+      - fqdn
+      - publicHost
+      - nodes
+      properties:
+        fqdn:
+          type: string
+          description: Empty when none is set
+        publicHost:
+          type: string
+        certificate:
+          "$ref": "#/components/schemas/FqdnCertificate"
+        nodes:
+          type: array
+          items:
+            "$ref": "#/components/schemas/FqdnNode"
+    SetFqdnRequest:
+      type: object
+      required:
+      - fqdn
+      properties:
+        fqdn:
+          type: string
+          maxLength: 253
+          description: At least two labels, the last starting with a letter; an IP
+            address is not accepted. Compared case-insensitively.
+          example: cos.example.com
+    InstallFqdnCertificateRequest:
+      type: object
+      required:
+      - certificate
+      - privateKey
+      - caCertificate
+      properties:
+        certificate:
+          type: string
+          description: The certificate in PEM, optionally followed by its intermediates
+        privateKey:
+          type: string
+          description: Its private key in PEM, not encrypted
+        caCertificate:
+          type: string
+          description: The root CA that issued it in PEM, optionally with the intermediates
+    FqdnResult:
+      type: object
+      properties:
+        fqdn:
+          type: string
+        output:
+          type: string
+          description: The step log, one line per node and per cluster-wide step
+    FqdnResultResponse:
+      type: object
+      required:
+      - code
+      - data
+      - msg
+      - status
+      properties:
+        code:
+          type: integer
+        data:
+          "$ref": "#/components/schemas/FqdnResult"
+        msg:
+          type: string
+        status:
+          type: string
     StorageTier:
       type: object
       required:
