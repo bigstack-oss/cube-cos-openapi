@@ -2886,6 +2886,27 @@ paths:
                   status:
                     type: string
                     example: not found
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - code
+                - msg
+                - status
+                properties:
+                  code:
+                    type: integer
+                    example: 409
+                  msg:
+                    type: string
+                    example: 'storage example-storage is still used by Manila, delete
+                      these first: shares 9f0c2b1e-5d1a-4c7e-8a35-2d6f0e4b7c11 (error)'
+                  status:
+                    type: string
+                    example: status conflict
         '500':
           description: Internal Server Error
           content:
